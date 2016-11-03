@@ -1,10 +1,15 @@
 package com.dmitryvoronko.news.model;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
+import com.dmitryvoronko.news.data.DatabaseManager;
+import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.model.userinput.Status;
 import com.dmitryvoronko.news.model.userinput.UserInputHandler;
 import com.dmitryvoronko.news.util.NetworkHelper;
+
+import java.util.ArrayList;
 
 /**
  * Created by Dmitry on 01/11/2016.
@@ -13,10 +18,12 @@ import com.dmitryvoronko.news.util.NetworkHelper;
 public final class News
 {
     private final Context context;
+    private final DatabaseManager databaseManager;
 
     public News(final Context context)
     {
         this.context = context;
+        databaseManager = new DatabaseManager(context);
     }
 
     public Status requestAddNewChannel(final String userInput)
@@ -24,11 +31,16 @@ public final class News
         final boolean hasConnection = NetworkHelper.hasConnection(context);
         if (hasConnection)
         {
-            final UserInputHandler userInputHandler = new UserInputHandler(context);
+            final UserInputHandler userInputHandler = new UserInputHandler(databaseManager);
             return userInputHandler.handleUserInput(userInput);
         } else
         {
             return Status.NO_INTERNET_CONNECTION;
         }
+    }
+
+    @Nullable public ArrayList<Channel> getChannels(final int startId)
+    {
+        return databaseManager.getChannels(startId);
     }
 }

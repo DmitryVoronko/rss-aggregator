@@ -23,38 +23,40 @@ final class NewsContract
     private static final String DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS ";
 
 
-    private interface BaseTable
+    interface BaseTable
             extends android.provider.BaseColumns
     {
         String _TITLE = "_title";
-        String _DESCRIPTION = "_description";
         String _LINK = "_url";
+        String _DESCRIPTION = "_description";
         String _PUB_DATE = "_pub_date";
+        String _STATE = "_state";
     }
 
-    public final class ChannelsTable
+    final class ChannelsTable
             implements BaseTable
     {
-        public static final String _TABLE_NAME = "ChannelsTable";
+        static final String _TABLE_NAME = "ChannelsTable";
 
         private static final String CREATE_TABLE = NewsContract.CREATE_TABLE + " " +
                 _TABLE_NAME + " (" + _ID + INTEGER + PRIMARY_KEY + AUTOINCREMENT + COMMA_SEP +
                 _TITLE + TEXT + NOT_NULL + COMMA_SEP +
                 _DESCRIPTION + " " + TEXT + " " + NOT_NULL + COMMA_SEP +
-                _LINK + TEXT + NOT_NULL + UNIQUE +
-                _PUB_DATE + TEXT + NOT_NULL + COMMA_SEP + ");";
+                _LINK + TEXT + NOT_NULL + UNIQUE + COMMA_SEP +
+                _PUB_DATE + TEXT + NOT_NULL + COMMA_SEP +
+                _STATE + TEXT + NOT_NULL + ");";
 
         private static final String DELETE_TABLE = DROP_TABLE_IF_EXISTS + _TABLE_NAME;
     }
 
-    public final class ArticlesTable
+    final class ArticlesTable
             implements BaseTable
     {
-        public static final String _TABLE_NAME = "ArticlesTable";
+        static final String _TABLE_NAME = "ArticlesTable";
 
-        public static final String _CHANNEL_ID = "_channel_id";
-        public static final String _PUB_DATE = "_pub_date";
-        public static final String _STATE = "_state";
+        static final String _CHANNEL_ID = "_channel_id";
+        static final String _PUB_DATE = "_pub_date";
+
 
         private static final String CREATE_TABLE = NewsContract.CREATE_TABLE + " " +
                 _TABLE_NAME + " (" +

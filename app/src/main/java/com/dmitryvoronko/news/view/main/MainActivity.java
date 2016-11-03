@@ -1,5 +1,6 @@
 package com.dmitryvoronko.news.view.main;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,12 +10,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
+import com.dmitryvoronko.news.model.data.FeedObjectFactory;
+import com.dmitryvoronko.news.model.data.State;
+import com.dmitryvoronko.news.services.MainService;
 import com.dmitryvoronko.news.view.add.AddNewActivity;
 import com.dmitryvoronko.news.view.settings.SettingsActivity;
 
@@ -25,6 +30,7 @@ import lombok.Data;
 public final class MainActivity extends AppCompatActivity
 {
     private final static int SHOW_NEW_ITEM_ACTIVITY = 1;
+    public static final String TAG = "MainActivity";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private final ArrayList<Channel> data = new ArrayList<>();
@@ -35,11 +41,30 @@ public final class MainActivity extends AppCompatActivity
     protected void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+//        bindMainService();
+
         setContentView(R.layout.activity_main);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrollStateChanged(final RecyclerView recyclerView, final int newState)
+            {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d(TAG, "onScrollStateChanged: state changed = " + newState);
+            }
+
+            @Override
+            public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy)
+            {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d(TAG, "onScrolled: dx = " + dx + ", dy = " + dy);
+            }
+        });
         recyclerView.setHasFixedSize(true);
 
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -68,6 +93,12 @@ public final class MainActivity extends AppCompatActivity
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    private void bindMainService()
+    {
+        final Intent intent = new Intent(this, MainService.class);
+        final ComponentName componentName = startService(intent);
     }
 
     @NonNull
@@ -211,7 +242,9 @@ public final class MainActivity extends AppCompatActivity
     private void handleAddNewItem(final Intent input)
     {
         final String channelUrl = input.getStringExtra(AddNewActivity.CHANNEL_LINK);
-        final Channel channel = new Channel(channelUrl, channelUrl, channelUrl, channelUrl);
+        final Channel channel = FeedObjectFactory.createChannel(0, channelUrl, channelUrl, channelUrl,
+                                                                channelUrl,
+                                                                State.IS_NOT_READ);
         putChannelToStorage(channel, 0);
     }
 

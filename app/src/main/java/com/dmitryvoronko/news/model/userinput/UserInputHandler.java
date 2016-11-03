@@ -1,6 +1,5 @@
 package com.dmitryvoronko.news.model.userinput;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.dmitryvoronko.news.data.DatabaseManager;
@@ -21,11 +20,11 @@ public final class UserInputHandler
 {
     private final static String TAG = "USER_INPUT_HANDLER";
 
-    private final Context context;
+    private final DatabaseManager databaseManager;
 
-    public UserInputHandler(final Context context)
+    public UserInputHandler(final DatabaseManager databaseManager)
     {
-        this.context = context;
+        this.databaseManager = databaseManager;
     }
 
     public Status handleUserInput(final String userInput)
@@ -33,15 +32,21 @@ public final class UserInputHandler
         try
         {
             final URL url = new URL(userInput);
-            final Parser parser = new Parser();
-            final Channel channel = parser.parseChannel(url);
-            return tryToAddChannelToDB(channel);
+            final boolean hasAlready = databaseManager.hasAlreadyChannel(url.toString());
+
+            if (hasAlready)
+            {
+                return Status.HAS_ALREADY;
+            } else {
+                final Channel channel = parseChannel(url);
+                return insertToDatabase(channel);
+            }
+
         } catch (final MalformedURLException e)
         {
             return Status.NOT_URL;
         } catch (final XmlPullParserException e)
         {
-            Log.d(TAG, "handleUserInput: Xml Pull Parser Exception", e);
             return Status.NOT_XML;
         } catch (final IOException e)
         {
@@ -49,19 +54,18 @@ public final class UserInputHandler
         }
     }
 
-
-    private Status tryToAddChannelToDB(final Channel channel)
+    private Channel parseChannel(final URL url) throws IOException, XmlPullParserException
     {
-        final DatabaseManager manager = new DatabaseManager(context);
-        final boolean inserted = manager.insertIfNotExist(channel);
-
-        if (inserted)
-        {
-            return Status.ADDED;
-        } else
-        {
-            return Status.HAS_ALREADY;
-        }
+        final Parser parser = new Parser();
+        return parser.parseChannel(url);
     }
 
+
+    private Status insertToDatabase(final Channel channel)
+    {
+        databaseManager.insert(channel);
+        final Status status = Status.ADDED;
+        Log.d(TAG, "insertToDatabase: Status = " + status);
+        return status;
+    }
 }

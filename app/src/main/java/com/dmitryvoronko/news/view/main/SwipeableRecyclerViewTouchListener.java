@@ -393,14 +393,13 @@ final class SwipeableRecyclerViewTouchListener
 
                     // Send a cancel event
                     final long time = SystemClock.uptimeMillis();
-                    final MotionEvent
-                            cancelEvent =
-                            MotionEvent.obtain(time,
-                                               time,
-                                               MotionEvent.ACTION_CANCEL,
-                                               0,
-                                               0,
-                                               0);
+                    final MotionEvent cancelEvent = MotionEvent.obtain(
+                            time,
+                            time,
+                            MotionEvent.ACTION_CANCEL,
+                            0,
+                            0,
+                            0);
                     mRecyclerView.dispatchTouchEvent(cancelEvent);
 
                     mPendingDismisses.clear();
@@ -443,17 +442,15 @@ final class SwipeableRecyclerViewTouchListener
         private final int position;
         private final View view;
 
-        public PendingDismissData(final int position,
-                                  final View view)
+        PendingDismissData(final int position,
+                           final View view)
         {
             this.position = position;
             this.view = view;
         }
 
         @Override
-        public int compareTo(final
-                             @NonNull
-                                     PendingDismissData other)
+        public int compareTo(final @NonNull PendingDismissData other)
         {
             return other.position - position;
         }
