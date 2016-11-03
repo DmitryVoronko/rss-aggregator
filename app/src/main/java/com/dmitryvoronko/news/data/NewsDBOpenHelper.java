@@ -8,11 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Dmitry on 21/10/2016.
  */
 
-public final class NewsDBOpenHelper
+final class NewsDBOpenHelper
         extends SQLiteOpenHelper
 {
-    public static final String DATABASE_NAME = "newsDatabase.db";
-    public static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "newsDatabase.db";
+    private static final int DATABASE_VERSION = 1;
 
     public NewsDBOpenHelper(final Context context,
                             final String name,
@@ -25,7 +25,7 @@ public final class NewsDBOpenHelper
               version);
     }
 
-    public NewsDBOpenHelper(final Context context)
+    NewsDBOpenHelper(final Context context)
     {
         super(context,
               DATABASE_NAME,

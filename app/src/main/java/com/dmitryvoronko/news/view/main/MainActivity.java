@@ -15,18 +15,21 @@ import android.view.View;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
-import com.dmitryvoronko.news.view.addnew.AddNewActivity;
+import com.dmitryvoronko.news.view.add.AddNewActivity;
 import com.dmitryvoronko.news.view.settings.SettingsActivity;
 
 import java.util.ArrayList;
 
+import lombok.Data;
+
 public final class MainActivity extends AppCompatActivity
 {
-
     private final static int SHOW_NEW_ITEM_ACTIVITY = 1;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private ArrayList<Channel> data = new ArrayList<Channel>();
+    private final ArrayList<Channel> data = new ArrayList<>();
+
+    private TempItem tempItem;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState)
@@ -67,28 +70,93 @@ public final class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
     }
 
+    @NonNull
+    private SwipeableRecyclerViewTouchListener getSwipeableRecyclerViewTouchListener()
+    {
+        final SwipeableRecyclerViewTouchListener.SwipeListener listener =
+                new SwipeableRecyclerViewTouchListener.SwipeListener()
+                {
+                    @Override
+                    public boolean canSwipeLeft(final int position)
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean canSwipeRight(final int position)
+                    {
+                        return true;
+                    }
+
+                    @Override
+                    public void onDismissedBySwipeLeft(final RecyclerView recyclerView,
+                                                       final int[] reverseSortedPositions)
+                    {
+                    }
+
+                    @Override
+                    public void onDismissedBySwipeRight(final RecyclerView recyclerView,
+                                                        final int[] reverseSortedPositions)
+                    {
+                        getUndoRemoveItemSnackbar(getCurrentFocus()).show();
+                        for (final int position : reverseSortedPositions)
+                        {
+                            final Channel temp = data.get(position);
+
+                            tempItem = new TempItem(temp, position);
+
+                            data.remove(position);
+                            adapter.notifyItemRemoved(
+                                    position);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                };
+        return new SwipeableRecyclerViewTouchListener(recyclerView, listener);
+    }
+
+    private void startAddNewItemActivity()
+    {
+        final Intent intent = new Intent(this, AddNewActivity.class);
+        startActivityForResult(intent, SHOW_NEW_ITEM_ACTIVITY);
+    }
+
     private Snackbar getUndoRemoveItemSnackbar(final View view)
     {
         final Snackbar snackbar = Snackbar.make(
                 view,
-                "Channel is deleted!",
+                R.string.channel_deleted_message,
                 Snackbar.LENGTH_LONG
         );
 
-        snackbar.setAction("CANCEL", new View.OnClickListener()
+        snackbar.setAction(R.string.cancel_button_text, new View.OnClickListener()
         {
             @Override public void onClick(final View v)
             {
-                final Snackbar restoredSnackbar = Snackbar.make(
-                        v,
-                        "Channel is restored!",
-                        Snackbar.LENGTH_SHORT
-                );
-                restoredSnackbar.show();
+                putChannelToStorage(tempItem.getTemp(), tempItem.getPosition());
+                showRestoredSnackbar(v);
             }
         });
 
         return snackbar;
+    }
+
+    private void putChannelToStorage(final Channel channel,
+                                     final int position)
+    {
+        data.add(position, channel);
+        adapter.notifyItemInserted(position);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void showRestoredSnackbar(final View v)
+    {
+        final Snackbar restoredSnackbar = Snackbar.make(
+                v,
+                R.string.channel_restored_message,
+                Snackbar.LENGTH_SHORT
+        );
+        restoredSnackbar.show();
     }
 
     @Override
@@ -122,62 +190,6 @@ public final class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void startAddNewItemActivity()
-    {
-        final Intent intent = new Intent(this, AddNewActivity.class);
-        startActivity(intent);
-    }
-
-    @NonNull
-    private SwipeableRecyclerViewTouchListener getSwipeableRecyclerViewTouchListener()
-    {
-        final SwipeableRecyclerViewTouchListener.SwipeListener listener =
-                new SwipeableRecyclerViewTouchListener.SwipeListener()
-                {
-                    @Override
-                    public boolean canSwipeLeft(final int position)
-                    {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean canSwipeRight(final int position)
-                    {
-                        return true;
-                    }
-
-                    @Override
-                    public void onDismissedBySwipeLeft(final RecyclerView recyclerView,
-                                                       final int[] reverseSortedPositions)
-                    {
-                    }
-
-                    @Override
-                    public void onDismissedBySwipeRight(final RecyclerView recyclerView,
-                                                        final int[] reverseSortedPositions)
-                    {
-                        getUndoRemoveItemSnackbar(getCurrentFocus()).show();
-                        for (final int position : reverseSortedPositions)
-                        {
-                            data.remove(position);
-                            adapter.notifyItemRemoved(
-                                    position);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                };
-        return new SwipeableRecyclerViewTouchListener(recyclerView, listener);
-    }
-
-    private void handleAddNewItem(final Intent input)
-    {
-//        final String channelUrl = input.getStringExtra(Channel.KEY_CHANNEL_URL_COLUMN);
-//        final Channel channel = new Channel(channelUrl, channelUrl, channelUrl);
-//        data.add(0, channel);
-//        adapter.notifyItemInserted(0);
-//        adapter.notifyDataSetChanged();
-    }
-
     @Override
     protected void onActivityResult(final int requestCode,
                                     final int resultCode,
@@ -193,6 +205,26 @@ public final class MainActivity extends AppCompatActivity
             {
                 handleAddNewItem(data);
             }
+        }
+    }
+
+    private void handleAddNewItem(final Intent input)
+    {
+        final String channelUrl = input.getStringExtra(AddNewActivity.CHANNEL_LINK);
+        final Channel channel = new Channel(channelUrl, channelUrl, channelUrl, channelUrl);
+        putChannelToStorage(channel, 0);
+    }
+
+    @Data
+    private final class TempItem
+    {
+        private final Channel temp;
+        private final int position;
+
+        private TempItem(final Channel temp, final int position)
+        {
+            this.temp = temp;
+            this.position = position;
         }
     }
 }

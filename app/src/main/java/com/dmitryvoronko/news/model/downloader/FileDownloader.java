@@ -20,11 +20,11 @@ import java.net.URLConnection;
  * Created by Dmitry on 31/10/2016.
  */
 
-public final class FileDownloader
+final class FileDownloader
 {
     private static final String TAG = "FILE_DOWNLOADER";
 
-    private ContextWrapper contextWrapper;
+    private final ContextWrapper contextWrapper;
 
     public FileDownloader(final ContextWrapper contextWrapper)
     {
@@ -44,17 +44,15 @@ public final class FileDownloader
             {
                 final InputStream inputStream = httpConnection.getInputStream();
 
-                final boolean fileCreated = fileCreated(fileInfo.getFileName(), inputStream);
-
-                return fileCreated;
+                return fileCreated(fileInfo.getFileName(), inputStream);
             }
 
-        } catch (MalformedURLException e)
+        } catch (final MalformedURLException e)
         {
             Log.d(TAG, "downloadFile: Malformed URL Exception", e);
-        } catch (IOException e)
+        } catch (final IOException e)
         {
-            Log.d(TAG, "downloadFile: IO Exception", e);
+            Log.d(TAG, "downloadFile: TOTAL_ERROR Exception", e);
         }
 
         return false;
@@ -82,32 +80,18 @@ public final class FileDownloader
 
             return true;
 
-        } catch (FileNotFoundException e)
+        } catch (final FileNotFoundException e)
         {
             Log.d(TAG, "fileCreated: File Not Found Exception", e);
-        } catch (IOException e)
+        } catch (final IOException e)
         {
-            Log.d(TAG, "fileCreated: IO Exception", e);
+            Log.d(TAG, "fileCreated: TOTAL_ERROR Exception", e);
         } finally
         {
             closeWriter(writer);
             closeReader(reader);
         }
         return false;
-    }
-
-    private void closeReader(BufferedReader reader)
-    {
-        if (reader != null)
-        {
-            try
-            {
-                reader.close();
-            } catch (IOException e)
-            {
-                Log.d(TAG, "closeReader: IO Exception", e);
-            }
-        }
     }
 
     private void closeWriter(OutputStreamWriter writer)
@@ -118,9 +102,23 @@ public final class FileDownloader
             {
                 writer.flush();
                 writer.close();
-            } catch (IOException e)
+            } catch (final IOException e)
             {
-                Log.d(TAG, "closeWriter: IO Exception", e);
+                Log.d(TAG, "closeWriter: TOTAL_ERROR Exception", e);
+            }
+        }
+    }
+
+    private void closeReader(BufferedReader reader)
+    {
+        if (reader != null)
+        {
+            try
+            {
+                reader.close();
+            } catch (final IOException e)
+            {
+                Log.d(TAG, "closeReader: TOTAL_ERROR Exception", e);
             }
         }
     }

@@ -30,28 +30,47 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity
     }
 
     @Override
+    protected void onStop()
+    {
+        super.onStop();
+        getDelegate().onStop();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        getDelegate().onDestroy();
+    }
+
+    private AppCompatDelegate getDelegate()
+    {
+        if (mDelegate == null)
+        {
+            mDelegate = AppCompatDelegate.create(this, null);
+        }
+        return mDelegate;
+    }
+
+    @Override
     protected void onPostCreate(final Bundle savedInstanceState)
     {
         super.onPostCreate(savedInstanceState);
         getDelegate().onPostCreate(savedInstanceState);
     }
 
-    public ActionBar getSupportActionBar()
+    @Override
+    protected void onPostResume()
     {
-        return getDelegate().getSupportActionBar();
-    }
-
-    public void setSupportActionBar(
-            @Nullable
-            final Toolbar toolbar)
-    {
-        getDelegate().setSupportActionBar(toolbar);
+        super.onPostResume();
+        getDelegate().onPostResume();
     }
 
     @Override
-    public MenuInflater getMenuInflater()
+    public void onConfigurationChanged(final Configuration newConfig)
     {
-        return getDelegate().getMenuInflater();
+        super.onConfigurationChanged(newConfig);
+        getDelegate().onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -80,11 +99,15 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity
         getDelegate().addContentView(view, params);
     }
 
-    @Override
-    protected void onPostResume()
+    public void invalidateOptionsMenu()
     {
-        super.onPostResume();
-        getDelegate().onPostResume();
+        getDelegate().invalidateOptionsMenu();
+    }
+
+    @Override
+    @android.support.annotation.NonNull public MenuInflater getMenuInflater()
+    {
+        return getDelegate().getMenuInflater();
     }
 
     @Override
@@ -94,38 +117,15 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity
         getDelegate().setTitle(title);
     }
 
-    @Override
-    public void onConfigurationChanged(final Configuration newConfig)
+    ActionBar getSupportActionBar()
     {
-        super.onConfigurationChanged(newConfig);
-        getDelegate().onConfigurationChanged(newConfig);
+        return getDelegate().getSupportActionBar();
     }
 
-    @Override
-    protected void onStop()
+    public void setSupportActionBar(
+            @Nullable
+            final Toolbar toolbar)
     {
-        super.onStop();
-        getDelegate().onStop();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        getDelegate().onDestroy();
-    }
-
-    public void invalidateOptionsMenu()
-    {
-        getDelegate().invalidateOptionsMenu();
-    }
-
-    private AppCompatDelegate getDelegate()
-    {
-        if (mDelegate == null)
-        {
-            mDelegate = AppCompatDelegate.create(this, null);
-        }
-        return mDelegate;
+        getDelegate().setSupportActionBar(toolbar);
     }
 }

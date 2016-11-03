@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.dmitryvoronko.news">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +20,29 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".view.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".view.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dmitryvoronko.news.view.main.MainActivity"/>
+        </activity>
+
+        <service
+            android:name=".services.FileDownloadService"
+            android:exported="false">
+        </service>
+
+        <activity
+            android:name=".view.add.AddNewActivity"
+            android:label="@string/title_activity_add_new"
+            android:parentActivityName=".view.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dmitryvoronko.news.view.main.MainActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -107,28 +133,6 @@
                     android:mimeType="application/atom+xml"
                     android:scheme="http"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".view.main.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.main.MainActivity"/>
-        </activity>
-
-        <service
-            android:name=".services.FileDownloadService"
-            android:exported="false">
-        </service>
-
-        <activity
-            android:name=".view.addnew.AddNewActivity"
-            android:label="@string/title_activity_add_new"
-            android:parentActivityName=".view.main.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.main.MainActivity"/>
         </activity>
     </application>
 

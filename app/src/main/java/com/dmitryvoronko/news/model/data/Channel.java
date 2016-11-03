@@ -10,8 +10,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public final class Channel extends Item
 {
-    public Channel(final String title, final String description, final String link)
+    public Channel(final String title,
+                   final String description,
+                   final String link,
+                   final String pubDate)
     {
-        super(title, description, link);
+        super(title, description, link, pubDate);
     }
 }

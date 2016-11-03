@@ -26,22 +26,22 @@ import java.util.List;
  * Created by Dmitry on 20/10/2016.
  */
 
-public final class SwipeableRecyclerViewTouchListener
+final class SwipeableRecyclerViewTouchListener
         implements RecyclerView.OnItemTouchListener
 {
     // Cached ViewConfiguration and system-wide constant values
-    private int mSlop;
-    private int mMinFlingVelocity;
-    private int mMaxFlingVelocity;
-    private long mAnimationTime;
+    private final int mSlop;
+    private final int mMinFlingVelocity;
+    private final int mMaxFlingVelocity;
+    private final long mAnimationTime;
 
     // Fixed properties
-    private RecyclerView mRecyclerView;
-    private SwipeListener mSwipeListener;
+    private final RecyclerView mRecyclerView;
+    private final SwipeListener mSwipeListener;
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
 
     // Transient properties
-    private List<PendingDismissData> mPendingDismisses = new ArrayList<>();
+    private final List<PendingDismissData> mPendingDismisses = new ArrayList<>();
     private int mDismissAnimationRefCount = 0;
     private float mAlpha;
     private float mDownX;
@@ -91,7 +91,7 @@ public final class SwipeableRecyclerViewTouchListener
         });
     }
 
-    public void setEnabled(final boolean enabled)
+    private void setEnabled(final boolean enabled)
     {
         mPaused = !enabled;
     }
@@ -104,16 +104,16 @@ public final class SwipeableRecyclerViewTouchListener
     }
 
     @Override
-    public void onRequestDisallowInterceptTouchEvent(final boolean disallowIntercept)
-    {
-        // Do nothing.
-    }
-
-    @Override
     public void onTouchEvent(final RecyclerView rv,
                              final MotionEvent motionEvent)
     {
         handleTouchEvent(motionEvent);
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(final boolean disallowIntercept)
+    {
+        // Do nothing.
     }
 
     private boolean handleTouchEvent(final MotionEvent motionEvent)
@@ -134,10 +134,10 @@ public final class SwipeableRecyclerViewTouchListener
                 // Find the child view that was touched (perform a hit test)
                 final Rect rect = new Rect();
                 final int childCount = mRecyclerView.getChildCount();
-                final int[] listViewCoords = new int[2];
-                mRecyclerView.getLocationOnScreen(listViewCoords);
-                final int x = (int) motionEvent.getRawX() - listViewCoords[0];
-                final int y = (int) motionEvent.getRawY() - listViewCoords[1];
+                final int[] listViewCoordinates = new int[2];
+                mRecyclerView.getLocationOnScreen(listViewCoordinates);
+                final int x = (int) motionEvent.getRawX() - listViewCoordinates[0];
+                final int y = (int) motionEvent.getRawY() - listViewCoordinates[1];
                 View child;
                 for (int i = 0; i < childCount; i++)
                 {
@@ -334,7 +334,7 @@ public final class SwipeableRecyclerViewTouchListener
     {
         // Animate the dismissed list item to zero-height and fire the dismiss callback when
         // all dismissed list item animations have completed. This triggers layout on each animation
-        // frame; in the future we may want to do something smarter and more performant.
+        // frame; in the future we may want to do something smarter and more productively.
 
         final ViewGroup.LayoutParams lp = dismissView.getLayoutParams();
         final int originalLayoutParamsHeight = lp.height;

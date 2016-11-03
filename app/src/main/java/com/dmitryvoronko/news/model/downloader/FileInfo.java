@@ -6,7 +6,7 @@ import lombok.Data;
  * Created by Dmitry on 31/10/2016.
  */
 @Data
-public final class FileInfo
+final class FileInfo
 {
     private final String link;
     private final String fileName;

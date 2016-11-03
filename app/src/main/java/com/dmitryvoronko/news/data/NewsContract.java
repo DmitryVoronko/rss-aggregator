@@ -5,7 +5,7 @@ package com.dmitryvoronko.news.data;
  * Created by Dmitry on 22/10/2016.
  */
 
-public final class NewsContract
+final class NewsContract
 {
     static final String DATABASE_CREATE = ChannelsTable.CREATE_TABLE + ArticlesTable.CREATE_TABLE;
     static final String DATABASE_DELETE = ChannelsTable.DELETE_TABLE + ArticlesTable.DELETE_TABLE;
@@ -26,9 +26,10 @@ public final class NewsContract
     private interface BaseTable
             extends android.provider.BaseColumns
     {
-        public static final String _TITLE = "_title";
-        public static final String _DESCRIPTION = "_description";
-        public static final String _LINK = "_url";
+        String _TITLE = "_title";
+        String _DESCRIPTION = "_description";
+        String _LINK = "_url";
+        String _PUB_DATE = "_pub_date";
     }
 
     public final class ChannelsTable
@@ -40,7 +41,8 @@ public final class NewsContract
                 _TABLE_NAME + " (" + _ID + INTEGER + PRIMARY_KEY + AUTOINCREMENT + COMMA_SEP +
                 _TITLE + TEXT + NOT_NULL + COMMA_SEP +
                 _DESCRIPTION + " " + TEXT + " " + NOT_NULL + COMMA_SEP +
-                _LINK + TEXT + NOT_NULL + UNIQUE + ");";
+                _LINK + TEXT + NOT_NULL + UNIQUE +
+                _PUB_DATE + TEXT + NOT_NULL + COMMA_SEP + ");";
 
         private static final String DELETE_TABLE = DROP_TABLE_IF_EXISTS + _TABLE_NAME;
     }

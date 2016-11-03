@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
 
@@ -35,8 +34,7 @@ public final class ItemRecyclerViewAdapter
                                         .inflate(R.layout.article_view,
                                                  parent,
                                                  false);
-        final ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override

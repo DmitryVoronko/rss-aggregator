@@ -12,8 +12,6 @@ import lombok.EqualsAndHashCode;
 public final class Article extends Item
 {
     private final int channelId;
-    private final String pubDate;
-    private State state = State.IS_NOT_READ;
 
     public Article(final String title,
                    final String description,
@@ -21,21 +19,7 @@ public final class Article extends Item
                    final int channelId,
                    final String pubDate)
     {
-        super(title, description, link);
+        super(title, description, link, pubDate);
         this.channelId = channelId;
-        this.pubDate = pubDate;
-    }
-
-    public enum State
-    {
-        WAS_READ("WAS_READ"),
-        IS_NOT_READ("IS_NOT_READ");
-
-        private final String name;
-
-        private State(final String name)
-        {
-            this.name = name;
-        }
     }
 }
