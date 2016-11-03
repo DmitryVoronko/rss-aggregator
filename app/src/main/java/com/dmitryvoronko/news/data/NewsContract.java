@@ -55,8 +55,6 @@ final class NewsContract
         static final String _TABLE_NAME = "ArticlesTable";
 
         static final String _CHANNEL_ID = "_channel_id";
-        static final String _PUB_DATE = "_pub_date";
-
 
         private static final String CREATE_TABLE = NewsContract.CREATE_TABLE + " " +
                 _TABLE_NAME + " (" +

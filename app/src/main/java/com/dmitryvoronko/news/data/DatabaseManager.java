@@ -29,8 +29,6 @@ public final class DatabaseManager
         return hasAlready(link, NewsContract.ChannelsTable._TABLE_NAME);
     }
 
-
-
     public long insert(final Channel channel) {
         final SQLiteDatabase database = dbHelper.getWritableDatabase();
         final ContentValues values = packChannel(channel);
@@ -53,11 +51,13 @@ public final class DatabaseManager
         return count;
     }
 
-    @Nullable public ArrayList<Channel> getChannels(final int startId) {
+    // FIXME: 03/11/2016 refactor
+    @Nullable public ArrayList<Channel> getChannels(final int startId,
+                                                    final String limit) {
         final SQLiteDatabase database = dbHelper.getWritableDatabase();
 
         final String tableName = NewsContract.ChannelsTable._TABLE_NAME;
-        final String where = NewsContract.ChannelsTable._ID + " > ?";
+        final String where = NewsContract.ChannelsTable._ID + " >= ?";
         final String[] whereArgs = {"" + startId};
         final int count = getCount(database, tableName, where, whereArgs);
 
@@ -75,14 +75,12 @@ public final class DatabaseManager
                     };
             final String orderBy =
                     NewsContract.ChannelsTable._STATE + ", " + NewsContract.ChannelsTable._TITLE;
-            final String limit = "20";
             final Cursor cursor =
                     database.query(tableName, columns, where, whereArgs, null, null, orderBy,
                                    limit);
             final ArrayList<Channel> channels = new ArrayList<>();
 
             final int[] columnsIndexes = getColumnIndexes(cursor, columns);
-
 
             while (cursor.moveToNext())
             {

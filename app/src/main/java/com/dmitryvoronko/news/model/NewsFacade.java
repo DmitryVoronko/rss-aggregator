@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * Created by Dmitry on 01/11/2016.
  */
 
-public final class News
+public final class NewsFacade
 {
     private final Context context;
     private final DatabaseManager databaseManager;
 
-    public News(final Context context)
+    public NewsFacade(final Context context)
     {
         this.context = context;
         databaseManager = new DatabaseManager(context);
@@ -39,8 +39,8 @@ public final class News
         }
     }
 
-    @Nullable public ArrayList<Channel> getChannels(final int startId)
+    @Nullable public ArrayList<Channel> getChannels(final int startId, final String limit)
     {
-        return databaseManager.getChannels(startId);
+        return databaseManager.getChannels(startId, limit);
     }
 }

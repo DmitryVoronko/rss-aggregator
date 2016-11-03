@@ -14,19 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.dmitryvoronko.news.R;
-import com.dmitryvoronko.news.model.News;
+import com.dmitryvoronko.news.model.NewsFacade;
 import com.dmitryvoronko.news.model.userinput.Status;
 
 public final class AddNewActivity extends AppCompatActivity
 {
     public static final String CHANNEL_LINK = "CHANNEL_LINK";
-    private final News news;
+    private final NewsFacade newsFacade;
     private EditText newItemEditText;
 
     public AddNewActivity()
     {
         super();
-        news = new News(this);
+        newsFacade = new NewsFacade(this);
     }
 
     @Override
@@ -70,7 +70,7 @@ public final class AddNewActivity extends AppCompatActivity
                         public void run()
                         {
 
-                            final Status status = news.requestAddNewChannel(userInput);
+                            final Status status = newsFacade.requestAddNewChannel(userInput);
                             runOnUiThread(new Runnable()
                             {
                                 @Override
@@ -122,7 +122,7 @@ public final class AddNewActivity extends AppCompatActivity
             case NO_INTERNET_CONNECTION:
                 break;
             case NOT_URL:
-                showSnackbar(R.string.input_string_are_not_link);
+                showSnackbar(R.string.input_string_is_not_link);
                 break;
             case NOT_XML:
                 showSnackbar(R.string.input_link_are_not_xml);

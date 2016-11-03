@@ -13,7 +13,7 @@
     <string name="no_internet_connection_message">No internet connection</string>
     <string name="channel_successfully_added">Channel successfully added</string>
     <string name="already_exists">Channel already exists</string>
-    <string name="input_string_are_not_link">Input string are not link</string>
+    <string name="input_string_is_not_link">Input string is not link</string>
     <string name="input_link_are_not_xml">Input link does not contains channel</string>
 
     <!-- MainActivity values -->

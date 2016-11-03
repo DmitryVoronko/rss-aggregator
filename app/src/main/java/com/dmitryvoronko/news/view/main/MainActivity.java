@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
@@ -34,6 +36,7 @@ public final class MainActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private final ArrayList<Channel> data = new ArrayList<>();
+    private SwipeRefreshLayout updateItemsRefreshLayout;
 
     private TempItem tempItem;
 
@@ -46,6 +49,27 @@ public final class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+        updateItemsRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        updateItemsRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+
+        updateItemsRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override public void onRefresh()
+            {
+//                Toast.makeText(this, R.string.refresh_started, Toast.LENGTH_SHORT).show();
+                // начинаем показывать прогресс
+                updateItemsRefreshLayout.setRefreshing(true);
+                // ждем 3 секунды и прячем прогресс
+                updateItemsRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateItemsRefreshLayout.setRefreshing(false);
+                        // говорим о том, что собираемся закончить
+//                        Toast.makeText(MainActivity.this, R.string.refresh_finished, Toast.LENGTH_SHORT).show();
+                    }
+                }, 3000);
+            }
+        });
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
