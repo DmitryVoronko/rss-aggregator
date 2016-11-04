@@ -31,7 +31,7 @@ final class FileDownloader
         this.contextWrapper = contextWrapper;
     }
 
-    public boolean downloadFile(FileInfo fileInfo)
+    public boolean downloadFile(final FileInfo fileInfo)
     {
         try
         {

@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
@@ -123,6 +122,7 @@ public final class MainActivity extends AppCompatActivity
     {
         final Intent intent = new Intent(this, MainService.class);
         final ComponentName componentName = startService(intent);
+
     }
 
     @NonNull
@@ -265,11 +265,11 @@ public final class MainActivity extends AppCompatActivity
 
     private void handleAddNewItem(final Intent input)
     {
-        final String channelUrl = input.getStringExtra(AddNewActivity.CHANNEL_LINK);
-        final Channel channel = FeedObjectFactory.createChannel(0, channelUrl, channelUrl, channelUrl,
-                                                                channelUrl,
-                                                                State.IS_NOT_READ);
-        putChannelToStorage(channel, 0);
+//        final String channelUrl = input.getStringExtra(AddNewActivity.CHANNEL_LINK);
+//        final Channel channel = FeedObjectFactory.createChannel(0, channelUrl, channelUrl, channelUrl,
+//                                                                channelUrl,
+//                                                                State.IS_NOT_READ);
+//        putChannelToStorage(channel, 0);
     }
 
     @Data

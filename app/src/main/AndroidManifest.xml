@@ -31,7 +31,7 @@
         </activity>
 
         <service
-            android:name=".services.FileDownloadService"
+            android:name=".services.MainService"
             android:exported="false">
         </service>
 
@@ -135,11 +135,7 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".services.MainService"
-            android:enabled="false"
-            android:exported="false">
-        </service>
+        <receiver android:name=".view.add.AddNewActivity"/>
     </application>
 
 </manifest>

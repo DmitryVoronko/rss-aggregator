@@ -1,8 +1,10 @@
 package com.dmitryvoronko.news.view.add;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,20 +16,23 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.dmitryvoronko.news.R;
-import com.dmitryvoronko.news.model.NewsFacade;
 import com.dmitryvoronko.news.model.userinput.Status;
+import com.dmitryvoronko.news.services.MainService;
 
 public final class AddNewActivity extends AppCompatActivity
 {
-    public static final String CHANNEL_LINK = "CHANNEL_LINK";
-    private final NewsFacade newsFacade;
     private EditText newItemEditText;
-
-    public AddNewActivity()
+    private ProgressDialog progressDialog;
+    private final BroadcastReceiver statusReceiver = new BroadcastReceiver()
     {
-        super();
-        newsFacade = new NewsFacade(this);
-    }
+        @Override public void onReceive(final Context context, final Intent intent)
+        {
+            final String stringStatus = intent.getStringExtra(MainService.EXTRA_ADD_NEW_CHANNEL_STATUS);
+            final Status status = Status.valueOf(stringStatus);
+            progressDialog.dismiss();
+            handleStatus(status);
+        }
+    };
 
     @Override
     protected void onCreate(final Bundle savedInstanceState)
@@ -35,11 +40,29 @@ public final class AddNewActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new);
 
+        initViewComponents();
+
+        initStatusReceiver();
+
+        readIntentData();
+    }
+
+    @Override protected void onPause()
+    {
+        super.onPause();
+        unregisterReceiver(statusReceiver);
+    }
+
+    private void initViewComponents()
+    {
         newItemEditText = (EditText) findViewById(R.id.new_item_edit_text);
         final Button addButton = (Button) findViewById(R.id.add_new_item_button);
-
+        progressDialog = getProgressDialogWithTitle();
         addButton.setOnClickListener(getAddNewItemListener(newItemEditText));
+    }
 
+    private void readIntentData()
+    {
         final Intent intent = getIntent();
         final Uri data = intent.getData();
 
@@ -47,7 +70,13 @@ public final class AddNewActivity extends AppCompatActivity
         {
             newItemEditText.setText(data.toString());
         }
+    }
 
+    private void initStatusReceiver()
+    {
+        final IntentFilter intentFilter =
+                new IntentFilter(MainService.ACTION_ADD_NEW_CHANNEL_STATUS);
+        registerReceiver(statusReceiver, intentFilter);
     }
 
     @NonNull private View.OnClickListener getAddNewItemListener(final EditText newItemEditText)
@@ -56,37 +85,20 @@ public final class AddNewActivity extends AppCompatActivity
         {
             @Override public void onClick(final View v)
             {
-                hideKeyboard();
-                final String userInput = newItemEditText.getText().toString();
-                if (!userInput.equals(""))
-                {
-
-                    final ProgressDialog progressDialog = getProgressDialogWithTitle();
-                    progressDialog.show();
-
-                    final Thread thread = new Thread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-
-                            final Status status = newsFacade.requestAddNewChannel(userInput);
-                            runOnUiThread(new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    progressDialog.dismiss();
-                                    handleStatus(status);
-                                }
-                            });
-                        }
-                    });
-                    thread.setDaemon(true);
-                    thread.start();
-                }
+                requestAddNewChannelToService();
             }
         };
+    }
+
+    private void requestAddNewChannelToService()
+    {
+        final String userInput = newItemEditText.getText().toString();
+        if (!userInput.equals(""))
+        {
+            hideKeyboard();
+            progressDialog.show();
+            MainService.startActionAddNewChannel(this, userInput);
+        }
     }
 
     private void hideKeyboard()
@@ -148,10 +160,11 @@ public final class AddNewActivity extends AppCompatActivity
 
     private void handleChannelAdded()
     {
-        final String newItem = newItemEditText.getText().toString();
-        final Intent result = new Intent();
-        result.putExtra(CHANNEL_LINK, newItem);
-        setResult(RESULT_OK, result);
+//        final String newItem = newItemEditText.getText().toString();
+//        final Intent result = new Intent();
+//        result.putExtra(, newItem);
+//        setResult(RESULT_OK, result);
         finish();
     }
+
 }
