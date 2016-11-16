@@ -5,25 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
+ *
  * Created by Dmitry on 21/10/2016.
  */
 
-final class NewsDBOpenHelper
-        extends SQLiteOpenHelper
+final class NewsDBOpenHelper extends SQLiteOpenHelper
 {
     private static final String DATABASE_NAME = "newsDatabase.db";
     private static final int DATABASE_VERSION = 1;
-
-    public NewsDBOpenHelper(final Context context,
-                            final String name,
-                            final SQLiteDatabase.CursorFactory factory,
-                            final int version)
-    {
-        super(context,
-              name,
-              factory,
-              version);
-    }
 
     NewsDBOpenHelper(final Context context)
     {
@@ -36,7 +25,8 @@ final class NewsDBOpenHelper
     @Override
     public void onCreate(final SQLiteDatabase db)
     {
-        db.execSQL(NewsContract.DATABASE_CREATE);
+        db.execSQL(NewsContract.ChannelsTable.CREATE_TABLE);
+        db.execSQL(NewsContract.EntryTable.CREATE_TABLE);
     }
 
     @Override

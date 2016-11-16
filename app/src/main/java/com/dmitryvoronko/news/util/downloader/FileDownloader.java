@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.model.downloader;
+package com.dmitryvoronko.news.util.downloader;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -16,11 +16,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import lombok.Cleanup;
+
 /**
+ *
  * Created by Dmitry on 31/10/2016.
  */
 
-final class FileDownloader
+public final class FileDownloader
 {
     private static final String TAG = "FILE_DOWNLOADER";
 
@@ -31,7 +34,7 @@ final class FileDownloader
         this.contextWrapper = contextWrapper;
     }
 
-    public boolean downloadFile(final FileInfo fileInfo)
+    public void downloadFile(final FileInfo fileInfo)
     {
         try
         {
@@ -42,9 +45,9 @@ final class FileDownloader
             final int responseCode = httpConnection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK)
             {
-                final InputStream inputStream = httpConnection.getInputStream();
+                @Cleanup final InputStream inputStream = httpConnection.getInputStream();
 
-                return fileCreated(fileInfo.getFileName(), inputStream);
+                fileCreated(fileInfo.getFileName(), inputStream);
             }
 
         } catch (final MalformedURLException e)
@@ -54,72 +57,31 @@ final class FileDownloader
         {
             Log.d(TAG, "downloadFile: TOTAL_ERROR Exception", e);
         }
-
-        return false;
     }
 
-    private boolean fileCreated(final String fileName,
+    private void fileCreated(final String fileName,
                                 final InputStream inputStream)
     {
-        OutputStreamWriter writer = null;
-        BufferedReader reader = null;
         try
         {
             final FileOutputStream fileOutputStream =
                     contextWrapper.openFileOutput(fileName, Context.MODE_PRIVATE);
-            writer = new OutputStreamWriter(fileOutputStream);
+            @Cleanup final OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream);
 
             final InputStreamReader streamReader = new InputStreamReader(inputStream);
-            reader = new BufferedReader(streamReader);
+            @Cleanup final BufferedReader reader = new BufferedReader(streamReader);
 
             String line;
             while ((line = reader.readLine()) != null)
             {
                 writer.write(line);
             }
-
-            return true;
-
         } catch (final FileNotFoundException e)
         {
             Log.d(TAG, "fileCreated: File Not Found Exception", e);
         } catch (final IOException e)
         {
             Log.d(TAG, "fileCreated: TOTAL_ERROR Exception", e);
-        } finally
-        {
-            closeWriter(writer);
-            closeReader(reader);
-        }
-        return false;
-    }
-
-    private void closeWriter(OutputStreamWriter writer)
-    {
-        if (writer != null)
-        {
-            try
-            {
-                writer.flush();
-                writer.close();
-            } catch (final IOException e)
-            {
-                Log.d(TAG, "closeWriter: TOTAL_ERROR Exception", e);
-            }
-        }
-    }
-
-    private void closeReader(BufferedReader reader)
-    {
-        if (reader != null)
-        {
-            try
-            {
-                reader.close();
-            } catch (final IOException e)
-            {
-                Log.d(TAG, "closeReader: TOTAL_ERROR Exception", e);
-            }
         }
     }
 

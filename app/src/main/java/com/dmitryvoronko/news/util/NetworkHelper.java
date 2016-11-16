@@ -4,17 +4,29 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import lombok.NonNull;
+
 /**
+ *
  * Created by Dmitry on 01/11/2016.
  */
 
 public final class NetworkHelper
 {
-    public static boolean hasConnection(final Context context)
+    private NetworkHelper()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    public static boolean hasConnection(@NonNull final Context context)
     {
         final ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null)
+        {
+            return false;
+        }
         final NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        return networkInfo.isConnectedOrConnecting();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 }

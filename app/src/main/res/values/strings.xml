@@ -15,6 +15,8 @@
     <string name="already_exists">Channel already exists</string>
     <string name="input_string_is_not_link">Input string is not link</string>
     <string name="input_link_are_not_xml">Input link does not contains channel</string>
+    <string name="enter_valid_channel_link">Enter valid channel link</string>
+    <string name="unsupported_channel_format">Sorry. Our application does not support this format of channel.</string>
 
     <!-- MainActivity values -->
     <string name="channel_restored_message">Channel is restored!</string>
@@ -64,20 +66,6 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value"/>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 

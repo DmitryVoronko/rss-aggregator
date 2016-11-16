@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.main;
+package com.dmitryvoronko.news.view.content;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ *
  * Created by Dmitry on 20/10/2016.
  */
 
@@ -38,10 +39,9 @@ final class SwipeableRecyclerViewTouchListener
     // Fixed properties
     private final RecyclerView mRecyclerView;
     private final SwipeListener mSwipeListener;
-    private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
-
     // Transient properties
     private final List<PendingDismissData> mPendingDismisses = new ArrayList<>();
+    private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
     private int mDismissAnimationRefCount = 0;
     private float mAlpha;
     private float mDownX;
@@ -58,10 +58,10 @@ final class SwipeableRecyclerViewTouchListener
     private boolean mSwipingLeft;
     private boolean mSwipingRight;
 
-    public SwipeableRecyclerViewTouchListener(final RecyclerView recyclerView,
-                                              final SwipeListener listener)
+    SwipeableRecyclerViewTouchListener(final RecyclerView recyclerView,
+                                       final SwipeListener listener)
     {
-        ViewConfiguration vc = ViewConfiguration.get(recyclerView.getContext());
+        final ViewConfiguration vc = ViewConfiguration.get(recyclerView.getContext());
         mSlop = vc.getScaledTouchSlop();
         mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
         mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
@@ -158,16 +158,10 @@ final class SwipeableRecyclerViewTouchListener
                     mDownX = motionEvent.getRawX();
                     mDownY = motionEvent.getRawY();
                     mDownPosition = mRecyclerView.getChildLayoutPosition(mDownView);
-                    mSwipingLeft = mSwipeListener.canSwipeLeft(mDownPosition);
-                    mSwipingRight = mSwipeListener.canSwipeRight(mDownPosition);
-                    if (mSwipingLeft || mSwipingRight)
-                    {
-                        mVelocityTracker = VelocityTracker.obtain();
-                        mVelocityTracker.addMovement(motionEvent);
-                    } else
-                    {
-                        mDownView = null;
-                    }
+                    mSwipingLeft = false;
+                    mSwipingRight = true;
+                    mVelocityTracker = VelocityTracker.obtain();
+                    mVelocityTracker.addMovement(motionEvent);
                 }
                 break;
             }
@@ -241,13 +235,13 @@ final class SwipeableRecyclerViewTouchListener
                               .setListener(new ViewPropertyAnimatorListener()
                               {
                                   @Override
-                                  public void onAnimationStart(View view)
+                                  public void onAnimationStart(final View view)
                                   {
                                       // Do nothing.
                                   }
 
                                   @Override
-                                  public void onAnimationEnd(View view)
+                                  public void onAnimationEnd(final View view)
                                   {
                                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                       {
@@ -257,7 +251,7 @@ final class SwipeableRecyclerViewTouchListener
                                   }
 
                                   @Override
-                                  public void onAnimationCancel(View view)
+                                  public void onAnimationCancel(final View view)
                                   {
                                       // Do nothing.
                                   }
@@ -340,7 +334,7 @@ final class SwipeableRecyclerViewTouchListener
         final int originalLayoutParamsHeight = lp.height;
         final int originalHeight = dismissView.getHeight();
 
-        ValueAnimator
+        final ValueAnimator
                 animator =
                 ValueAnimator.ofInt(originalHeight,
                                     1)
@@ -349,7 +343,7 @@ final class SwipeableRecyclerViewTouchListener
         animator.addListener(new AnimatorListenerAdapter()
         {
             @Override
-            public void onAnimationEnd(Animator animation)
+            public void onAnimationEnd(final Animator animation)
             {
                 --mDismissAnimationRefCount;
                 if (mDismissAnimationRefCount == 0)
@@ -364,14 +358,9 @@ final class SwipeableRecyclerViewTouchListener
                         dismissPositions[i] = mPendingDismisses.get(i).position;
                     }
 
-                    if (mFinalDelta < 0)
+                    if (mFinalDelta >= 0)
                     {
-                        mSwipeListener.onDismissedBySwipeLeft(mRecyclerView,
-                                                              dismissPositions);
-                    } else
-                    {
-                        mSwipeListener.onDismissedBySwipeRight(mRecyclerView,
-                                                               dismissPositions);
+                        mSwipeListener.onDismissedBySwipeRight(dismissPositions);
                     }
 
                     // Reset mDownPosition to avoid MotionEvent.ACTION_UP trying to start a dismiss
@@ -379,7 +368,7 @@ final class SwipeableRecyclerViewTouchListener
                     mDownPosition = ListView.INVALID_POSITION;
 
                     ViewGroup.LayoutParams lp;
-                    for (PendingDismissData pendingDismiss : mPendingDismisses)
+                    for (final PendingDismissData pendingDismiss : mPendingDismisses)
                     {
                         // Reset view presentation
                         pendingDismiss.view.setAlpha(mAlpha);
@@ -411,7 +400,7 @@ final class SwipeableRecyclerViewTouchListener
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator)
+            public void onAnimationUpdate(final ValueAnimator valueAnimator)
             {
                 lp.height = (Integer) valueAnimator.getAnimatedValue();
                 dismissView.setLayoutParams(lp);
@@ -423,17 +412,9 @@ final class SwipeableRecyclerViewTouchListener
         animator.start();
     }
 
-    public interface SwipeListener
+    interface SwipeListener
     {
-        boolean canSwipeLeft(final int position);
-
-        boolean canSwipeRight(final int position);
-
-        void onDismissedBySwipeLeft(final RecyclerView recyclerView,
-                                    final int[] reverseSortedPositions);
-
-        void onDismissedBySwipeRight(final RecyclerView recyclerView,
-                                     final int[] reverseSortedPositions);
+        void onDismissedBySwipeRight(final int[] reverseSortedPositions);
     }
 
     private final class PendingDismissData

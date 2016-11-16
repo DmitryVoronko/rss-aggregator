@@ -3,9 +3,11 @@
                                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
                                     android:id="@+id/card_view"
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/card_default_height"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="@dimen/card_default_height"
                                     android:layout_gravity="center"
                                     android:layout_margin="@dimen/card_margin"
+
                                     card_view:cardCornerRadius="@dimen/card_corner_radius">
 
     <RelativeLayout

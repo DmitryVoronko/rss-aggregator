@@ -6,12 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.dmitryvoronko.news.view.main.MainActivity">
+    tools:context="com.dmitryvoronko.news.view.content.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/main_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        >
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -21,7 +23,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
+    <include layout="@layout/content_layout"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

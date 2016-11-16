@@ -1,15 +1,19 @@
 package com.dmitryvoronko.news.model;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.support.annotation.Nullable;
 
 import com.dmitryvoronko.news.data.DatabaseManager;
 import com.dmitryvoronko.news.model.data.Channel;
+import com.dmitryvoronko.news.model.data.Entry;
 import com.dmitryvoronko.news.model.userinput.Status;
 import com.dmitryvoronko.news.model.userinput.UserInputHandler;
 import com.dmitryvoronko.news.util.NetworkHelper;
 
 import java.util.ArrayList;
+
+import lombok.NonNull;
 
 /**
  * Created by Dmitry on 01/11/2016.
@@ -19,14 +23,16 @@ public final class NewsFacade
 {
     private final Context context;
     private final DatabaseManager databaseManager;
+    private final NewsUpdater updater;
 
-    public NewsFacade(final Context context)
+    public NewsFacade(@NonNull final ContextWrapper context)
     {
         this.context = context;
         databaseManager = new DatabaseManager(context);
+        updater = new NewsUpdater(context, databaseManager);
     }
 
-    public Status requestAddNewChannel(final String userInput)
+    public Status requestAddNewChannel(@NonNull final String userInput)
     {
         final boolean hasConnection = NetworkHelper.hasConnection(context);
         if (hasConnection)
@@ -39,8 +45,38 @@ public final class NewsFacade
         }
     }
 
-    @Nullable public ArrayList<Channel> getChannels(final int startId, final String limit)
+    @Nullable public ArrayList<Channel> getChannels()
     {
-        return databaseManager.getChannels(startId, limit);
+        return databaseManager.getChannels();
+    }
+
+    public ArrayList<Entry> getEntries(final long channelId)
+    {
+        return databaseManager.getEntries(channelId);
+    }
+
+    public void deleteChannel(final long id)
+    {
+        databaseManager.deleteChannel(id);
+    }
+
+    public void updateChannels()
+    {
+        updater.updateChannels();
+    }
+
+    public void deleteEntry(final long id)
+    {
+        databaseManager.deleteEntry(id);
+    }
+
+    public void updateEntries(final long channelId)
+    {
+        updater.updateChannel(channelId);
+    }
+
+    public void cancelUpdate()
+    {
+        updater.cancelUpdate();
     }
 }
