@@ -35,5 +35,17 @@
             android:layout_below="@id/article_title"
             android:padding="@dimen/description_text_padding"
             android:textSize="@dimen/description_text_size"/>
+        <ImageButton
+            android:id="@+id/feed_object_share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/article_description"
+            android:layout_alignParentRight="true"
+            android:background="@color/cardview_light_background"
+            android:layout_marginBottom="@dimen/description_text_padding"
+            android:layout_marginEnd="@dimen/description_text_padding"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_share_black_24dp"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -7,10 +7,12 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
+import com.dmitryvoronko.news.util.ShareHelper;
 
 import java.util.ArrayList;
 
@@ -51,7 +53,18 @@ final class ContentRecyclerViewAdapter
         articleTitle = (TextView) holder.cardView.findViewById(R.id.article_title);
         final TextView articleDescription;
         articleDescription = (TextView) holder.cardView.findViewById(R.id.article_description);
+        final ImageButton imageButton;
+        imageButton = (ImageButton) holder.cardView.findViewById(R.id.feed_object_share_button);
         final Channel channel = data.get(position);
+
+        imageButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override public void onClick(final View view)
+            {
+                ShareHelper.share(holder.cardView.getContext(), channel.getLink());
+            }
+        });
+
 
         holder.cardView.setOnClickListener(new View.OnClickListener()
         {
@@ -63,6 +76,11 @@ final class ContentRecyclerViewAdapter
 
         //noinspection deprecation
         articleTitle.setText(Html.fromHtml(channel.getTitle()));
+
+        if (channel.getTitle().equals(""))
+        {
+            holder.cardView.removeView(articleTitle);
+        }
         //noinspection deprecation
         final Spanned description = Html.fromHtml(channel.getDescription());
         articleDescription.setText(description);

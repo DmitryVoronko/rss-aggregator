@@ -10,6 +10,7 @@ import android.webkit.WebViewClient;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.util.NetworkHelper;
+import com.dmitryvoronko.news.util.ShareHelper;
 import com.dmitryvoronko.news.util.SnackbarHelper;
 
 import static com.dmitryvoronko.news.view.content.EntriesActivity.EXTRA_ENTRY_ID;
@@ -46,10 +47,7 @@ public final class EntryActivity extends AppCompatActivity
             {
                 @Override public void onClick(final View view)
                 {
-                    final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, entryLink);
-                    startActivity(Intent.createChooser(shareIntent, "Shipping method"));
+                    share(entryLink);
                 }
             });
 
@@ -62,6 +60,11 @@ public final class EntryActivity extends AppCompatActivity
                 SnackbarHelper.showNoInternetConnectionSnackBar(this);
             }
         }
+    }
+
+    private void share(final String entryLink)
+    {
+        ShareHelper.share(this, entryLink);
     }
 
     private void loadEntry(final String entryLink)
