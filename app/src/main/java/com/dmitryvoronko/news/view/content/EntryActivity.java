@@ -2,7 +2,9 @@ package com.dmitryvoronko.news.view.content;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -23,6 +25,8 @@ public final class EntryActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
 
+        final FloatingActionButton shareButton =
+                (FloatingActionButton) findViewById(R.id.share_entry_fab);
         final Intent intent = getIntent();
         if (intent != null)
         {
@@ -37,6 +41,18 @@ public final class EntryActivity extends AppCompatActivity
             {
                 throw new UnsupportedOperationException();
             }
+
+            shareButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override public void onClick(final View view)
+                {
+                    final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, entryLink);
+                    startActivity(Intent.createChooser(shareIntent, "Shipping method"));
+                }
+            });
+
             final boolean hasConnection = NetworkHelper.hasConnection(this);
             if (hasConnection)
             {

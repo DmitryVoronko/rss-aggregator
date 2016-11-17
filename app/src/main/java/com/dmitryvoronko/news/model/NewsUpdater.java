@@ -1,5 +1,6 @@
 package com.dmitryvoronko.news.model;
 
+import android.app.job.JobService;
 import android.content.ContextWrapper;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -21,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 import lombok.Cleanup;
 import lombok.Data;
@@ -36,22 +38,21 @@ final class NewsUpdater
 
     private final ContextWrapper contextWrapper;
     private final DatabaseManager databaseManager;
-    private ExecutorService executorService;
+    private final ExecutorService executorService;
 
     NewsUpdater(final ContextWrapper contextWrapper,
                 final DatabaseManager databaseManager)
     {
         this.contextWrapper = contextWrapper;
         this.databaseManager = databaseManager;
+        final int threadsCount = Runtime.getRuntime().availableProcessors() * 2;
+        executorService = Executors.newFixedThreadPool(threadsCount);
     }
 
     void updateChannels()
     {
         final ArrayList<Channel> channels = databaseManager.getChannels();
 
-        final int threadsCounts = channels.size();
-
-        executorService = Executors.newFixedThreadPool(threadsCounts);
         while (!executorService.isShutdown())
         {
             final ArrayList<Future<Feed>> futures = new ArrayList<>();

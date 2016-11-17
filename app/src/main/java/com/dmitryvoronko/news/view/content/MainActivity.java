@@ -78,7 +78,7 @@ public final class MainActivity extends ContentActivity
         {
             super.onCreate(savedInstanceState);
             final FloatingActionButton addNewItemButton;
-            addNewItemButton = (FloatingActionButton) findViewById(R.id.fab);
+            addNewItemButton = (FloatingActionButton) findViewById(R.id.add_new_channel_fab);
 
             addNewItemButton.setOnClickListener(new View.OnClickListener()
             {
