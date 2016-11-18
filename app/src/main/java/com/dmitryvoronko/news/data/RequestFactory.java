@@ -138,7 +138,6 @@ final class RequestFactory extends RequestFactoryBase
                 NewsContract.ChannelsTable._TITLE,
                 NewsContract.ChannelsTable._LINK,
                 NewsContract.ChannelsTable._DESCRIPTION,
-                NewsContract.ChannelsTable._STATE,
                 };
     }
 
@@ -152,9 +151,7 @@ final class RequestFactory extends RequestFactoryBase
 
                 final String[] columns = getChannelColumns();
 
-                final String orderBy =
-                        NewsContract.ChannelsTable._STATE + ", " +
-                                NewsContract.ChannelsTable._TITLE;
+                final String orderBy = NewsContract.ChannelsTable._TITLE;
 
                 @Cleanup final Cursor cursor =
                         database.query(tableName, columns, null, null, null, null, orderBy);
@@ -186,12 +183,10 @@ final class RequestFactory extends RequestFactoryBase
                         NewsContract.EntryTable._TITLE,
                         NewsContract.EntryTable._LINK,
                         NewsContract.EntryTable._DESCRIPTION,
-                        NewsContract.EntryTable._STATE,
                         NewsContract.EntryTable._CHANNEL_ID
                 };
 
-                final String orderBy = NewsContract.EntryTable._STATE + ", "
-                        + NewsContract.EntryTable._TITLE;
+                final String orderBy = NewsContract.EntryTable._TITLE;
 
                 final String where = NewsContract.EntryTable._CHANNEL_ID + LIKE;
                 final String stringChannelId = String.valueOf(channelId);

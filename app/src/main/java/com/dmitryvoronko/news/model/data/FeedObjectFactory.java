@@ -17,17 +17,15 @@ public final class FeedObjectFactory
     private static final int INDEX_TITLE_COLUMN = 1;
     private static final int INDEX_LINK_COLUMN = 2;
     private static final int INDEX_DESCRIPTION_COLUMN = 3;
-    private static final int INDEX_STATE_COLUMN = 4;
-    private static final int INDEX_CHANNEL_ID_COLUMN = 5;
+    private static final int INDEX_CHANNEL_ID_COLUMN = 4;
 
-    private static Channel createChannel(@NonNull final long id, @NonNull final String title,
-                                        @NonNull final String link,
-                                        @NonNull final String description,
-                                        @NonNull final State state)
-    {
-        return new FeedObject(id, title, link, description,
-                              state);
-    }
+//    private static Channel createChannel(@NonNull final long id,
+//                                         @NonNull final String title,
+//                                        @NonNull final String link,
+//                                        @NonNull final String description)
+//    {
+//        return new FeedObject(id, title, link, description);
+//    }
 
     public static Entry createEntry(@NonNull final Cursor cursor,
                                     @NonNull final int[] columnsIndexes)
@@ -46,9 +44,7 @@ public final class FeedObjectFactory
         @NonNull final String link = cursor.getString(columnsIndexes[INDEX_LINK_COLUMN]);
         @NonNull final String description =
                 cursor.getString(columnsIndexes[INDEX_DESCRIPTION_COLUMN]);
-        @NonNull final String state = cursor.getString(columnsIndexes[INDEX_STATE_COLUMN]);
-        return createChannel(id, title, link, description,
-                             state);
+        return createChannel(id, title, link, description);
     }
 
     private static Entry createEntry(@NonNull final Channel channel,
@@ -56,36 +52,31 @@ public final class FeedObjectFactory
     {
         return createEntry(channel.getId(), channel.getTitle(), channel.getLink(),
                            channel.getDescription(),
-                           channel.getState(),
                            channelId);
     }
 
     private static Channel createChannel(@NonNull final long id,
                                          @NonNull final String title,
                                          @NonNull final String link,
-                                         @NonNull final String description,
-                                         @NonNull final String stateString)
+                                         @NonNull final String description)
     {
-        @NonNull final State state = State.valueOf(stateString);
-        return new FeedObject(id, title, link, description,
-                              state);
+        return new FeedObject(id, title, link, description);
     }
 
     public static Entry createEntry(@NonNull final long id,
                                     @NonNull final String title,
                                     @NonNull final String link,
                                     @NonNull final String description,
-                                    @NonNull final State state,
                                     @NonNull final long channelId)
     {
-        return new FeedEntry(id, title, link, description,
-                             state, channelId);
+        return new FeedEntry(id, title, link, description, channelId);
     }
 
 
-    public static Channel createChannel(final String title, final String link,
-                                        final String description)
+    public static Channel createChannel(@NonNull final String title,
+                                        @NonNull final String link,
+                                        @NonNull final String description)
     {
-        return createChannel(NO_ID, title, link, description, State.IS_NOT_READ);
+        return createChannel(NO_ID, title, link, description);
     }
 }

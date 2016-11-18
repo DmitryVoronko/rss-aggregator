@@ -1,13 +1,11 @@
 package com.dmitryvoronko.news.view.content;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +16,6 @@ import android.view.View;
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.services.ContentService;
-import com.dmitryvoronko.news.services.ContentType;
 import com.dmitryvoronko.news.services.ItemToBeDeleted;
 import com.dmitryvoronko.news.util.SnackbarHelper;
 
@@ -34,22 +31,17 @@ abstract class ContentActivity extends AppCompatActivity
     private static final String TAG = "ContentActivity";
 
     private final ContentRecyclerViewAdapter adapter = createContentRecyclerViewAdapter();
-    protected ContentType contentType;
     private SwipeRefreshLayout updateContentRefreshLayout;
     private RecyclerView recyclerView;
-    private ContentService contentService;
     private final BroadcastReceiver contentBroadcastReceiver = createBroadcastReceiver();
     private final ServiceConnection contentServiceConnection = createServiceConnection();
+    protected ContentService contentService;
 
     @Override
     public void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        initContentType();
-        if (contentType == null)
-        {
-            throw new NullPointerException();
-        }
+
         setLayout();
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -64,8 +56,6 @@ abstract class ContentActivity extends AppCompatActivity
         recyclerView.addOnItemTouchListener(swipeTouchListener);
         updateContentRefreshLayout = createUpdateContentRefreshLayout();
     }
-
-    protected abstract void initContentType();
 
     protected abstract void setLayout();
 
@@ -160,7 +150,7 @@ abstract class ContentActivity extends AppCompatActivity
         super.onResume();
         registerContentReceiver();
         bindContentService();
-        getContent();
+        requestContent();
     }
 
     private void registerContentReceiver()
@@ -172,30 +162,15 @@ abstract class ContentActivity extends AppCompatActivity
 
     private void bindContentService()
     {
-        final Intent intent = new Intent(this, ContentService.class);
-        intent.putExtra(ContentService.EXTRA_CONTENT_TYPE, contentType.name());
+        final Intent intent = getContentServiceIntent();
         bindService(intent, contentServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    protected abstract void getContent();
+    protected abstract void requestContent();
 
-    @NonNull private ServiceConnection createServiceConnection()
-    {
-        return new ServiceConnection()
-        {
-            @Override
-            public void onServiceConnected(final ComponentName name, final IBinder service)
-            {
-                final ContentService.Binder binder = (ContentService.Binder) service;
-                contentService = binder.getService();
-            }
+    @NonNull protected abstract Intent getContentServiceIntent();
 
-            @Override public void onServiceDisconnected(final ComponentName name)
-            {
-                contentService = null;
-            }
-        };
-    }
+    protected abstract ServiceConnection createServiceConnection();
 
     @NonNull private BroadcastReceiver createBroadcastReceiver()
     {

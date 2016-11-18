@@ -18,11 +18,9 @@ final class FeedEntry extends FeedObject implements Entry
               final String title,
               final String link,
               final String description,
-              final State state,
               final long channelId)
     {
-        super(id, title, link, description,
-              state);
+        super(id, title, link, description);
         this.channelId = channelId;
     }
 }

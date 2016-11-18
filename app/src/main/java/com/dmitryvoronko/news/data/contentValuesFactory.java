@@ -25,7 +25,6 @@ final class ContentValuesFactory
         values.put(NewsContract.BaseTable._TITLE, channel.getTitle());
         values.put(NewsContract.BaseTable._DESCRIPTION, channel.getDescription());
         values.put(NewsContract.BaseTable._LINK, channel.getLink());
-        values.put(NewsContract.BaseTable._STATE, channel.getState().name());
         return values;
     }
 

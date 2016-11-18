@@ -16,9 +16,9 @@ import lombok.NonNull;
 abstract class RequestFactoryBase
 {
     static long insertBase(@NonNull final SQLiteDatabase sqLiteDatabase,
-                                           @NonNull final String tableName,
-                                           @NonNull final ContentValues values,
-                                           @NonNull final Channel channel)
+                           @NonNull final String tableName,
+                           @NonNull final ContentValues values,
+                           @NonNull final Channel channel)
     {
 
         final String link = values.getAsString(NewsContract.BaseTable._LINK);
@@ -34,8 +34,8 @@ abstract class RequestFactoryBase
     }
 
     static boolean alreadyExistsBase(@NonNull final SQLiteDatabase database,
-                                                     @NonNull final String link,
-                                                     @NonNull final String tableName)
+                                     @NonNull final String link,
+                                     @NonNull final String tableName)
     {
         final String where = NewsContract.BaseTable._LINK + NewsContract.LIKE;
         final String[] whereArgs = {link};
@@ -44,9 +44,9 @@ abstract class RequestFactoryBase
     }
 
     static boolean updateBase(@NonNull final SQLiteDatabase sqLiteDatabase,
-                                              @NonNull final String tableName,
-                                              @NonNull final ContentValues values,
-                                              @NonNull final Channel channel)
+                              @NonNull final String tableName,
+                              @NonNull final ContentValues values,
+                              @NonNull final Channel channel)
     {
         final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
         final String id = String.valueOf(channel.getId());
@@ -56,20 +56,21 @@ abstract class RequestFactoryBase
     }
 
     private static int getCount(@NonNull final SQLiteDatabase database,
-                                        @NonNull final String tableName,
-                                        @NonNull final String where,
-                                        @NonNull final String[] whereArgs)
+                                @NonNull final String tableName,
+                                @NonNull final String where,
+                                @NonNull final String[] whereArgs)
     {
         final String[] columns = {NewsContract.BaseTable._ID};
-        final Cursor cursor = database.query(tableName, columns, where, whereArgs, null, null, null);
+        final Cursor cursor =
+                database.query(tableName, columns, where, whereArgs, null, null, null);
         final int count = cursor.getCount();
         cursor.close();
         return count;
     }
 
     static boolean deleteBase(@NonNull final SQLiteDatabase sqLiteDatabase,
-                                              final String id,
-                                              @NonNull final String tableName)
+                              final String id,
+                              @NonNull final String tableName)
     {
         final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
         final String[] selectionArgs = {id};
@@ -89,7 +90,7 @@ abstract class RequestFactoryBase
     }
 
     static int[] getColumnIndexes(@NonNull final Cursor cursor,
-                                                  @NonNull final String... ids)
+                                  @NonNull final String... ids)
     {
         final int length = ids.length;
         final int[] columnIndexes = new int[length];

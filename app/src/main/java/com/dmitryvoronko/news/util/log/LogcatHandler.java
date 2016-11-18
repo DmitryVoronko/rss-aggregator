@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.util;
+package com.dmitryvoronko.news.util.log;
 
 import android.util.Log;
 
@@ -13,6 +13,7 @@ import java.util.logging.LogRecord;
 
 final class LogcatHandler extends Handler
 {
+
     @Override public void publish(final LogRecord record)
     {
         if (null == record)

@@ -7,6 +7,4 @@
     <color name="darkColorPrimary">#212121</color>
     <color name="darkColorPrimaryDark">#000000</color>
     <color name="darkColorAccent">#424242</color>
-
-    <color name="unReadStateColor">#FF9800</color>
 </resources>

@@ -1,7 +1,11 @@
 package com.dmitryvoronko.news.view.content;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -9,13 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dmitryvoronko.news.R;
-import com.dmitryvoronko.news.services.ContentService;
-import com.dmitryvoronko.news.services.ContentType;
+import com.dmitryvoronko.news.services.ChannelsContentService;
 import com.dmitryvoronko.news.util.SnackbarHelper;
 import com.dmitryvoronko.news.view.addnew.AddNewActivity;
 import com.dmitryvoronko.news.view.settings.SettingsActivity;
 
-import static com.dmitryvoronko.news.services.ContentService.EXTRA_CHANNEL_ID;
+
+import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNEL_ID;
 
 public final class MainActivity extends ContentActivity
 {
@@ -68,7 +72,7 @@ public final class MainActivity extends ContentActivity
                                     SnackbarHelper.NULL_ACTION_RES_ID,
                                     SnackbarHelper.NULL_ON_CLICK_LISTENER,
                                     SnackbarHelper.NULL_CALLBACK);
-        getContent();
+        requestContent();
     }
 
     @Override
@@ -98,11 +102,6 @@ public final class MainActivity extends ContentActivity
         }
     }
 
-    @Override protected void initContentType()
-    {
-        contentType = ContentType.CHANNEL;
-    }
-
     @Override protected void setLayout()
     {
         setContentView(R.layout.activity_main);
@@ -110,12 +109,36 @@ public final class MainActivity extends ContentActivity
 
     @Override protected void updateContent()
     {
-        ContentService.startActionUpdateContent(this);
+        ChannelsContentService.startActionUpdateContent(this);
     }
 
-    @Override protected void getContent()
+    @NonNull @Override protected Intent getContentServiceIntent()
     {
-        ContentService.startActionGetContent(this);
+        return new Intent(this, ChannelsContentService.class);
+    }
+
+    @Override protected ServiceConnection createServiceConnection()
+    {
+        return new ServiceConnection()
+        {
+            @Override
+            public void onServiceConnected(final ComponentName name, final IBinder service)
+            {
+                final ChannelsContentService.Binder binder
+                        = (ChannelsContentService.Binder) service;
+                contentService = binder.getService();
+            }
+
+            @Override public void onServiceDisconnected(final ComponentName name)
+            {
+                contentService = null;
+            }
+        };
+    }
+
+    @Override protected void requestContent()
+    {
+        ChannelsContentService.startActionGetContent(this);
     }
 
     @Override protected void goToChild(final long id, final String link)

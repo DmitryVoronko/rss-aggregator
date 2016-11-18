@@ -1,16 +1,17 @@
 package com.dmitryvoronko.news.view.content;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.dmitryvoronko.news.R;
-import com.dmitryvoronko.news.services.ContentService;
-import com.dmitryvoronko.news.services.ContentType;
+import com.dmitryvoronko.news.services.EntriesContentService;
 
-import java.util.concurrent.CompletableFuture;
-
-import static com.dmitryvoronko.news.services.ContentService.EXTRA_CHANNEL_ID;
+import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNEL_ID;
 
 /**
  *
@@ -18,14 +19,12 @@ import static com.dmitryvoronko.news.services.ContentService.EXTRA_CHANNEL_ID;
  */
 public final class EntriesActivity extends ContentActivity
 {
-    private static final String TAG = "EntriesActivity";
-
     public static final String EXTRA_ENTRY_ID =
             "com.dmitryvoronko.news.view.content.extra.ENTRY_ID";
     public static final String EXTRA_ENTRY_LINK =
             "com.dmitryvoronko.news.view.content.extra.ENTRY_LINK";
-    public static final long DEFAULT_CHANNEL_ID = -1;
-
+    public static final long DEFAULT_CHANNEL_ID = -10;
+    private static final String TAG = "EntriesActivity";
     private static long channelId = DEFAULT_CHANNEL_ID;
 
     @Override
@@ -51,11 +50,6 @@ public final class EntriesActivity extends ContentActivity
         }
     }
 
-    @Override protected void initContentType()
-    {
-        contentType = ContentType.ENTRY;
-    }
-
     @Override protected void setLayout()
     {
         setContentView(R.layout.activity_entries);
@@ -63,12 +57,35 @@ public final class EntriesActivity extends ContentActivity
 
     @Override protected void updateContent()
     {
-        ContentService.startActionUpdateContent(this, channelId);
+        EntriesContentService.startActionUpdateContent(this, channelId);
     }
 
-    @Override protected void getContent()
+    @Override protected void requestContent()
     {
-        ContentService.startActionGetContent(this, channelId);
+        EntriesContentService.startActionGetContent(this, channelId);
+    }
+
+    @NonNull @Override protected Intent getContentServiceIntent()
+    {
+        return new Intent(this, EntriesContentService.class);
+    }
+
+    @Override protected ServiceConnection createServiceConnection()
+    {
+        return new ServiceConnection()
+        {
+            @Override
+            public void onServiceConnected(final ComponentName name, final IBinder service)
+            {
+                final EntriesContentService.Binder binder = (EntriesContentService.Binder) service;
+                contentService = binder.getService();
+            }
+
+            @Override public void onServiceDisconnected(final ComponentName name)
+            {
+                contentService = null;
+            }
+        };
     }
 
     @Override protected void goToChild(final long id, final String link)

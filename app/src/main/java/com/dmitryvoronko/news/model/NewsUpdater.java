@@ -1,6 +1,5 @@
 package com.dmitryvoronko.news.model;
 
-import android.app.job.JobService;
 import android.content.ContextWrapper;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -22,7 +21,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 
 import lombok.Cleanup;
 import lombok.Data;
@@ -32,7 +30,7 @@ import lombok.Data;
  * Created by Dmitry on 15/11/2016.
  */
 
-final class NewsUpdater
+final class NewsUpdater extends Cancellable
 {
     private static final String TAG = "NewsUpdater";
 
@@ -49,43 +47,55 @@ final class NewsUpdater
         executorService = Executors.newFixedThreadPool(threadsCount);
     }
 
-    void updateChannels()
+    UpdateStatus updateChannels()
     {
         final ArrayList<Channel> channels = databaseManager.getChannels();
 
-        while (!executorService.isShutdown())
+        final ArrayList<Future<Feed>> futures = new ArrayList<>();
+
+        for (final Channel channel : channels)
         {
-            final ArrayList<Future<Feed>> futures = new ArrayList<>();
-
-            for (final Channel channel : channels)
+            if (canceled)
             {
-                final FileInfo fileInfo = FileInfo.create(channel);
-                final Callable<Feed> worker = feedUpdater(fileInfo);
-                final Future<Feed> submit = executorService.submit(worker);
-                futures.add(submit);
+                break;
             }
+            final FileInfo fileInfo = FileInfo.valueOf(channel);
+            final Callable<Feed> worker = feedUpdater(fileInfo);
+            final Future<Feed> submit = executorService.submit(worker);
+            futures.add(submit);
+        }
 
-            final ArrayList<Feed> parsedItems = new ArrayList<>();
+        final ArrayList<Feed> parsedItems = new ArrayList<>();
 
-            for (final Future<Feed> feedFuture : futures)
+        for (final Future<Feed> feedFuture : futures)
+        {
+            if (canceled)
             {
-                try
-                {
-                    final Feed feed = feedFuture.get();
-                    parsedItems.add(feed);
-                } catch (final InterruptedException e)
-                {
-                    Log.d(TAG, "updateChannels: " + e);
-                } catch (final ExecutionException e)
-                {
-                    Log.d(TAG, "updateChannels: " + e);
-                    e.printStackTrace();
-                }
+                break;
             }
+            try
+            {
+                final Feed feed = feedFuture.get();
+                parsedItems.add(feed);
+            } catch (final InterruptedException e)
+            {
+                Log.d(TAG, "updateChannels: " + e);
+            } catch (final ExecutionException e)
+            {
+                Log.d(TAG, "updateChannels: " + e);
+                e.printStackTrace();
+            }
+        }
 
-            executorService.shutdown();
+        executorService.shutdown();
 
-            insertToDatabase(parsedItems);
+        insertToDatabase(parsedItems);
+        if (!canceled)
+        {
+            return UpdateStatus.UPDATED;
+        } else
+        {
+            return UpdateStatus.CANCELED;
         }
     }
 
@@ -104,6 +114,10 @@ final class NewsUpdater
     {
         for (final Feed feed : parsedItems)
         {
+            if (canceled)
+            {
+                break;
+            }
             insertToDatabase(feed);
         }
     }
@@ -111,7 +125,7 @@ final class NewsUpdater
     @Nullable private Feed getUpdatedFeed(final FileInfo fileInfo)
     {
         final FileDownloader fileDownloader = new FileDownloader(contextWrapper);
-        fileDownloader.downloadFile(fileInfo);
+        fileDownloader.download(fileInfo);
         final NewsParser parser = new NewsParser();
         final Channel updatedChannel;
         try
@@ -160,20 +174,18 @@ final class NewsUpdater
         return parser.parse(fileInputStream, updatedChannel.getId());
     }
 
-    void updateChannel(final long channelId)
+    UpdateStatus updateChannel(final long channelId)
     {
         final Channel channel = databaseManager.getChannel(channelId);
-        final FileInfo fileInfo = FileInfo.create(channel);
+        final FileInfo fileInfo = FileInfo.valueOf(channel);
         final Feed feed = getUpdatedFeed(fileInfo);
-        insertToDatabase(feed);
-    }
-
-    void cancelUpdate()
-    {
-        if (executorService != null)
+        if (feed != null && !canceled)
         {
-            executorService.shutdownNow();
-            Log.d(TAG, "cancelUpdate: Executor Service shutdown now");
+            insertToDatabase(feed);
+            return UpdateStatus.UPDATED;
+        } else
+        {
+            return UpdateStatus.CANCELED;
         }
     }
 
@@ -183,4 +195,5 @@ final class NewsUpdater
         private final Channel channel;
         private final ArrayList<Entry> entries;
     }
+
 }

@@ -142,9 +142,12 @@
         </activity>
 
         <service
-            android:name=".services.ContentService"
+            android:name=".services.ChannelsContentService"
             android:exported="false">
         </service>
+        <service
+            android:name=".services.EntriesContentService"
+            android:exported="false"/>
 
         <activity android:name=".view.content.EntryActivity">
             android:parentActivityName=".view.content.MainActivity">

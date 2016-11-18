@@ -4,11 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
+ *
  * Created by Dmitry on 17/11/2016.
  */
 
 public final class ShareHelper
 {
+    private ShareHelper()
+    {
+        throw new UnsupportedOperationException();
+    }
+
     public static void share(final Context context,
                              final String link)
     {

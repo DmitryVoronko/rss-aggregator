@@ -3,7 +3,8 @@ package com.dmitryvoronko.news.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.util.Log;
+
+import com.dmitryvoronko.news.util.log.Logger;
 
 import lombok.NonNull;
 
@@ -16,11 +17,11 @@ abstract class DatabaseManagerBase
 {
     private static final String TAG = "DatabaseManagerBase";
 
-    private final NewsDBOpenHelper dbHelper;
+    private final DatabaseOpenHelper databaseHelper;
 
     DatabaseManagerBase(@NonNull final Context context) throws SQLiteException
     {
-        this.dbHelper = new NewsDBOpenHelper(context);
+        this.databaseHelper = new DatabaseOpenHelper(context);
     }
 
     final class Request<T>
@@ -30,14 +31,14 @@ abstract class DatabaseManagerBase
             T result = null;
             try
             {
-                final SQLiteDatabase database = dbHelper.getWritableDatabase();
+                final SQLiteDatabase database = databaseHelper.getWritableDatabase();
                 result = request.executed(database);
             } catch (final SQLiteException e)
             {
-                Log.d(TAG, "executeRequest: SQLite Exception = " + e);
+                Logger.e(TAG, "executeRequest: SQLite Exception ", e);
             } finally
             {
-                dbHelper.close();
+                databaseHelper.close();
             }
             return result;
         }

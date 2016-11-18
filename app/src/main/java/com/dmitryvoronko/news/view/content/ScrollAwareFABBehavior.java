@@ -15,15 +15,17 @@ import android.view.View;
 public final class ScrollAwareFABBehavior extends FloatingActionButton.Behavior
 {
     public ScrollAwareFABBehavior(final Context context,
-                                  final AttributeSet attrs) {
+                                  final AttributeSet attrs)
+    {
         super();
     }
 
     @Override public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout,
-                                       final FloatingActionButton child,
-                                       final View directTargetChild,
-                                       final View target,
-                                       final int nestedScrollAxes) {
+                                                 final FloatingActionButton child,
+                                                 final View directTargetChild,
+                                                 final View target,
+                                                 final int nestedScrollAxes)
+    {
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL ||
                 super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target,
                                           nestedScrollAxes);
@@ -36,13 +38,16 @@ public final class ScrollAwareFABBehavior extends FloatingActionButton.Behavior
                                final int dxConsumed,
                                final int dyConsumed,
                                final int dxUnconsumed,
-                               final int dyUnconsumed) {
+                               final int dyUnconsumed)
+    {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed,
                              dyUnconsumed);
 
-        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
+        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE)
+        {
             child.hide();
-        } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
+        } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE)
+        {
             child.show();
         }
     }

@@ -34,7 +34,7 @@ public final class FileDownloader
         this.contextWrapper = contextWrapper;
     }
 
-    public void downloadFile(final FileInfo fileInfo)
+    public void download(final FileInfo fileInfo)
     {
         try
         {
@@ -47,20 +47,21 @@ public final class FileDownloader
             {
                 @Cleanup final InputStream inputStream = httpConnection.getInputStream();
 
-                fileCreated(fileInfo.getFileName(), inputStream);
+                downloadFile(fileInfo.getFileName(), inputStream);
             }
 
         } catch (final MalformedURLException e)
         {
-            Log.d(TAG, "downloadFile: Malformed URL Exception", e);
+            Log.d(TAG, "download: Malformed URL Exception", e);
         } catch (final IOException e)
         {
-            Log.d(TAG, "downloadFile: TOTAL_ERROR Exception", e);
+            Log.d(TAG, "download: TOTAL_ERROR Exception", e);
         }
+
     }
 
-    private void fileCreated(final String fileName,
-                                final InputStream inputStream)
+    private void downloadFile(final String fileName,
+                              final InputStream inputStream)
     {
         try
         {
@@ -78,10 +79,10 @@ public final class FileDownloader
             }
         } catch (final FileNotFoundException e)
         {
-            Log.d(TAG, "fileCreated: File Not Found Exception", e);
+            Log.d(TAG, "downloadFile: File Not Found Exception", e);
         } catch (final IOException e)
         {
-            Log.d(TAG, "fileCreated: TOTAL_ERROR Exception", e);
+            Log.d(TAG, "downloadFile: TOTAL_ERROR Exception", e);
         }
     }
 
