@@ -1,10 +1,9 @@
 package com.dmitryvoronko.news.model.userinput;
 
-import android.util.Log;
-
 import com.dmitryvoronko.news.data.DatabaseManager;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.model.data.Entry;
+import com.dmitryvoronko.news.util.log.Logger;
 import com.dmitryvoronko.news.util.parser.NewsParser;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -106,7 +105,7 @@ public final class UserInputHandler
             databaseManager.insert(entry);
         }
         final Status status = Status.ADDED;
-        Log.d(TAG, "insertToDatabase: Status = " + status);
+        Logger.i(TAG, "insertToDatabase: Status = " + status);
         return status;
     }
 }

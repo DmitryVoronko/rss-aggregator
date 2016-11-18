@@ -6,10 +6,10 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.EntriesContentService;
+import com.dmitryvoronko.news.util.log.Logger;
 
 import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNEL_ID;
 
@@ -36,8 +36,6 @@ public final class EntriesActivity extends ContentActivity
 
             final Intent intent = getIntent();
 
-            Log.d(TAG, "onCreate: intent action = " + intent);
-
             channelId = intent.getLongExtra(EXTRA_CHANNEL_ID, channelId);
 
             if (channelId == DEFAULT_CHANNEL_ID)
@@ -46,7 +44,7 @@ public final class EntriesActivity extends ContentActivity
             }
         } catch (final Exception e)
         {
-            e.printStackTrace();
+            Logger.e(TAG, "onCreate()", e);
         }
     }
 

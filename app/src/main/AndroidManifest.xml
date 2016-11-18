@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".view.content.MainActivity"
+            android:name=".view.content.ChannelsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,7 +26,7 @@
         <activity android:name=".view.content.EntriesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.content.MainActivity"/>
+                android:value="com.dmitryvoronko.news.view.content.ChannelsActivity"/>
             />
         </activity>
         <activity
@@ -34,7 +34,7 @@
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.content.MainActivity"/>
+                android:value="com.dmitryvoronko.news.view.content.ChannelsActivity"/>
         </activity>
 
         <service
@@ -47,7 +47,7 @@
             android:label="@string/title_activity_add_new">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.content.MainActivity"/>
+                android:value="com.dmitryvoronko.news.view.content.ChannelsActivity"/>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -68,23 +68,7 @@
 
                 <data
                     android:host="*"
-                    android:pathPattern=".*xml"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*rss"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*feed.*"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*podcast.*"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*Podcast.*"
+                    android:pathPattern=".*xml.*"
                     android:scheme="http"/>
                 <data
                     android:host="*"
@@ -92,27 +76,16 @@
                     android:scheme="http"/>
                 <data
                     android:host="*"
-                    android:pathPattern=".*RSS.*"
+                    android:pathPattern=".*feed.*"
                     android:scheme="http"/>
                 <data
                     android:host="*"
-                    android:pathPattern=".*xml"
-                    android:scheme="https"/>
+                    android:pathPattern=".*atom.*"
+                    android:scheme="http"/>
+
                 <data
                     android:host="*"
-                    android:pathPattern=".*rss"
-                    android:scheme="https"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*feed.*"
-                    android:scheme="https"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*podcast.*"
-                    android:scheme="https"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*Podcast.*"
+                    android:pathPattern=".*xml."
                     android:scheme="https"/>
                 <data
                     android:host="*"
@@ -120,7 +93,12 @@
                     android:scheme="https"/>
                 <data
                     android:host="*"
-                    android:pathPattern=".*RSS.*"
+                    android:pathPattern=".*feed.*"
+                    android:scheme="https"/>
+
+                <data
+                    android:host="*"
+                    android:pathPattern=".*atom.*"
                     android:scheme="https"/>
             </intent-filter>
             <intent-filter>

@@ -28,8 +28,6 @@ import java.util.ArrayList;
 
 abstract class ContentActivity extends AppCompatActivity
 {
-    private static final String TAG = "ContentActivity";
-
     private final ContentRecyclerViewAdapter adapter = createContentRecyclerViewAdapter();
     private SwipeRefreshLayout updateContentRefreshLayout;
     private RecyclerView recyclerView;
@@ -115,7 +113,7 @@ abstract class ContentActivity extends AppCompatActivity
             }
         };
 
-        SnackbarHelper.showSnackbar(this, R.string.channel_deleted_message,
+        SnackbarHelper.showSnackbar(this, R.string.item_deleted_message,
                                     R.string.cancel_button_text,
                                     onClickListener,
                                     null);
@@ -132,7 +130,7 @@ abstract class ContentActivity extends AppCompatActivity
         adapter.notifyItemInserted(itemPosition);
         adapter.notifyDataSetChanged();
         SnackbarHelper.showSnackbar(this,
-                                    R.string.channel_restored_message,
+                                    R.string.item_restored_message,
                                     SnackbarHelper.NULL_ACTION_RES_ID,
                                     null,
                                     null);

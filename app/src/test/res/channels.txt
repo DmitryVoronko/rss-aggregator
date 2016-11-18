@@ -1,0 +1,16 @@
+http://www.ibm.com/developerworks/views/global/rss/libraryview.jsp?feed_by=atom
+http://www.ibm.com/developerworks/views/global/rss/libraryview.jsp?site_id=1&contentarea_by=Mobile%20development&topic_by=-1&product_by=-1&search_by=Android&industry_by=-1&sort_by=Date&series_title_by=&type_by=All%20Types
+http://www.tourism-review.com/top10-news.rss
+http://feeds.feedburner.com/techcrunch
+http://androidinsider.ru/feed
+https://antijob.net/rss.php
+https://www.heise.de/newsticker/heise-atom.xml
+
+
+https://cyber.harvard.edu/rss/examples/rss2sample.xml
+http://starling.us/cgi-bin/gus_atom_xsl.pl?atom=starling_us_atom.xml!sort_order=Category
+http://www.theage.com.au/rssheadlines/top.xml
+https://www.newswise.com/legacy/feed/channels.php?channel=105
+http://www.tourism-review.com/top10-news.rss
+http://www.theage.com.au/rssheadlines/top.xml
+https://cyber.harvard.edu/rss/examples/sampleRss091.xml

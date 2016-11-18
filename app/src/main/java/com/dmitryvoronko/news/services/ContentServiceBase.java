@@ -22,7 +22,6 @@ abstract class ContentServiceBase extends IntentService implements ContentServic
     protected static final String ACTION_UPDATE_CONTENT =
             "com.dmitryvoronko.news.services.action.UPDATE_CONTENT";
 
-    private static final String TAG = "ContentServiceBase";
     protected final ArrayList<Channel> content = new ArrayList<>();
     protected final NewsFacade newsFacade;
     private final Stack<ItemToBeDeleted> deletedItems = new Stack<>();

@@ -24,6 +24,7 @@ import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.userinput.Status;
 import com.dmitryvoronko.news.services.AddNewService;
 import com.dmitryvoronko.news.util.SnackbarHelper;
+import com.dmitryvoronko.news.util.log.Logger;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -57,14 +58,20 @@ public final class AddNewActivity extends AppCompatActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new);
+        try
+        {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_add_new);
 
-        initViewComponents();
+            initViewComponents();
 
-        initStatusReceiver();
+            initStatusReceiver();
 
-        readIntentData();
+            readIntentData();
+        } catch (final Exception e)
+        {
+            Logger.e(TAG, "onCreate", e);
+        }
     }
 
     private void initViewComponents()

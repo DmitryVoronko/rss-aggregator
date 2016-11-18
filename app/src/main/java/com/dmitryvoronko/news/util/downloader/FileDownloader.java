@@ -2,7 +2,8 @@ package com.dmitryvoronko.news.util.downloader;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.util.Log;
+
+import com.dmitryvoronko.news.util.log.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -52,10 +53,10 @@ public final class FileDownloader
 
         } catch (final MalformedURLException e)
         {
-            Log.d(TAG, "download: Malformed URL Exception", e);
+            Logger.e(TAG, "download: Malformed URL Exception", e);
         } catch (final IOException e)
         {
-            Log.d(TAG, "download: TOTAL_ERROR Exception", e);
+            Logger.e(TAG, "download: IO Exception", e);
         }
 
     }
@@ -79,10 +80,10 @@ public final class FileDownloader
             }
         } catch (final FileNotFoundException e)
         {
-            Log.d(TAG, "downloadFile: File Not Found Exception", e);
+            Logger.e(TAG, "downloadFile: File Not Found Exception", e);
         } catch (final IOException e)
         {
-            Log.d(TAG, "downloadFile: TOTAL_ERROR Exception", e);
+            Logger.e(TAG, "downloadFile: IO Exception", e);
         }
     }
 

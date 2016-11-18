@@ -1,29 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">News</string>
-    <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
-
-    <!-- NewItemActivity values -->
-    <string name="new_item_edit_text_hint">Channel address</string>
-    <string name="add_new_item_button_name">Add</string>
-    <string name="title_activity_add_new">Add new channel</string>
-    <string name="adding_dialog_title">Please Wait…</string>
-    <string name="adding_dialog_message">Adding channel…</string>
-
-    <string name="no_internet_connection_message">No internet connection</string>
-    <string name="channel_successfully_added">Channel successfully added</string>
-    <string name="already_exists">Channel already exists</string>
-    <string name="input_string_is_not_link">Input string is not link</string>
-    <string name="input_link_are_not_xml">Input link does not contains channel</string>
-    <string name="enter_valid_channel_link">Enter valid channel link</string>
-    <string name="unsupported_channel_format">Sorry. Our application does not support this format of channel.</string>
-
-    <!-- MainActivity values -->
-    <string name="channel_restored_message">Channel is restored!</string>
-    <string name="channel_deleted_message">Channel is deleted!</string>
-    <string name="cancel_button_text">@android:string/cancel</string>
-
-    <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>

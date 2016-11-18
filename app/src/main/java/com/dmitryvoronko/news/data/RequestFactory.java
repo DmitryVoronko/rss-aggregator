@@ -3,6 +3,7 @@ package com.dmitryvoronko.news.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.model.data.Entry;
@@ -32,6 +33,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<Boolean>()
         {
             @Override public Boolean executed(@NonNull final SQLiteDatabase sqLiteDatabase)
+                    throws SQLiteException
             {
                 final ContentValues values = ContentValuesFactory.createContentValues(channel);
                 return updateBase(sqLiteDatabase, NewsContract.ChannelsTable._TABLE_NAME,
@@ -45,6 +47,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<Long>()
         {
             @Override public Long executed(@NonNull final SQLiteDatabase sqLiteDatabase)
+                    throws SQLiteException
             {
 
                 final ContentValues values = ContentValuesFactory.createContentValues(channel);
@@ -59,6 +62,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<Long>()
         {
             @Override public Long executed(@NonNull final SQLiteDatabase sqLiteDatabase)
+                    throws SQLiteException
             {
                 final ContentValues values = ContentValuesFactory.createContentValues(entry);
                 return insertBase(sqLiteDatabase, NewsContract.EntryTable._TABLE_NAME,
@@ -72,6 +76,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<Boolean>()
         {
             @Override public Boolean executed(@NonNull final SQLiteDatabase sqLiteDatabase)
+                    throws SQLiteException
             {
 
                 final String stringId = String.valueOf(id);
@@ -90,6 +95,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<Boolean>()
         {
             @Override public Boolean executed(@NonNull final SQLiteDatabase sqLiteDatabase)
+                    throws SQLiteException
             {
                 final String stringId = String.valueOf(id);
                 return deleteBase(sqLiteDatabase, stringId, NewsContract.EntryTable._TABLE_NAME);
@@ -103,6 +109,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<Boolean>()
         {
             @Override public Boolean executed(@NonNull final SQLiteDatabase sqLiteDatabase)
+                    throws SQLiteException
             {
                 return alreadyExistsBase(sqLiteDatabase, link,
                                          NewsContract.ChannelsTable._TABLE_NAME);
@@ -115,6 +122,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<Channel>()
         {
             @Override public Channel executed(final SQLiteDatabase sqLiteDatabase)
+                    throws SQLiteException
             {
                 final String tableName = NewsContract.ChannelsTable._TABLE_NAME;
                 final String[] columns = getChannelColumns();
@@ -146,6 +154,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<ArrayList<Channel>>()
         {
             @Override public ArrayList<Channel> executed(@NonNull final SQLiteDatabase database)
+                    throws SQLiteException
             {
                 final String tableName = NewsContract.ChannelsTable._TABLE_NAME;
 
@@ -176,6 +185,7 @@ final class RequestFactory extends RequestFactoryBase
         return new Request<ArrayList<Entry>>()
         {
             @Override public ArrayList<Entry> executed(@NonNull final SQLiteDatabase database)
+                    throws SQLiteException
             {
                 final String tableName = NewsContract.EntryTable._TABLE_NAME;
                 final String[] columns = {

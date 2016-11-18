@@ -1,6 +1,7 @@
 package com.dmitryvoronko.news.data;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 
 /**
  *
@@ -9,5 +10,5 @@ import android.database.sqlite.SQLiteDatabase;
 
 interface Request<T>
 {
-    T executed(final SQLiteDatabase sqLiteDatabase);
+    T executed(final SQLiteDatabase sqLiteDatabase) throws SQLiteException;
 }

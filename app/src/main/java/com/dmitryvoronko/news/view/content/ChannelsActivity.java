@@ -21,7 +21,7 @@ import com.dmitryvoronko.news.view.settings.SettingsActivity;
 
 import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNEL_ID;
 
-public final class MainActivity extends ContentActivity
+public final class ChannelsActivity extends ContentActivity
 {
     private final static int ACTION_SHOW_NEW_ITEM_ACTIVITY = 1;
 

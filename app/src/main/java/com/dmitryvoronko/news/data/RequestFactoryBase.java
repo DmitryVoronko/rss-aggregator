@@ -3,6 +3,7 @@ package com.dmitryvoronko.news.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 
 import com.dmitryvoronko.news.model.data.Channel;
 
@@ -19,6 +20,7 @@ abstract class RequestFactoryBase
                            @NonNull final String tableName,
                            @NonNull final ContentValues values,
                            @NonNull final Channel channel)
+            throws SQLiteException
     {
 
         final String link = values.getAsString(NewsContract.BaseTable._LINK);
@@ -36,6 +38,7 @@ abstract class RequestFactoryBase
     static boolean alreadyExistsBase(@NonNull final SQLiteDatabase database,
                                      @NonNull final String link,
                                      @NonNull final String tableName)
+            throws SQLiteException
     {
         final String where = NewsContract.BaseTable._LINK + NewsContract.LIKE;
         final String[] whereArgs = {link};
@@ -47,6 +50,7 @@ abstract class RequestFactoryBase
                               @NonNull final String tableName,
                               @NonNull final ContentValues values,
                               @NonNull final Channel channel)
+            throws SQLiteException
     {
         final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
         final String id = String.valueOf(channel.getId());
@@ -59,6 +63,7 @@ abstract class RequestFactoryBase
                                 @NonNull final String tableName,
                                 @NonNull final String where,
                                 @NonNull final String[] whereArgs)
+            throws SQLiteException
     {
         final String[] columns = {NewsContract.BaseTable._ID};
         final Cursor cursor =
@@ -71,6 +76,7 @@ abstract class RequestFactoryBase
     static boolean deleteBase(@NonNull final SQLiteDatabase sqLiteDatabase,
                               final String id,
                               @NonNull final String tableName)
+            throws SQLiteException
     {
         final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
         final String[] selectionArgs = {id};
@@ -79,9 +85,9 @@ abstract class RequestFactoryBase
         return true;
     }
 
-    static boolean deleteChannelEntries(
-            @NonNull final SQLiteDatabase sqLiteDatabase,
-            final String id)
+    static boolean deleteChannelEntries(@NonNull final SQLiteDatabase sqLiteDatabase,
+                                        final String id)
+            throws SQLiteException
     {
         final String selection = NewsContract.EntryTable._CHANNEL_ID + NewsContract.LIKE;
         final String[] selectionArgs = {id};

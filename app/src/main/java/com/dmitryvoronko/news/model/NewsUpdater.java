@@ -2,13 +2,13 @@ package com.dmitryvoronko.news.model;
 
 import android.content.ContextWrapper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.dmitryvoronko.news.data.DatabaseManager;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.model.data.Entry;
 import com.dmitryvoronko.news.util.downloader.FileDownloader;
 import com.dmitryvoronko.news.util.downloader.FileInfo;
+import com.dmitryvoronko.news.util.log.Logger;
 import com.dmitryvoronko.news.util.parser.NewsParser;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -79,11 +79,10 @@ final class NewsUpdater extends Cancellable
                 parsedItems.add(feed);
             } catch (final InterruptedException e)
             {
-                Log.d(TAG, "updateChannels: " + e);
+                Logger.e(TAG, "updateChannels: Interrupted Exception", e);
             } catch (final ExecutionException e)
             {
-                Log.d(TAG, "updateChannels: " + e);
-                e.printStackTrace();
+                Logger.e(TAG, "updateChannels: Execution Exception", e);
             }
         }
 
@@ -136,11 +135,11 @@ final class NewsUpdater extends Cancellable
             return new Feed(updatedChannel, updatedEntries);
         } catch (final IOException e)
         {
-            Log.d(TAG, "getUpdatedFeed: IO Exception = " + e);
+            Logger.e(TAG, "getUpdatedFeed: IO Exception", e);
             return null;
         } catch (final XmlPullParserException e)
         {
-            Log.d(TAG, "getUpdatedFeed: Xml Pull Parser Exception = " + e);
+            Logger.e(TAG, "getUpdatedFeed: Xml Pull Parser Exception", e);
             return null;
         }
     }

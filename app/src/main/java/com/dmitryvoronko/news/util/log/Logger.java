@@ -25,20 +25,11 @@ public final class Logger
         log(tag, message, Level.SEVERE);
     }
 
-    public static void i(final String tag, final String message, final Throwable thrown)
-    {
-        log(tag, message, thrown, Level.INFO);
-    }
-
     public static void i(final String tag, final String message)
     {
         log(tag, message, Level.INFO);
     }
 
-    public static void w(final String tag, final String message, final Throwable thrown)
-    {
-        log(tag, message, thrown, Level.WARNING);
-    }
 
     public static void w(final String tag, final String message)
     {

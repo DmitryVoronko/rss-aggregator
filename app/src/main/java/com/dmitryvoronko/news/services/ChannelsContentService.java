@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.dmitryvoronko.news.model.UpdateStatus;
 import com.dmitryvoronko.news.util.log.Logger;
@@ -63,14 +62,14 @@ public final class ChannelsContentService extends ContentServiceBase
         final UpdateStatus updateStatus = newsFacade.updateChannels();
         if (updateStatus.equals(UpdateStatus.CANCELED))
         {
-            Log.d(TAG, "handleActionUpdateChannels: Status equals 'CANCELED'");
+            Logger.i(TAG, "handleActionUpdateChannels: Status equals 'CANCELED'");
             stopSelf();
         } else if (updateStatus.equals(UpdateStatus.UPDATED))
         {
             handleActionGetChannels();
         } else
         {
-            Log.d(TAG, "handleActionUpdateChannels: Status is not recognized");
+            Logger.e(TAG, "handleActionUpdateChannels: Status is not recognized");
         }
     }
 
