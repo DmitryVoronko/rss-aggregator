@@ -14,7 +14,7 @@ import android.view.View;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.ChannelsContentService;
-import com.dmitryvoronko.news.util.SnackbarHelper;
+import com.dmitryvoronko.news.view.util.SnackbarHelper;
 import com.dmitryvoronko.news.view.addnew.AddNewActivity;
 import com.dmitryvoronko.news.view.settings.SettingsActivity;
 

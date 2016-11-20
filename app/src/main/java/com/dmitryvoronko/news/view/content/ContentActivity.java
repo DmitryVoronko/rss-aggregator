@@ -17,7 +17,7 @@ import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.services.ContentService;
 import com.dmitryvoronko.news.services.ItemToBeDeleted;
-import com.dmitryvoronko.news.util.SnackbarHelper;
+import com.dmitryvoronko.news.view.util.SnackbarHelper;
 
 import java.util.ArrayList;
 

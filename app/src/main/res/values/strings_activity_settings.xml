@@ -47,12 +47,40 @@
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
+    <string-array name="pref_led_color_titles">
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Cyan</item>
+        <item>Blue</item>
+        <item>Indigo</item>
+        <item>Purple</item>
+        <item>White</item>
+    </string-array>
+    <string-array name="pref_led_color_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>-array>
+
     <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
+    <string name="pref_title_news_updated_notifications">News updated notifications</string>
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
-
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_title_led">LED</string>
+    <string name="pref_title_led_color">LED Color</string>
+
+    <string name="pref_ringtone_key">notifications_news_updated_ringtone</string>
+    <string name="pref_notifications_vibrate_key">notifications_news_updated_vibrate</string>
+    <string name="pref_notifications_switch_key">notifications_news_updated</string>
+    <string name="pref_notifications_led_switch_key">notifications_news_updated_led_switch</string>
+    <string name="pref_notifications_led_color_key">notifications_news_updated_led_color</string>
 </resources>

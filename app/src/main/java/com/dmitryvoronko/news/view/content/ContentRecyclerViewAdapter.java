@@ -3,7 +3,6 @@ package com.dmitryvoronko.news.view.content;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
-import com.dmitryvoronko.news.util.ShareHelper;
+import com.dmitryvoronko.news.view.util.ShareHelper;
 
 import java.util.ArrayList;
 

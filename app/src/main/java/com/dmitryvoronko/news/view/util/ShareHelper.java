@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.util;
+package com.dmitryvoronko.news.view.util;
 
 import android.content.Context;
 import android.content.Intent;

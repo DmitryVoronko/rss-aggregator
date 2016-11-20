@@ -16,7 +16,7 @@ public interface ContentService
     String ACTION_NO_INTERNET_CONNECTION =
             "com.dmitryvoronko.news.view.content.action.NO_INTERNET_CONNECTION";
     String ACTION_CONTENT_READY =
-                    "com.dmitryvoronko.news.view.content.action.CONTENT_CHANGED";
+                    "com.dmitryvoronko.news.view.content.action.CONTENT_READY";
 
     ArrayList<Channel> getContent();
 

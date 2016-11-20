@@ -23,7 +23,7 @@ import android.widget.EditText;
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.userinput.Status;
 import com.dmitryvoronko.news.services.AddNewService;
-import com.dmitryvoronko.news.util.SnackbarHelper;
+import com.dmitryvoronko.news.view.util.SnackbarHelper;
 import com.dmitryvoronko.news.util.log.Logger;
 
 import lombok.AllArgsConstructor;
