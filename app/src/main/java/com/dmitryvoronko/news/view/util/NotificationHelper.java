@@ -54,7 +54,7 @@ public final class NotificationHelper
         final Uri soundUri = getSoundUri(context, sharedPreferences);
         final NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_stat_ff1swa2uhr)
+                        .setSmallIcon(R.drawable.notification_small_icon)
                         .setContentTitle(notificationTitle)
                         .setContentText(notificationText)
                         .setLargeIcon(largeIcon)
@@ -83,7 +83,7 @@ public final class NotificationHelper
 
     private static int getColor(final Context context, final SharedPreferences sharedPreferences)
     {
-        final String prefColorName = getString(context, R.string.pref_notifications_led_color_key);
+        final String prefColorName = getString(context, R.string.pref_key_notifications_led_color);
         final String defaultColor = GREEN_COLOR_NUMBER;
         final int colorNumber = Integer.valueOf(sharedPreferences.getString(prefColorName, defaultColor));
         final int colorResId = chooseColorResId(colorNumber);
@@ -138,7 +138,7 @@ public final class NotificationHelper
     private static boolean hasLights(final Context context, final SharedPreferences sharedPreferences)
     {
         final String prefLedSwitchKey =
-                getString(context, R.string.pref_notifications_led_switch_key);
+                getString(context, R.string.pref_key_notifications_led_switch);
         final boolean defaultSwitchValue = true;
         return sharedPreferences.getBoolean(prefLedSwitchKey, defaultSwitchValue);
     }
@@ -146,7 +146,7 @@ public final class NotificationHelper
     private static boolean notificationsEnabled(final Context context, final SharedPreferences sharedPreferences)
     {
         final String prefRingtoneSwitchKey =
-                getString(context, R.string.pref_notifications_switch_key);
+                getString(context, R.string.pref_key_notifications_switch);
         final boolean defaultSwitchValue = true;
         return sharedPreferences.getBoolean(prefRingtoneSwitchKey, defaultSwitchValue);
     }
@@ -154,7 +154,7 @@ public final class NotificationHelper
     private static Uri getSoundUri(final Context context,
                             final SharedPreferences sharedPreferences)
     {
-        final String prefRingtoneKey = context.getString(R.string.pref_ringtone_key);
+        final String prefRingtoneKey = context.getString(R.string.pref_key_ringtone);
         final Uri actualDefaultRingtoneUri = RingtoneManager
                 .getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
         return Uri.parse(sharedPreferences.getString(prefRingtoneKey,
@@ -178,7 +178,7 @@ public final class NotificationHelper
                                final SharedPreferences sharedPreferences)
     {
         final String prefVibrateKey =
-                getString(context, R.string.pref_notifications_vibrate_key);
+                getString(context, R.string.pref_key_notifications_vibrate);
         final boolean defaultVibrateValue = true;
         return sharedPreferences.getBoolean(prefVibrateKey, defaultVibrateValue);
     }

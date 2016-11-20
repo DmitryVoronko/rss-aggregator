@@ -31,7 +31,7 @@ public final class Logger
     }
 
 
-    public static void w(final String tag, final String message)
+    @SuppressWarnings("SameParameterValue") public static void w(final String tag, final String message)
     {
         log(tag, message, Level.WARNING);
     }

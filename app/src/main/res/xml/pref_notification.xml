@@ -1,32 +1,31 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreference
         android:defaultValue="true"
-        android:key="@string/pref_notifications_switch_key"
+        android:key="@string/pref_key_notifications_switch"
         android:title="@string/pref_title_news_updated_notifications"/>
     <RingtonePreference
         android:defaultValue="content://settings/system/notification_sound"
-        android:dependency="@string/pref_notifications_switch_key"
-        android:key="@string/pref_ringtone_key"
+        android:dependency="@string/pref_key_notifications_switch"
+        android:key="@string/pref_key_ringtone"
         android:ringtoneType="notification"
         android:title="@string/pref_title_ringtone"/>
     <SwitchPreference
         android:defaultValue="true"
-        android:dependency="@string/pref_notifications_switch_key"
-        android:key="@string/pref_notifications_vibrate_key"
+        android:dependency="@string/pref_key_notifications_switch"
+        android:key="@string/pref_key_notifications_vibrate"
         android:title="@string/pref_title_vibrate"/>
     <SwitchPreference
         android:defaultValue="true"
-        android:dependency="@string/pref_notifications_switch_key"
-        android:key="@string/pref_notifications_led_switch_key"
+        android:dependency="@string/pref_key_notifications_switch"
+        android:key="@string/pref_key_notifications_led_switch"
         android:title="@string/pref_title_led"/>
     <ListPreference
         android:defaultValue="4"
-        android:dependency="@string/pref_notifications_led_switch_key"
-        android:key="@string/pref_notifications_led_color_key"
+        android:dependency="@string/pref_key_notifications_led_switch"
+        android:key="@string/pref_key_notifications_led_color"
         android:title="@string/pref_title_led_color"
         android:entries="@array/pref_led_color_titles"
         android:entryValues="@array/pref_led_color_values"
         android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        />
+        android:positiveButtonText="@null"/>
 </PreferenceScreen>

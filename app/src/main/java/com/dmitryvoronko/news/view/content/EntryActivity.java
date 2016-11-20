@@ -3,34 +3,31 @@ package com.dmitryvoronko.news.view.content;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.util.NetworkHelper;
+import com.dmitryvoronko.news.view.ActivityBase;
 import com.dmitryvoronko.news.view.util.ShareHelper;
 import com.dmitryvoronko.news.view.util.SnackbarHelper;
 
 import static com.dmitryvoronko.news.view.content.EntriesActivity.EXTRA_ENTRY_ID;
 import static com.dmitryvoronko.news.view.content.EntriesActivity.EXTRA_ENTRY_LINK;
 
-public final class EntryActivity extends AppCompatActivity
+public final class EntryActivity extends ActivityBase
 {
     private final static long NO_ENTRY_ID = -1;
     private WebView webView;
     private FloatingActionButton shareButton;
 
-    @Override
-    protected void onCreate(final Bundle savedInstanceState)
+    @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
         shareButton = (FloatingActionButton) findViewById(R.id.share_entry_fab);
         webView =  (WebView) findViewById(R.id.entry_web_view);
         webView.setWebViewClient(new WebViewClient());
-
     }
 
     private void share(final String entryLink)
@@ -44,9 +41,8 @@ public final class EntryActivity extends AppCompatActivity
         webView.loadUrl(entryLink);
     }
 
-    @Override protected void onResume()
+    @Override protected void doOnResume()
     {
-        super.onResume();
         final Intent intent = getIntent();
         handleIntent(intent);
     }
@@ -86,9 +82,8 @@ public final class EntryActivity extends AppCompatActivity
         }
     }
 
-    @Override protected void onPause()
+    @Override protected void doOnPause()
     {
-        super.onPause();
         pauseWebView();
     }
 

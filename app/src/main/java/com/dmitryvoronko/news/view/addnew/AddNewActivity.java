@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,13 +22,14 @@ import android.widget.EditText;
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.userinput.Status;
 import com.dmitryvoronko.news.services.AddNewService;
+import com.dmitryvoronko.news.view.ActivityBase;
 import com.dmitryvoronko.news.view.util.SnackbarHelper;
 import com.dmitryvoronko.news.util.log.Logger;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-public final class AddNewActivity extends AppCompatActivity
+public final class AddNewActivity extends ActivityBase
 {
     private static final String TAG = "AddNewActivity";
 
@@ -55,12 +55,10 @@ public final class AddNewActivity extends AppCompatActivity
         }
     };
 
-    @Override
-    protected void onCreate(final Bundle savedInstanceState)
+    @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
         try
         {
-            super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_new);
 
             initViewComponents();
@@ -198,16 +196,15 @@ public final class AddNewActivity extends AppCompatActivity
                                     SnackbarHelper.NULL_CALLBACK);
     }
 
-    @Override protected void onPause()
+    @Override protected void doOnPause()
     {
-        super.onPause();
         unregisterReceiver(statusReceiver);
     }
 
-    @Override protected void onResume()
+    @Override protected void doOnResume()
     {
-        super.onResume();
         initStatusReceiver();
+
     }
 
     private void validateLink()

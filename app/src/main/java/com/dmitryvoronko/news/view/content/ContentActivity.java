@@ -8,7 +8,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,6 +16,7 @@ import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.services.ContentService;
 import com.dmitryvoronko.news.services.ItemToBeDeleted;
+import com.dmitryvoronko.news.view.ActivityBase;
 import com.dmitryvoronko.news.view.util.SnackbarHelper;
 
 import java.util.ArrayList;
@@ -26,22 +26,18 @@ import java.util.ArrayList;
  * Created by Dmitry on 12/11/2016.
  */
 
-abstract class ContentActivity extends AppCompatActivity
+abstract class ContentActivity extends ActivityBase
 {
     private final ContentRecyclerViewAdapter adapter = createContentRecyclerViewAdapter();
     private SwipeRefreshLayout updateContentRefreshLayout;
     private RecyclerView recyclerView;
     private final BroadcastReceiver contentBroadcastReceiver = createBroadcastReceiver();
     private final ServiceConnection contentServiceConnection = createServiceConnection();
-    protected ContentService contentService;
+    ContentService contentService;
 
-    @Override
-    public void onCreate(final Bundle savedInstanceState)
+    @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-
         setLayout();
-
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -86,9 +82,9 @@ abstract class ContentActivity extends AppCompatActivity
     {
         final SwipeRefreshLayout swipeRefreshLayout =
                 (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
-                                                   R.color.colorPrimary,
-                                                   R.color.colorPrimaryDark);
+        swipeRefreshLayout.setColorSchemeResources(R.color.greenColorAccent,
+                                                   R.color.greenColorPrimary,
+                                                   R.color.greenColorPrimaryDark);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -136,16 +132,14 @@ abstract class ContentActivity extends AppCompatActivity
                                     null);
     }
 
-    @Override protected void onPause()
+    @Override protected void doOnPause()
     {
-        super.onPause();
         unbindService(contentServiceConnection);
         unregisterReceiver(contentBroadcastReceiver);
     }
 
-    @Override protected void onResume()
+    @Override protected void doOnResume()
     {
-        super.onResume();
         registerContentReceiver();
         bindContentService();
         requestContent();
@@ -220,4 +214,5 @@ abstract class ContentActivity extends AppCompatActivity
     }
 
     protected abstract void goToChild(final long id, final String link);
+
 }

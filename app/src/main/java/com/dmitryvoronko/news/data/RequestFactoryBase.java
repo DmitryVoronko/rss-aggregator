@@ -46,10 +46,10 @@ abstract class RequestFactoryBase
         return count > 0;
     }
 
-    static boolean updateBase(@NonNull final SQLiteDatabase sqLiteDatabase,
-                              @NonNull final String tableName,
-                              @NonNull final ContentValues values,
-                              @NonNull final Channel channel)
+    @SuppressWarnings("SameReturnValue") static boolean updateBase(@NonNull final SQLiteDatabase sqLiteDatabase,
+                                                                   @NonNull final String tableName,
+                                                                   @NonNull final ContentValues values,
+                                                                   @NonNull final Channel channel)
             throws SQLiteException
     {
         final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
@@ -73,9 +73,9 @@ abstract class RequestFactoryBase
         return count;
     }
 
-    static boolean deleteBase(@NonNull final SQLiteDatabase sqLiteDatabase,
-                              final String id,
-                              @NonNull final String tableName)
+    @SuppressWarnings("SameReturnValue") static boolean deleteBase(@NonNull final SQLiteDatabase sqLiteDatabase,
+                                                                   final String id,
+                                                                   @NonNull final String tableName)
             throws SQLiteException
     {
         final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
@@ -85,8 +85,8 @@ abstract class RequestFactoryBase
         return true;
     }
 
-    static boolean deleteChannelEntries(@NonNull final SQLiteDatabase sqLiteDatabase,
-                                        final String id)
+    @SuppressWarnings("SameReturnValue") static boolean deleteChannelEntries(@NonNull final SQLiteDatabase sqLiteDatabase,
+                                                                             final String id)
             throws SQLiteException
     {
         final String selection = NewsContract.EntryTable._CHANNEL_ID + NewsContract.LIKE;

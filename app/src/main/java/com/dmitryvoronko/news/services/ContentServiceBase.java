@@ -17,13 +17,13 @@ import lombok.NonNull;
 
 abstract class ContentServiceBase extends IntentService implements ContentService
 {
-    protected static final String ACTION_GET_CONTENT =
+    static final String ACTION_GET_CONTENT =
             "com.dmitryvoronko.news.services.action.GET_CONTENT";
-    protected static final String ACTION_UPDATE_CONTENT =
+    static final String ACTION_UPDATE_CONTENT =
             "com.dmitryvoronko.news.services.action.UPDATE_CONTENT";
 
-    protected final ArrayList<Channel> content = new ArrayList<>();
-    protected final NewsFacade newsFacade;
+    final ArrayList<Channel> content = new ArrayList<>();
+    final NewsFacade newsFacade;
     private final Stack<ItemToBeDeleted> deletedItems = new Stack<>();
     private final IBinder binder = createBinder();
 
@@ -97,7 +97,7 @@ abstract class ContentServiceBase extends IntentService implements ContentServic
     protected abstract void handleActionUpdateContent(final Intent intent);
 
 
-    protected void sendBroadcast(@NonNull final String action)
+    final void sendBroadcast(@NonNull final String action)
     {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);

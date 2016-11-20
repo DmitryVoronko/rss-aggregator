@@ -1,0 +1,11 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/pref_key_daily_update_switch"
+        android:title="@string/pref_title_daily_update_switch"/>
+
+    <com.dmitryvoronko.news.view.settings.TimePreference
+        android:defaultValue="@string/pref_daily_update_time_default_value"
+        android:key="@string/pref_key_daily_update_time_picker"
+        android:dependency="@string/pref_key_daily_update_switch"/>
+</PreferenceScreen>

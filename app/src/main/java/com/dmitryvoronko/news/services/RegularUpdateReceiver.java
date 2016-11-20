@@ -10,7 +10,7 @@ import com.dmitryvoronko.news.view.util.NotificationHelper;
 
 public final class RegularUpdateReceiver extends BroadcastReceiver
 {
-    public static final String ACTION_REGULAR_UPDATE_SUCCESS =
+    private static final String ACTION_REGULAR_UPDATE_SUCCESS =
             "com.dmitryvoronko.news.services.action.REGULAR_UPDATE_SUCCESS";
 
     public RegularUpdateReceiver()

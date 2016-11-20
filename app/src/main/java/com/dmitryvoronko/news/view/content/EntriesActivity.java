@@ -27,13 +27,11 @@ public final class EntriesActivity extends ContentActivity
     private static final String TAG = "EntriesActivity";
     private static long channelId = DEFAULT_CHANNEL_ID;
 
-    @Override
-    public void onCreate(final Bundle savedInstanceState)
+    @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
+        super.doOnCreate(savedInstanceState);
         try
         {
-            super.onCreate(savedInstanceState);
-
             final Intent intent = getIntent();
 
             channelId = intent.getLongExtra(EXTRA_CHANNEL_ID, channelId);

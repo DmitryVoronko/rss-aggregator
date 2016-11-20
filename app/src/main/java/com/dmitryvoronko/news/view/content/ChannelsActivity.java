@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,12 +74,11 @@ public final class ChannelsActivity extends ContentActivity
         requestContent();
     }
 
-    @Override
-    public void onCreate(final Bundle savedInstanceState)
+    @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
+        super.doOnCreate(savedInstanceState);
         try
         {
-            super.onCreate(savedInstanceState);
             final FloatingActionButton addNewItemButton;
             addNewItemButton = (FloatingActionButton) findViewById(R.id.add_new_channel_fab);
 
@@ -94,8 +92,6 @@ public final class ChannelsActivity extends ContentActivity
 
             });
 
-            final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
         } catch (final Exception e)
         {
             e.printStackTrace();

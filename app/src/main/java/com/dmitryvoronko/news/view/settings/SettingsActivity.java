@@ -1,15 +1,13 @@
 package com.dmitryvoronko.news.view.settings;
 
-
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -22,18 +20,13 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.dmitryvoronko.news.R;
+import com.dmitryvoronko.news.view.util.ThemeHelper;
 
 import java.util.List;
 
-/**
- *
- */
 public final class SettingsActivity extends AppCompatPreferenceActivity
 {
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
+
     private final static Preference.OnPreferenceChangeListener
             sBindPreferenceSummaryToValueListener =
             new Preference.OnPreferenceChangeListener()
@@ -45,24 +38,25 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
 
                     if (preference instanceof ListPreference)
                     {
-                        // For list preferences, look up the correct display value in
-                        // the preference's 'entries' list.
                         final ListPreference listPreference = (ListPreference) preference;
                         final int index = listPreference.findIndexOfValue(stringValue);
 
-                        // Set the summary to reflect the new value.
                         preference.setSummary(
                                 index >= 0
                                 ? listPreference.getEntries()[index]
                                 : null);
 
+                        final String themeKey =
+                                preference.getContext().getString(R.string.pref_key_choose_theme);
+                        if (preference.getKey().equalsIgnoreCase(themeKey))
+                        {
+                            ThemeHelper.setTheme(preference.getContext());
+                        }
+
                     } else if (preference instanceof RingtonePreference)
                     {
-                        // For ringtone preferences, look up the correct display value
-                        // using RingtoneManager.
                         if (TextUtils.isEmpty(stringValue))
                         {
-                            // Empty values correspond to 'silent' (no ringtone).
                             preference.setSummary(R.string.pref_ringtone_silent);
 
                         } else
@@ -72,12 +66,9 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
 
                             if (ringtone == null)
                             {
-                                // Clear the summary if there was a lookup error.
                                 preference.setSummary(null);
                             } else
                             {
-                                // Set the summary to reflect the new ringtone display
-                                // name.
                                 final String name = ringtone.getTitle(preference.getContext());
                                 preference.setSummary(name);
                             }
@@ -85,30 +76,16 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
 
                     } else
                     {
-                        // For all other preferences, set the summary to the value's
-                        // simple string representation.
                         preference.setSummary(stringValue);
                     }
                     return true;
                 }
             };
 
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
     private static void bindPreferenceSummaryToValue(final Preference preference)
     {
-        // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-        // Trigger the listener immediately with the preference's
-        // current value.
         final Context context = preference.getContext();
         final SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
@@ -119,19 +96,16 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState)
     {
+        ThemeHelper.setTheme(this);
         super.onCreate(savedInstanceState);
         setupActionBar();
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
     private void setupActionBar()
     {
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
         {
-            // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
@@ -151,52 +125,31 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
         return super.onMenuItemSelected(featureId, item);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean onIsMultiPane()
     {
         return isXLargeTablet(this);
     }
 
-    /**
-     * Helper method to determine if the device has an extra-large screen. For
-     * example, 10" tablets are extra-large.
-     */
     private static boolean isXLargeTablet(final Context context)
     {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(final List<Header> target)
     {
         loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
-    /**
-     * This method stops fragment injection in malicious applications.
-     * Make sure to deny any unknown fragments here.
-     */
     protected boolean isValidFragment(final String fragmentName)
     {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
-                || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
+                || UpdatesPreferenceFragment.class.getName().equals(fragmentName)
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName);
     }
 
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment
     {
         @Override
@@ -206,12 +159,8 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
+            final String themeKey = getString(R.string.pref_key_choose_theme);
+            bindPreferenceSummaryToValue(findPreference(themeKey));
         }
 
         @Override
@@ -227,11 +176,6 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
         }
     }
 
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment
     {
         @Override
@@ -241,12 +185,10 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            final String ringtoneKey = getString(R.string.pref_ringtone_key);
+            final String ringtoneKey = getString(R.string.pref_key_ringtone);
             bindPreferenceSummaryToValue(findPreference(ringtoneKey));
+            final String lEDColorKey = getString(R.string.pref_key_notifications_led_color);
+            bindPreferenceSummaryToValue(findPreference(lEDColorKey));
         }
 
         @Override
@@ -262,25 +204,18 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
         }
     }
 
-    /**
-     * This fragment shows data and sync preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment
+    public static class UpdatesPreferenceFragment extends PreferenceFragment
     {
         @Override
         public void onCreate(final Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
+            addPreferencesFromResource(R.xml.pref_updates);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+
+            final String timePickerKey = getString(R.string.pref_key_daily_update_time_picker);
+            bindPreferenceSummaryToValue(findPreference(timePickerKey));
         }
 
         @Override
@@ -294,5 +229,11 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
             }
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override protected void onApplyThemeResource(final Resources.Theme theme, final int resId,
+                                                  final boolean first)
+    {
+        theme.applyStyle(resId, true);
     }
 }
