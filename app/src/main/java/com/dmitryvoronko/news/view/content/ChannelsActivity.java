@@ -77,25 +77,19 @@ public final class ChannelsActivity extends ContentActivity
     @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
         super.doOnCreate(savedInstanceState);
-        try
-        {
-            final FloatingActionButton addNewItemButton;
-            addNewItemButton = (FloatingActionButton) findViewById(R.id.add_new_channel_fab);
 
-            addNewItemButton.setOnClickListener(new View.OnClickListener()
+        final FloatingActionButton addNewItemButton;
+        addNewItemButton = (FloatingActionButton) findViewById(R.id.add_new_channel_fab);
+
+        addNewItemButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(final View v)
             {
-                @Override
-                public void onClick(final View v)
-                {
-                    startAddNewItemActivity();
-                }
+                startAddNewItemActivity();
+            }
 
-            });
-
-        } catch (final Exception e)
-        {
-            e.printStackTrace();
-        }
+        });
     }
 
     @Override protected void setLayout()

@@ -3,6 +3,7 @@ package com.dmitryvoronko.news.view;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dmitryvoronko.news.util.log.Logger;
 import com.dmitryvoronko.news.view.util.ThemeHelper;
 
 /**
@@ -12,11 +13,19 @@ import com.dmitryvoronko.news.view.util.ThemeHelper;
 
 public abstract class ActivityBase extends AppCompatActivity
 {
+    private static final String TAG = "ActivityBase";
+
     @Override public final void onCreate(final Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setTheme();
-        doOnCreate(savedInstanceState);
+        try
+        {
+            super.onCreate(savedInstanceState);
+            setTheme();
+            doOnCreate(savedInstanceState);
+        } catch (final Exception e)
+        {
+            Logger.e(TAG, "onCreate", e);
+        }
     }
 
 

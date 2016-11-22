@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.EntriesContentService;
-import com.dmitryvoronko.news.util.log.Logger;
 
 import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNEL_ID;
 
@@ -24,25 +23,18 @@ public final class EntriesActivity extends ContentActivity
     public static final String EXTRA_ENTRY_LINK =
             "com.dmitryvoronko.news.view.content.extra.ENTRY_LINK";
     public static final long DEFAULT_CHANNEL_ID = -10;
-    private static final String TAG = "EntriesActivity";
     private static long channelId = DEFAULT_CHANNEL_ID;
 
     @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
         super.doOnCreate(savedInstanceState);
-        try
-        {
-            final Intent intent = getIntent();
+        final Intent intent = getIntent();
 
-            channelId = intent.getLongExtra(EXTRA_CHANNEL_ID, channelId);
+        channelId = intent.getLongExtra(EXTRA_CHANNEL_ID, channelId);
 
-            if (channelId == DEFAULT_CHANNEL_ID)
-            {
-                throw new UnsupportedOperationException();
-            }
-        } catch (final Exception e)
+        if (channelId == DEFAULT_CHANNEL_ID)
         {
-            Logger.e(TAG, "onCreate()", e);
+            throw new UnsupportedOperationException();
         }
     }
 

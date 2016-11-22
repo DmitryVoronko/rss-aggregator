@@ -205,7 +205,6 @@ final class RequestFactory extends RequestFactoryBase
                 @Cleanup final Cursor cursor =
                         database.query(tableName, columns, where, whereArgs, null, null, orderBy);
 
-
                 final ArrayList<Entry> entries = new ArrayList<>();
 
                 final int[] columnsIndexes = getColumnIndexes(cursor, columns);

@@ -79,18 +79,14 @@ public final class EntryActivity extends ActivityBase
             {
                 SnackbarHelper.showNoInternetConnectionSnackBar(this);
             }
+        } else
+        {
+            throw new UnsupportedOperationException();
         }
     }
 
     @Override protected void doOnPause()
     {
-        pauseWebView();
-    }
 
-    private void pauseWebView()
-    {
-        webView.clearCache(true);
-        webView.clearHistory();
-        webView.onPause();
     }
 }

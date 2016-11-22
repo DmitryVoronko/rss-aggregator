@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.dmitryvoronko.news.model.NewsFacade;
+import com.dmitryvoronko.news.model.UpdateStatus;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.util.NetworkHelper;
 
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import lombok.NonNull;
+
+import static com.dmitryvoronko.news.services.ChannelsContentService.ACTION_REGULAR_UPDATE_CONTENT;
 
 
 abstract class ContentServiceBase extends IntentService implements ContentService
@@ -75,10 +78,10 @@ abstract class ContentServiceBase extends IntentService implements ContentServic
         if (intent != null)
         {
             final String action = intent.getAction();
-            if (ACTION_GET_CONTENT.equals(action))
+            if (ACTION_GET_CONTENT.equalsIgnoreCase(action))
             {
                 handleActionGetContent(intent);
-            } else if (ACTION_UPDATE_CONTENT.equals(action))
+            } else if (ACTION_UPDATE_CONTENT.equalsIgnoreCase(action))
             {
                 final boolean hasConnection = NetworkHelper.hasConnection(this);
                 if (hasConnection)
@@ -88,7 +91,33 @@ abstract class ContentServiceBase extends IntentService implements ContentServic
                 {
                     sendBroadcast(ACTION_NO_INTERNET_CONNECTION);
                 }
+            } else if (ACTION_REGULAR_UPDATE_CONTENT.equalsIgnoreCase(action))
+            {
+                final boolean hasConnection = NetworkHelper.hasConnection(this);
+                if (hasConnection)
+                {
+                    handleActionRegularUpdate();
+                } else
+                {
+                    // TODO: 21/11/2016 Add implementation
+                    throw new UnsupportedOperationException();
+                }
             }
+        }
+    }
+
+    private void handleActionRegularUpdate()
+    {
+        final UpdateStatus updateStatus = newsFacade.updateChannels();
+        if (updateStatus.equals(UpdateStatus.UPDATED))
+        {
+            final Intent succeedIntent = new Intent(this, RegularUpdateReceiver.class);
+            succeedIntent.setAction(RegularUpdateReceiver.ACTION_REGULAR_UPDATE_SUCCEED);
+            sendBroadcast(succeedIntent);
+        } else
+        {
+            // TODO: 21/11/2016 Add implementation
+            throw new UnsupportedOperationException();
         }
     }
 

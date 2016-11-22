@@ -10,11 +10,16 @@ import com.dmitryvoronko.news.view.util.NotificationHelper;
 
 public final class RegularUpdateReceiver extends BroadcastReceiver
 {
-    private static final String ACTION_REGULAR_UPDATE_SUCCESS =
-            "com.dmitryvoronko.news.services.action.REGULAR_UPDATE_SUCCESS";
+    public static final String ACTION_REGULAR_UPDATE_SUCCEED =
+            "com.dmitryvoronko.news.services.action.REGULAR_UPDATE_SUCCEED";
+    public static final String ACTION_REGULAR_UPDATE_INITIATE =
+            "com.dmitryvoronko.news.services.action.REGULAR_UPDATE_INITIATE";
+
+    public static final int REQUEST_CODE = 222;
 
     public RegularUpdateReceiver()
     {
+
     }
 
     @Override
@@ -23,11 +28,14 @@ public final class RegularUpdateReceiver extends BroadcastReceiver
     {
         if (intent != null)
         {
-            if (intent.getAction().equalsIgnoreCase(ACTION_REGULAR_UPDATE_SUCCESS))
+            if (intent.getAction().equalsIgnoreCase(ACTION_REGULAR_UPDATE_SUCCEED))
             {
                 final SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 NotificationHelper.showNotification(context, sharedPreferences);
+            } else if (intent.getAction().equalsIgnoreCase(ACTION_REGULAR_UPDATE_INITIATE))
+            {
+                ChannelsContentService.startActionRegularUpdate(context);
             }
         }
     }

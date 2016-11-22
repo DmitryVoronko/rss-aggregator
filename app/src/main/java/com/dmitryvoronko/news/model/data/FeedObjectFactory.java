@@ -19,14 +19,6 @@ public final class FeedObjectFactory
     private static final int INDEX_DESCRIPTION_COLUMN = 3;
     private static final int INDEX_CHANNEL_ID_COLUMN = 4;
 
-//    private static Channel createChannel(@NonNull final long id,
-//                                         @NonNull final String title,
-//                                        @NonNull final String link,
-//                                        @NonNull final String description)
-//    {
-//        return new FeedObject(id, title, link, description);
-//    }
-
     public static Entry createEntry(@NonNull final Cursor cursor,
                                     @NonNull final int[] columnsIndexes)
     {

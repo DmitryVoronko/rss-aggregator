@@ -20,13 +20,15 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.dmitryvoronko.news.R;
+import com.dmitryvoronko.news.services.RegularUpdateScheduler;
+import com.dmitryvoronko.news.util.log.Logger;
 import com.dmitryvoronko.news.view.util.ThemeHelper;
 
 import java.util.List;
 
 public final class SettingsActivity extends AppCompatPreferenceActivity
 {
-
+    private static final String TAG = "SettingsActivity";
     private final static Preference.OnPreferenceChangeListener
             sBindPreferenceSummaryToValueListener =
             new Preference.OnPreferenceChangeListener()
@@ -74,6 +76,21 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
                             }
                         }
 
+                    } else if (preference instanceof TimePreference)
+                    {
+                        final String previouslyValue = PreferenceManager
+                                .getDefaultSharedPreferences(preference.getContext())
+                                .getString(preference.getKey(), "");
+                        if (!previouslyValue.equalsIgnoreCase(stringValue))
+                        {
+                            final int hour = TimePreference.getHour(stringValue);
+                            final int minute = TimePreference.getMinute(stringValue);
+                            RegularUpdateScheduler.scheduleAlarm(preference.getContext(),
+                                                                 hour,
+                                                                 minute);
+                            Logger.i(TAG, "onPreferenceChange: update starts in " + stringValue);
+                        }
+                        preference.setSummary(stringValue);
                     } else
                     {
                         preference.setSummary(stringValue);

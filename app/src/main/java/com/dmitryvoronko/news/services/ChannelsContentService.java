@@ -18,6 +18,8 @@ import lombok.NonNull;
 public final class ChannelsContentService extends ContentServiceBase
 {
     private static final String TAG = "ChannelsContentService";
+    public static final String ACTION_REGULAR_UPDATE_CONTENT =
+            "com.dmitryvoronko.news.services.action.REGULAR_UPDATE_CONTENT";
 
     public static void startActionGetContent(@NonNull final Context context)
     {
@@ -35,6 +37,11 @@ public final class ChannelsContentService extends ContentServiceBase
     public static void startActionUpdateContent(@NonNull final Context context)
     {
         startContentAction(context, ACTION_UPDATE_CONTENT);
+    }
+
+    public static void startActionRegularUpdate(@NonNull final Context context)
+    {
+        startContentAction(context, ACTION_REGULAR_UPDATE_CONTENT);
     }
 
     @Override protected IBinder createBinder()

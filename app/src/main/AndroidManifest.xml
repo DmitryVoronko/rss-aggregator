@@ -136,10 +136,8 @@
         <receiver
             android:name=".services.RegularUpdateReceiver"
             android:enabled="true"
+            android:process=":remote"
             android:exported="false">
-            <intent-filter>
-                <action android:name="com.dmitryvoronko.news.view.content.action.CONTENT_READY"/>
-            </intent-filter>
         </receiver>
     </application>
 
