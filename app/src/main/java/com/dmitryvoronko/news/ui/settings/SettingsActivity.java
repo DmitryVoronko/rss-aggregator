@@ -23,6 +23,7 @@ import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.RegularUpdateScheduler;
 import com.dmitryvoronko.news.util.log.Logger;
 import com.dmitryvoronko.news.ui.util.ThemeHelper;
+import com.dmitryvoronko.news.view.settings.TimePreference;
 
 import java.util.List;
 
@@ -40,62 +41,80 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
 
                     if (preference instanceof ListPreference)
                     {
-                        final ListPreference listPreference = (ListPreference) preference;
-                        final int index = listPreference.findIndexOfValue(stringValue);
-
-                        preference.setSummary(
-                                index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
-
-                        final String themeKey =
-                                preference.getContext().getString(R.string.pref_key_choose_theme);
-                        if (preference.getKey().equalsIgnoreCase(themeKey))
-                        {
-                            ThemeHelper.setTheme(preference.getContext());
-                        }
+                        handleListPreferenceChanged(preference, stringValue);
 
                     } else if (preference instanceof RingtonePreference)
                     {
-                        if (TextUtils.isEmpty(stringValue))
-                        {
-                            preference.setSummary(R.string.pref_ringtone_silent);
-
-                        } else
-                        {
-                            final Ringtone ringtone = RingtoneManager.getRingtone(
-                                    preference.getContext(), Uri.parse(stringValue));
-
-                            if (ringtone == null)
-                            {
-                                preference.setSummary(null);
-                            } else
-                            {
-                                final String name = ringtone.getTitle(preference.getContext());
-                                preference.setSummary(name);
-                            }
-                        }
+                        handleRingtonePreferenceChanged(preference, stringValue);
 
                     } else if (preference instanceof TimePreference)
                     {
-                        final String previouslyValue = PreferenceManager
-                                .getDefaultSharedPreferences(preference.getContext())
-                                .getString(preference.getKey(), "");
-                        if (!previouslyValue.equalsIgnoreCase(stringValue))
-                        {
-                            final int hour = TimePreference.getHour(stringValue);
-                            final int minute = TimePreference.getMinute(stringValue);
-                            RegularUpdateScheduler.scheduleAlarm(preference.getContext(),
-                                                                 hour,
-                                                                 minute);
-                            Logger.i(TAG, "onPreferenceChange: update starts in " + stringValue);
-                        }
-                        preference.setSummary(stringValue);
+                        handleTimePreferenceChanged(preference, stringValue);
                     } else
                     {
                         preference.setSummary(stringValue);
                     }
                     return true;
+                }
+
+                private void handleTimePreferenceChanged(final Preference preference,
+                                                         final String stringValue)
+                {
+                    final String previouslyValue = PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), "");
+                    if (!previouslyValue.equalsIgnoreCase(stringValue))
+                    {
+                        final int hour = TimePreference.getHour(stringValue);
+                        final int minute = TimePreference.getMinute(stringValue);
+                        RegularUpdateScheduler.scheduleAlarm(preference.getContext(),
+                                                             hour,
+                                                             minute);
+                        Logger.i(TAG, "onPreferenceChange: update starts in " + stringValue);
+                    }
+                    preference.setSummary(stringValue);
+                }
+
+                private void handleRingtonePreferenceChanged(final Preference preference,
+                                                             final String stringValue)
+                {
+                    if (TextUtils.isEmpty(stringValue))
+                    {
+                        preference.setSummary(R.string.pref_ringtone_silent);
+
+                    } else
+                    {
+                        final Ringtone ringtone = RingtoneManager.getRingtone(
+                                preference.getContext(), Uri.parse(stringValue));
+
+                        if (ringtone == null)
+                        {
+                            preference.setSummary(null);
+                        } else
+                        {
+                            final String name = ringtone.getTitle(preference.getContext());
+                            preference.setSummary(name);
+                        }
+                    }
+                }
+
+                private void handleListPreferenceChanged(final Preference preference,
+                                                         final String stringValue)
+                {
+                    final ListPreference listPreference = (ListPreference) preference;
+                    final int index = listPreference.findIndexOfValue(stringValue);
+
+                    preference.setSummary(
+                            index >= 0
+                            ? listPreference.getEntries()[index]
+                            : null);
+
+                    final String themeKey =
+                            preference.getContext().getString(R.string.pref_key_choose_theme);
+                    if (preference.getKey().equalsIgnoreCase(themeKey))
+                    {
+                        ThemeHelper.setTheme(preference.getContext());
+                    }
                 }
             };
 

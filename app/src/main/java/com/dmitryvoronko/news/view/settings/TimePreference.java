@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.ui.settings;
+package com.dmitryvoronko.news.view.settings;
 
 import android.content.Context;
 import android.content.res.TypedArray;
