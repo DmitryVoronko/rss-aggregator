@@ -4,8 +4,13 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
+import com.dmitryvoronko.news.util.log.Logger;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -15,6 +20,9 @@ import java.util.Calendar;
 
 public final class RegularUpdateScheduler
 {
+    private static final String TAG = "RegularUpdateScheduler";
+    private static final int COUNT_DAY = 1;
+
     private RegularUpdateScheduler()
     {
         throw new UnsupportedOperationException();
@@ -23,9 +31,15 @@ public final class RegularUpdateScheduler
     public static void scheduleAlarm(final Context context, final int hours, final int minutes)
     {
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        final long currentTime = calendar.getTimeInMillis();
         calendar.set(Calendar.HOUR_OF_DAY, hours);
         calendar.set(Calendar.MINUTE, minutes);
+        final long scheduledTime = calendar.getTimeInMillis();
+        
+        if (!(currentTime <= scheduledTime))
+        {
+            calendar.add(Calendar.DAY_OF_WEEK, COUNT_DAY);
+        }
 
         final Intent intent = new Intent(context, RegularUpdateReceiver.class);
         intent.setAction(RegularUpdateReceiver.ACTION_REGULAR_UPDATE_INITIATE);
@@ -36,9 +50,8 @@ public final class RegularUpdateScheduler
                                            PendingIntent.FLAG_UPDATE_CURRENT);
         final AlarmManager alarmManager =
                 (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        final long timeInMillis = calendar.getTimeInMillis();
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                                         timeInMillis,
+                                         scheduledTime,
                                          AlarmManager.INTERVAL_DAY,
                                          pendingIntent);
     }
