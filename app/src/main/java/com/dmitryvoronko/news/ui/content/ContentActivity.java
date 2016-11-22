@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.dmitryvoronko.news.R;
@@ -18,6 +19,7 @@ import com.dmitryvoronko.news.services.ContentService;
 import com.dmitryvoronko.news.services.ItemToBeDeleted;
 import com.dmitryvoronko.news.ui.ActivityBase;
 import com.dmitryvoronko.news.ui.util.SnackbarHelper;
+import com.dmitryvoronko.news.util.log.Logger;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,8 @@ import java.util.ArrayList;
 
 abstract class ContentActivity extends ActivityBase
 {
+    private static final String TAG = "ContentActivity";
+
     private final ContentRecyclerViewAdapter adapter = createContentRecyclerViewAdapter();
     private SwipeRefreshLayout updateContentRefreshLayout;
     private RecyclerView recyclerView;
@@ -49,6 +53,7 @@ abstract class ContentActivity extends ActivityBase
 
         recyclerView.addOnItemTouchListener(swipeTouchListener);
         updateContentRefreshLayout = createUpdateContentRefreshLayout();
+        Logger.i(TAG, "doOnCreate: ");
     }
 
     protected abstract void setLayout();
@@ -78,7 +83,7 @@ abstract class ContentActivity extends ActivityBase
         return new SwipeableRecyclerViewTouchListener(recyclerView, listener);
     }
 
-    private SwipeRefreshLayout createUpdateContentRefreshLayout()
+    @NonNull private SwipeRefreshLayout createUpdateContentRefreshLayout()
     {
         final SwipeRefreshLayout swipeRefreshLayout =
                 (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
@@ -94,6 +99,13 @@ abstract class ContentActivity extends ActivityBase
                 updateContent();
             }
         });
+
+        Logger.i(TAG, "createUpdateContentRefreshLayout: ");
+
+        if (swipeRefreshLayout != null)
+        {
+            Logger.i(TAG, "createUpdateContentRefreshLayout: swipeRefreshLayout = not null");
+        }
 
         return swipeRefreshLayout;
     }
@@ -173,6 +185,10 @@ abstract class ContentActivity extends ActivityBase
                 if (intent.getAction().equalsIgnoreCase(ContentService.ACTION_CONTENT_READY))
                 {
                     contentChanged();
+                    if (updateContentRefreshLayout == null)
+                    {
+                        Logger.i(TAG, "onReceive: updateContentRefreshLayout == null");
+                    }
                     updateContentRefreshLayout.setRefreshing(false);
                 } else if (intent.getAction().equalsIgnoreCase(
                         ContentService.ACTION_NO_INTERNET_CONNECTION))

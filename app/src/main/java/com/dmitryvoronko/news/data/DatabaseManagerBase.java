@@ -9,7 +9,6 @@ import com.dmitryvoronko.news.util.log.Logger;
 import lombok.NonNull;
 
 /**
- *
  * Created by Dmitry on 04/11/2016.
  */
 
@@ -24,23 +23,21 @@ abstract class DatabaseManagerBase
         this.databaseHelper = new DatabaseOpenHelper(context);
     }
 
-    final class Request<T>
+
+    <T> T executeRequest(@NonNull final com.dmitryvoronko.news.data.Request<T> request)
     {
-        T executeRequest(@NonNull final com.dmitryvoronko.news.data.Request<T> request)
+        T result = null;
+        try
         {
-            T result = null;
-            try
-            {
-                final SQLiteDatabase database = databaseHelper.getWritableDatabase();
-                result = request.executed(database);
-            } catch (final SQLiteException e)
-            {
-                Logger.e(TAG, "executeRequest: SQLite Exception ", e);
-            } finally
-            {
-                databaseHelper.close();
-            }
-            return result;
+            final SQLiteDatabase database = databaseHelper.getWritableDatabase();
+            result = request.executed(database);
+        } catch (final SQLiteException e)
+        {
+            Logger.e(TAG, "executeRequest: SQLite Exception ", e);
+        } finally
+        {
+            databaseHelper.close();
         }
+        return result;
     }
 }

@@ -16,15 +16,15 @@
         <item>2</item>
     </string-array>
 
-    <string name="pref_key_choose_theme">choose_theme</string>
+    <string name="pref_key_choose_theme" translatable="false">choose_theme</string>
     <!-- Updates -->
     <string name="pref_header_updates">Updates</string>
 
     <string name="pref_title_daily_update_switch">Daily updates</string>
-    <string name="pref_daily_update_time_default_value">09:00</string>
+    <string name="pref_daily_update_time_default_value" translatable="false">09:00</string>
 
-    <string name="pref_key_daily_update_switch">auto_update_news_switch</string>
-    <string name="pref_key_daily_update_time_picker">daily_update_time_picker</string>
+    <string name="pref_key_daily_update_switch" translatable="false">auto_update_news_switch</string>
+    <string name="pref_key_daily_update_time_picker" translatable="false">daily_update_time_picker</string>
 
     <!-- Notifications -->
     <string-array name="pref_led_color_titles">
@@ -58,9 +58,9 @@
     <string name="pref_title_led">LED</string>
     <string name="pref_title_led_color">LED Color</string>
 
-    <string name="pref_key_ringtone">notifications_news_updated_ringtone</string>
-    <string name="pref_key_notifications_vibrate">notifications_news_updated_vibrate</string>
-    <string name="pref_key_notifications_switch">notifications_news_updated</string>
-    <string name="pref_key_notifications_led_switch">notifications_news_updated_led_switch</string>
-    <string name="pref_key_notifications_led_color">notifications_news_updated_led_color</string>
+    <string name="pref_key_ringtone" translatable="false">notifications_news_updated_ringtone</string>
+    <string name="pref_key_notifications_vibrate" translatable="false">notifications_news_updated_vibrate</string>
+    <string name="pref_key_notifications_switch" translatable="false">notifications_news_updated</string>
+    <string name="pref_key_notifications_led_switch" translatable="false">notifications_news_updated_led_switch</string>
+    <string name="pref_key_notifications_led_color" translatable="false">notifications_news_updated_led_color</string>
 </resources>

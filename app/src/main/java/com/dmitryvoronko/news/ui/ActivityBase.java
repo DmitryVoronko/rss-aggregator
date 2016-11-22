@@ -25,6 +25,7 @@ public abstract class ActivityBase extends AppCompatActivity
         } catch (final Exception e)
         {
             Logger.e(TAG, "onCreate", e);
+            e.printStackTrace();
         }
     }
 

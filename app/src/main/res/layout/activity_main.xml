@@ -18,5 +18,5 @@
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         app:srcCompat="@drawable/ic_add_white_24dp"
-        app:layout_behavior="com.dmitryvoronko.news.view.content.ScrollAwareFABBehavior"/>
+        app:layout_behavior="com.dmitryvoronko.news.ui.content.ScrollAwareFABBehavior"/>
 </android.support.design.widget.CoordinatorLayout>
