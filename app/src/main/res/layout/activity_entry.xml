@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="com.dmitryvoronko.news.view.content.EntryActivity">
+    tools:context="com.dmitryvoronko.news.ui.content.EntryActivity">
 
     <WebView
         android:id="@+id/entry_web_view"

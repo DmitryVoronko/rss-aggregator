@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.content;
+package com.dmitryvoronko.news.ui.content;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -131,7 +131,7 @@ final class SwipeableRecyclerViewTouchListener
                     break;
                 }
 
-                // Find the child view that was touched (perform a hit test)
+                // Find the child ui that was touched (perform a hit test)
                 final Rect rect = new Rect();
                 final int childCount = mRecyclerView.getChildCount();
                 final int[] listViewCoordinates = new int[2];
@@ -370,7 +370,7 @@ final class SwipeableRecyclerViewTouchListener
                     ViewGroup.LayoutParams lp;
                     for (final PendingDismissData pendingDismiss : mPendingDismisses)
                     {
-                        // Reset view presentation
+                        // Reset ui presentation
                         pendingDismiss.view.setAlpha(mAlpha);
                         pendingDismiss.view.setTranslationX(0);
 

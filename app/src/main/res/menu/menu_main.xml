@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.dmitryvoronko.news.view.content.ChannelsActivity">
+      tools:context="com.dmitryvoronko.news.ui.content.ChannelsActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

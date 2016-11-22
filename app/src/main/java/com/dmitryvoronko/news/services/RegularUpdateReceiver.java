@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.dmitryvoronko.news.view.util.NotificationHelper;
+import com.dmitryvoronko.news.ui.util.NotificationHelper;
 
 public final class RegularUpdateReceiver extends BroadcastReceiver
 {

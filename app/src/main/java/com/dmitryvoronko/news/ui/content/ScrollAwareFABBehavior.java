@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.content;
+package com.dmitryvoronko.news.ui.content;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

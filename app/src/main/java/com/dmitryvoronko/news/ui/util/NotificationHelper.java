@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.util;
+package com.dmitryvoronko.news.ui.util;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,7 +12,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.dmitryvoronko.news.R;
-import com.dmitryvoronko.news.view.content.ChannelsActivity;
+import com.dmitryvoronko.news.ui.content.ChannelsActivity;
 
 /**
  *

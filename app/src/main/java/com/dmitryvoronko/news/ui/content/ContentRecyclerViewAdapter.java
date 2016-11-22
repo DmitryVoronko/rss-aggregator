@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.content;
+package com.dmitryvoronko.news.ui.content;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
-import com.dmitryvoronko.news.view.util.ShareHelper;
+import com.dmitryvoronko.news.ui.util.ShareHelper;
 
 import java.util.ArrayList;
 

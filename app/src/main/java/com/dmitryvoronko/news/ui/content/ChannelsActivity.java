@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.content;
+package com.dmitryvoronko.news.ui.content;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -13,9 +13,9 @@ import android.view.View;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.ChannelsContentService;
-import com.dmitryvoronko.news.view.util.SnackbarHelper;
-import com.dmitryvoronko.news.view.addnew.AddNewActivity;
-import com.dmitryvoronko.news.view.settings.SettingsActivity;
+import com.dmitryvoronko.news.ui.util.SnackbarHelper;
+import com.dmitryvoronko.news.ui.addnew.AddNewActivity;
+import com.dmitryvoronko.news.ui.settings.SettingsActivity;
 
 
 import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNEL_ID;

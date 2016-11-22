@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.addnew;
+package com.dmitryvoronko.news.ui.addnew;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -22,8 +22,8 @@ import android.widget.EditText;
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.userinput.Status;
 import com.dmitryvoronko.news.services.AddNewService;
-import com.dmitryvoronko.news.view.ActivityBase;
-import com.dmitryvoronko.news.view.util.SnackbarHelper;
+import com.dmitryvoronko.news.ui.ActivityBase;
+import com.dmitryvoronko.news.ui.util.SnackbarHelper;
 import com.dmitryvoronko.news.util.log.Logger;
 
 import lombok.AllArgsConstructor;

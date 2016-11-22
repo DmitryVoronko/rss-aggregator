@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.util;
+package com.dmitryvoronko.news.ui.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

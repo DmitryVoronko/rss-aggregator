@@ -1,10 +1,10 @@
-package com.dmitryvoronko.news.view;
+package com.dmitryvoronko.news.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.dmitryvoronko.news.util.log.Logger;
-import com.dmitryvoronko.news.view.util.ThemeHelper;
+import com.dmitryvoronko.news.ui.util.ThemeHelper;
 
 /**
  *

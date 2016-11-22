@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.content;
+package com.dmitryvoronko.news.ui.content;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -19,9 +19,9 @@ import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNE
 public final class EntriesActivity extends ContentActivity
 {
     public static final String EXTRA_ENTRY_ID =
-            "com.dmitryvoronko.news.view.content.extra.ENTRY_ID";
+            "com.dmitryvoronko.news.ui.content.extra.ENTRY_ID";
     public static final String EXTRA_ENTRY_LINK =
-            "com.dmitryvoronko.news.view.content.extra.ENTRY_LINK";
+            "com.dmitryvoronko.news.ui.content.extra.ENTRY_LINK";
     public static final long DEFAULT_CHANNEL_ID = -10;
     private static long channelId = DEFAULT_CHANNEL_ID;
 

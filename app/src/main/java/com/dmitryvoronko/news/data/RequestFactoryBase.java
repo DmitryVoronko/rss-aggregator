@@ -16,6 +16,11 @@ import lombok.NonNull;
 
 abstract class RequestFactoryBase
 {
+    RequestFactoryBase()
+    {
+        throw new UnsupportedOperationException();
+    }
+
     static long insertBase(@NonNull final SQLiteDatabase sqLiteDatabase,
                            @NonNull final String tableName,
                            @NonNull final ContentValues values,

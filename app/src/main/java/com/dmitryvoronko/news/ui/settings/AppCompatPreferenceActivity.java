@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.settings;
+package com.dmitryvoronko.news.ui.settings;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.content;
+package com.dmitryvoronko.news.ui.content;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +9,12 @@ import android.webkit.WebViewClient;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.util.NetworkHelper;
-import com.dmitryvoronko.news.view.ActivityBase;
-import com.dmitryvoronko.news.view.util.ShareHelper;
-import com.dmitryvoronko.news.view.util.SnackbarHelper;
+import com.dmitryvoronko.news.ui.ActivityBase;
+import com.dmitryvoronko.news.ui.util.ShareHelper;
+import com.dmitryvoronko.news.ui.util.SnackbarHelper;
 
-import static com.dmitryvoronko.news.view.content.EntriesActivity.EXTRA_ENTRY_ID;
-import static com.dmitryvoronko.news.view.content.EntriesActivity.EXTRA_ENTRY_LINK;
+import static com.dmitryvoronko.news.ui.content.EntriesActivity.EXTRA_ENTRY_ID;
+import static com.dmitryvoronko.news.ui.content.EntriesActivity.EXTRA_ENTRY_LINK;
 
 public final class EntryActivity extends ActivityBase
 {

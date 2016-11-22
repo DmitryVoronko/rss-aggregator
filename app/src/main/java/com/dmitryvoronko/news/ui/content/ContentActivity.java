@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.content;
+package com.dmitryvoronko.news.ui.content;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,8 +16,8 @@ import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.services.ContentService;
 import com.dmitryvoronko.news.services.ItemToBeDeleted;
-import com.dmitryvoronko.news.view.ActivityBase;
-import com.dmitryvoronko.news.view.util.SnackbarHelper;
+import com.dmitryvoronko.news.ui.ActivityBase;
+import com.dmitryvoronko.news.ui.util.SnackbarHelper;
 
 import java.util.ArrayList;
 

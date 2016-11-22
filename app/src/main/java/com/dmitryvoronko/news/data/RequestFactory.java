@@ -23,9 +23,10 @@ import static com.dmitryvoronko.news.data.NewsContract.LIKE;
 
 final class RequestFactory extends RequestFactoryBase
 {
+
     private RequestFactory()
     {
-        throw new UnsupportedOperationException();
+        super();
     }
 
     static Request<Boolean> update(@NonNull final Channel channel)

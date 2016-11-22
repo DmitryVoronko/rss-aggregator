@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.view.settings;
+package com.dmitryvoronko.news.ui.settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +22,7 @@ import android.view.MenuItem;
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.RegularUpdateScheduler;
 import com.dmitryvoronko.news.util.log.Logger;
-import com.dmitryvoronko.news.view.util.ThemeHelper;
+import com.dmitryvoronko.news.ui.util.ThemeHelper;
 
 import java.util.List;
 

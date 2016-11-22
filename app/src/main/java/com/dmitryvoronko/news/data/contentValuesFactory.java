@@ -14,6 +14,11 @@ import lombok.NonNull;
 
 final class ContentValuesFactory
 {
+    private ContentValuesFactory()
+    {
+        throw new UnsupportedOperationException();
+    }
+
     static ContentValues createContentValues(@NonNull final Channel channel)
     {
         return createBaseContentValue(channel);
