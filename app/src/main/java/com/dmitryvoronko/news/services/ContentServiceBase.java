@@ -99,11 +99,15 @@ abstract class ContentServiceBase extends IntentService implements ContentServic
                     handleActionRegularUpdate();
                 } else
                 {
-                    // TODO: 21/11/2016 Add implementation
-                    throw new UnsupportedOperationException();
+                    tryAnotherTime();
                 }
             }
         }
+    }
+
+    private void tryAnotherTime()
+    {
+        RegularUpdateScheduler.anotherTryScheduleAlarm(getApplicationContext());
     }
 
     private void handleActionRegularUpdate()
@@ -116,8 +120,7 @@ abstract class ContentServiceBase extends IntentService implements ContentServic
             sendBroadcast(succeedIntent);
         } else
         {
-            // TODO: 21/11/2016 Add implementation
-            throw new UnsupportedOperationException();
+            tryAnotherTime();
         }
     }
 

@@ -21,9 +21,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 
 import lombok.Cleanup;
 import lombok.Data;
+import lombok.NonNull;
 
 /**
  *
@@ -36,19 +38,21 @@ final class NewsUpdater extends Cancellable
 
     private final ContextWrapper contextWrapper;
     private final DatabaseManager databaseManager;
-    private final ExecutorService executorService;
 
-    NewsUpdater(final ContextWrapper contextWrapper,
-                final DatabaseManager databaseManager)
+    NewsUpdater(@NonNull final ContextWrapper contextWrapper,
+                @NonNull final DatabaseManager databaseManager)
     {
         this.contextWrapper = contextWrapper;
         this.databaseManager = databaseManager;
-        final int threadsCount = Runtime.getRuntime().availableProcessors() * 2;
-        executorService = Executors.newFixedThreadPool(threadsCount);
+
     }
 
     UpdateStatus updateChannels()
     {
+        Logger.i(TAG, "start update");
+        final int threadsCount = Runtime.getRuntime().availableProcessors() * 2;
+        Logger.i(TAG, "threads count = " + threadsCount);
+        final ExecutorService executorService = Executors.newFixedThreadPool(threadsCount);
         final ArrayList<Channel> channels = databaseManager.getChannels();
 
         final ArrayList<Future<Feed>> futures = new ArrayList<>();
@@ -60,7 +64,7 @@ final class NewsUpdater extends Cancellable
                 break;
             }
             final FileInfo fileInfo = FileInfo.valueOf(channel);
-            final Callable<Feed> worker = feedUpdater(fileInfo);
+            final Callable<Feed> worker = feedUpdater(fileInfo, channel.getId());
             final Future<Feed> submit = executorService.submit(worker);
             futures.add(submit);
         }
@@ -83,10 +87,15 @@ final class NewsUpdater extends Cancellable
             } catch (final ExecutionException e)
             {
                 Logger.e(TAG, "updateChannels: Execution Exception", e);
+            } catch (final RejectedExecutionException e)
+            {
+                Logger.e(TAG, "updateChannels: RejectedExecutionException", e);
             }
         }
 
         executorService.shutdown();
+
+        Logger.i(TAG, "Finish update");
 
         insertToDatabase(parsedItems);
         if (!canceled)
@@ -98,13 +107,13 @@ final class NewsUpdater extends Cancellable
         }
     }
 
-    private Callable<Feed> feedUpdater(final FileInfo fileInfo)
+    private Callable<Feed> feedUpdater(final FileInfo fileInfo, final long channelId)
     {
         return new Callable<Feed>()
         {
             @Override public Feed call() throws Exception
             {
-                return getUpdatedFeed(fileInfo);
+                return getUpdatedFeed(fileInfo, channelId);
             }
         };
     }
@@ -121,7 +130,7 @@ final class NewsUpdater extends Cancellable
         }
     }
 
-    @Nullable private Feed getUpdatedFeed(final FileInfo fileInfo)
+    @Nullable private Feed getUpdatedFeed(final FileInfo fileInfo, final long channelId)
     {
         final FileDownloader fileDownloader = new FileDownloader(contextWrapper);
         fileDownloader.download(fileInfo);
@@ -129,8 +138,8 @@ final class NewsUpdater extends Cancellable
         final Channel updatedChannel;
         try
         {
-            updatedChannel = getChannel(parser, fileInfo);
-            final ArrayList<Entry> updatedEntries = getEntries(parser, updatedChannel, fileInfo);
+            updatedChannel = getChannel(parser, fileInfo, channelId);
+            final ArrayList<Entry> updatedEntries = getEntries(parser, channelId, fileInfo);
             contextWrapper.deleteFile(fileInfo.getFileName());
             return new Feed(updatedChannel, updatedEntries);
         } catch (final IOException e)
@@ -149,6 +158,7 @@ final class NewsUpdater extends Cancellable
         if (feed != null)
         {
             databaseManager.update(feed.getChannel());
+
             for (final Entry entry : feed.getEntries())
             {
                 databaseManager.insert(entry);
@@ -156,28 +166,31 @@ final class NewsUpdater extends Cancellable
         }
     }
 
-    private Channel getChannel(final NewsParser parser, final FileInfo fileInfo)
+    private Channel getChannel(@NonNull final NewsParser parser,
+                               @NonNull final FileInfo fileInfo,
+                               final long channelId)
             throws IOException, XmlPullParserException
     {
         @Cleanup final FileInputStream fileInputStream =
                 contextWrapper.openFileInput(fileInfo.getFileName());
-        return parser.parse(fileInputStream, fileInfo.getLink());
+        return parser.parse(fileInputStream, fileInfo.getLink(), channelId);
     }
 
-    private ArrayList<Entry> getEntries(final NewsParser parser, final Channel updatedChannel,
-                                        final FileInfo fileInfo)
+    private ArrayList<Entry> getEntries(@NonNull final NewsParser parser,
+                                        final long channelId,
+                                        @NonNull final FileInfo fileInfo)
             throws XmlPullParserException, IOException
     {
         @Cleanup final FileInputStream fileInputStream =
                 contextWrapper.openFileInput(fileInfo.getFileName());
-        return parser.parse(fileInputStream, updatedChannel.getId());
+        return parser.parse(fileInputStream, channelId);
     }
 
     UpdateStatus updateChannel(final long channelId)
     {
-        final Channel channel = databaseManager.getChannel(channelId);
-        final FileInfo fileInfo = FileInfo.valueOf(channel);
-        final Feed feed = getUpdatedFeed(fileInfo);
+        @NonNull final Channel channel = databaseManager.getChannel(channelId);
+        @NonNull final FileInfo fileInfo = FileInfo.valueOf(channel);
+        final Feed feed = getUpdatedFeed(fileInfo, channelId);
         if (feed != null && !canceled)
         {
             insertToDatabase(feed);

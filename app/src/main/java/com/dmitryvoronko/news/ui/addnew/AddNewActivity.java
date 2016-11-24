@@ -191,9 +191,7 @@ public final class AddNewActivity extends ActivityBase
 
     private void say(final int resId)
     {
-        SnackbarHelper.showSnackbar(this, resId, SnackbarHelper.NULL_ACTION_RES_ID,
-                                    SnackbarHelper.NULL_ON_CLICK_LISTENER,
-                                    SnackbarHelper.NULL_CALLBACK);
+        SnackbarHelper.showSnackbar(this, resId);
     }
 
     @Override protected void doOnPause()

@@ -36,14 +36,26 @@ public final class DatabaseManager extends DatabaseManagerBase
         executeRequest(RequestFactory.update(channel));
     }
 
-    public void deleteChannel(@NonNull final long id)
+    public void deleteChannel(final long id) throws IllegalArgumentException
     {
-        executeRequest(RequestFactory.deleteChannel(id));
+        if (id <= -1)
+        {
+            throw new IllegalArgumentException();
+        } else
+        {
+            executeRequest(RequestFactory.deleteChannel(id));
+        }
     }
 
-    public void deleteEntry(@NonNull final long id)
+    public void deleteEntry(final long id) throws IllegalArgumentException
     {
-        executeRequest(RequestFactory.deleteEntry(id));
+        if (id <= -1)
+        {
+            throw new IllegalArgumentException();
+        } else
+        {
+            executeRequest(RequestFactory.deleteEntry(id));
+        }
     }
 
     public boolean channelIsAlreadyExists(@NonNull final String link)
@@ -56,13 +68,25 @@ public final class DatabaseManager extends DatabaseManagerBase
         return executeRequest(RequestFactory.channelsRequest());
     }
 
-    public ArrayList<Entry> getEntries(@NonNull final long channelId)
+    public ArrayList<Entry> getEntries(final long channelId) throws IllegalArgumentException
     {
-        return executeRequest(RequestFactory.entriesRequest(channelId));
+        if (channelId <= -1)
+        {
+            throw new IllegalArgumentException();
+        } else
+        {
+            return executeRequest(RequestFactory.entriesRequest(channelId));
+        }
     }
 
-    public Channel getChannel(@NonNull final long channelId)
+    public Channel getChannel(final long channelId) throws IllegalArgumentException
     {
-        return executeRequest(RequestFactory.getChannel(channelId));
+        if (channelId <= -1)
+        {
+            throw new IllegalArgumentException();
+        } else
+        {
+            return executeRequest(RequestFactory.getChannel(channelId));
+        }
     }
 }

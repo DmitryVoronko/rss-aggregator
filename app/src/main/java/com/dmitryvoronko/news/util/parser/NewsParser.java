@@ -21,14 +21,14 @@ public final class NewsParser
 {
     private static final String TAG = "NewsParser";
 
-    public Channel parse(final InputStream in, final String link)
+    public Channel parse(final InputStream in, final String link, final long channelId)
             throws IOException,
                    XmlPullParserException,
                    UnsupportedOperationException
     {
         final XmlPullParser parser = getParser(in);
         final FormatParser formatParser = getFormatParser(parser);
-        return formatParser.parse(parser, link);
+        return formatParser.parse(parser, link, channelId);
     }
 
     private FormatParser getAtomFormatParser(final XmlPullParser parser)
@@ -96,7 +96,8 @@ public final class NewsParser
         return parser;
     }
 
-    private FormatParser getFormatParser(final XmlPullParser parser)
+    private FormatParser getFormatParser(final XmlPullParser parser) throws XmlPullParserException,
+                                                                            IOException
     {
         final String tagName = parser.getName();
 
@@ -106,6 +107,10 @@ public final class NewsParser
         } else if (tagName.equalsIgnoreCase(ParserContract.FEED))
         {
             return getAtomFormatParser(parser);
+        } else if (tagName.equalsIgnoreCase(ParserContract.HTML))
+        {
+            parser.nextTag();
+            return getFormatParser(parser);
         } else
         {
             Logger.e(TAG, "getFormatParser(): Not supported format = " + tagName);

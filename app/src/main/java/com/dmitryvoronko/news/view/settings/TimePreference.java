@@ -32,7 +32,7 @@ public final class TimePreference extends DialogPreference
     protected View onCreateDialogView()
     {
         picker = new TimePicker(getContext());
-
+        picker.setIs24HourView(true);
         return (picker);
     }
 

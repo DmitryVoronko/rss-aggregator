@@ -9,6 +9,7 @@ import com.dmitryvoronko.news.util.log.Logger;
 import lombok.NonNull;
 
 /**
+ *
  * Created by Dmitry on 04/11/2016.
  */
 

@@ -21,10 +21,10 @@ final class ContentValuesFactory
 
     static ContentValues createContentValues(@NonNull final Channel channel)
     {
-        return createBaseContentValue(channel);
+        return createBaseContentValueWithoutId(channel);
     }
 
-    private static ContentValues createBaseContentValue(@NonNull final Channel channel)
+    private static ContentValues createBaseContentValueWithoutId(@NonNull final Channel channel)
     {
         final ContentValues values = new ContentValues();
         values.put(NewsContract.BaseTable._TITLE, channel.getTitle());
@@ -35,8 +35,9 @@ final class ContentValuesFactory
 
     static ContentValues createContentValues(@NonNull final Entry entry)
     {
-        final ContentValues values = createBaseContentValue(entry);
+        final ContentValues values = createBaseContentValueWithoutId(entry);
         values.put(NewsContract.EntryTable._CHANNEL_ID, entry.getChannelId());
         return values;
     }
+
 }

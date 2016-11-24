@@ -26,6 +26,7 @@ final class ParserContract
     static final String SUMMARY = "summary";
     static final String ENTRY = "entry";
     static final String FEED = "feed";
+    static final String HTML = "html";
 
     private ParserContract()
     {

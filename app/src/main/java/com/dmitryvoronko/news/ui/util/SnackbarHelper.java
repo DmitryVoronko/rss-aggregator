@@ -18,10 +18,6 @@ import lombok.NonNull;
 
 public final class SnackbarHelper
 {
-    public static final int NULL_ACTION_RES_ID = -1;
-    public static final View.OnClickListener NULL_ON_CLICK_LISTENER = null;
-    public static final Snackbar.Callback NULL_CALLBACK = null;
-
     private SnackbarHelper()
     {
         throw new UnsupportedOperationException();
@@ -38,28 +34,27 @@ public final class SnackbarHelper
             }
         };
 
-        showSnackbar(activity, R.string.no_internet_connection_message, R.string.action_settings,
-                     openSettingsAction, NULL_CALLBACK);
+        showSnackbar(activity, R.string.no_internet_connection_message, R.string.action_settings, openSettingsAction);
+    }
+
+    public static void showSnackbar(@NonNull final  Activity activity,
+                                    @StringRes final int resId)
+    {
+        showSnackbar(activity, resId, -1, null);
     }
 
     public static void showSnackbar(@NonNull final Activity activity,
                                     @StringRes final int resId,
                                     final int actionResId,
-                                    final View.OnClickListener onClickListener,
-                                    final Snackbar.Callback callback)
+                                    final View.OnClickListener onClickListener)
     {
         final View currentFocus = activity.getCurrentFocus();
         if (currentFocus != null)
         {
             final Snackbar snackbar = Snackbar.make(currentFocus, resId, Snackbar.LENGTH_SHORT);
-            if (onClickListener != NULL_ON_CLICK_LISTENER)
+            if (onClickListener != null)
             {
                 snackbar.setAction(actionResId, onClickListener);
-            }
-
-            if (callback != NULL_CALLBACK)
-            {
-                snackbar.setCallback(callback);
             }
 
             snackbar.show();

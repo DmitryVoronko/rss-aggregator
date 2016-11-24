@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.dmitryvoronko.news.model.data.Channel;
+import com.dmitryvoronko.news.util.log.Logger;
 
 import lombok.NonNull;
 
@@ -16,10 +17,7 @@ import lombok.NonNull;
 
 abstract class RequestFactoryBase
 {
-    RequestFactoryBase()
-    {
-        throw new UnsupportedOperationException();
-    }
+    private static final String TAG = "RequestFactoryBase";
 
     static long insertBase(@NonNull final SQLiteDatabase sqLiteDatabase,
                            @NonNull final String tableName,
@@ -31,11 +29,14 @@ abstract class RequestFactoryBase
         final boolean alreadyExists = alreadyExistsBase(sqLiteDatabase, link, tableName);
         if (alreadyExists)
         {
+            Logger.i(TAG, "Updated = " + channel.getId());
             updateBase(sqLiteDatabase, tableName, values, channel);
             return channel.getId();
         } else
         {
-            return sqLiteDatabase.insert(tableName, null, values);
+            final long insertedId = sqLiteDatabase.insert(tableName, null, values);
+            Logger.i(TAG, "Inserted id = " + insertedId);
+            return insertedId;
         }
     }
 
@@ -44,21 +45,21 @@ abstract class RequestFactoryBase
                                      @NonNull final String tableName)
             throws SQLiteException
     {
-        final String where = NewsContract.BaseTable._LINK + NewsContract.LIKE;
-        final String[] whereArgs = {link};
+        @NonNull final String where = NewsContract.BaseTable._LINK + NewsContract.LIKE;
+        @NonNull final String[] whereArgs = {link};
         final int count = getCount(database, tableName, where, whereArgs);
         return count > 0;
     }
 
-    static boolean updateBase(@NonNull final SQLiteDatabase sqLiteDatabase,
-                                                                   @NonNull final String tableName,
-                                                                   @NonNull final ContentValues values,
-                                                                   @NonNull final Channel channel)
-            throws SQLiteException
+    @SuppressWarnings("SameReturnValue") static boolean updateBase(
+            @NonNull final SQLiteDatabase sqLiteDatabase,
+            @NonNull final String tableName,
+            @NonNull final ContentValues values,
+            @NonNull final Channel channel) throws SQLiteException
     {
-        final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
-        final String id = String.valueOf(channel.getId());
-        final String whereArgs[] = {id};
+        @NonNull final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
+        @NonNull final String id = String.valueOf(channel.getId());
+        @NonNull final String whereArgs[] = {id};
         sqLiteDatabase.update(tableName, values, selection, whereArgs);
         return true;
     }
@@ -70,32 +71,31 @@ abstract class RequestFactoryBase
             throws SQLiteException
     {
 
-        final String[] columns = {NewsContract.BaseTable._ID};
-        final Cursor cursor =
+        @NonNull final String[] columns = {NewsContract.BaseTable._ID};
+        @NonNull final Cursor cursor =
                 database.query(tableName, columns, where, whereArgs, null, null, null);
         final int count = cursor.getCount();
         cursor.close();
         return count;
     }
 
-    static boolean deleteBase(@NonNull final SQLiteDatabase sqLiteDatabase,
-                              final String id,
-                              @NonNull final String tableName)
+    @SuppressWarnings("SameReturnValue") static boolean deleteBase(@NonNull final SQLiteDatabase sqLiteDatabase,
+                                                                   final String id,
+                                                                   @NonNull final String tableName)
             throws SQLiteException
     {
-        final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
-        final String[] selectionArgs = {id};
+        @NonNull final String selection = NewsContract.BaseTable._ID + NewsContract.LIKE;
+        @NonNull final String[] selectionArgs = {id};
 
         sqLiteDatabase.delete(tableName, selection, selectionArgs);
         return true;
     }
 
-    static boolean deleteChannelEntries(@NonNull final SQLiteDatabase sqLiteDatabase,
-                                        final String id)
-            throws SQLiteException
+    @SuppressWarnings("SameReturnValue") static boolean deleteChannelEntries(
+            @NonNull final SQLiteDatabase sqLiteDatabase, final String id) throws SQLiteException
     {
-        final String selection = NewsContract.EntryTable._CHANNEL_ID + NewsContract.LIKE;
-        final String[] selectionArgs = {id};
+        @NonNull final String selection = NewsContract.EntryTable._CHANNEL_ID + NewsContract.LIKE;
+        @NonNull final String[] selectionArgs = {id};
         sqLiteDatabase.delete(NewsContract.EntryTable._TABLE_NAME, selection, selectionArgs);
         return true;
     }

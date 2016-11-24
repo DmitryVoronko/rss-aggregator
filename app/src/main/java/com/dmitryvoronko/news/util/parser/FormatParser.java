@@ -21,7 +21,7 @@ import java.util.ArrayList;
 abstract class FormatParser
 {
     private static final String TAG = "FormatParser";
-    Channel parse(final XmlPullParser parser, final String link)
+    Channel parse(final XmlPullParser parser, final String link, final long channelId)
             throws IOException,
                    XmlPullParserException,
                    UnsupportedOperationException
@@ -72,7 +72,13 @@ abstract class FormatParser
             throw new UnsupportedOperationException();
         } else
         {
-            return FeedObjectFactory.createChannel(title, link, description);
+            if (channelId == FeedObjectFactory.NO_ID)
+            {
+                return FeedObjectFactory.createChannel(title, link, description);
+            } else
+            {
+                return FeedObjectFactory.createChannel(channelId, title, link, description);
+            }
         }
     }
 

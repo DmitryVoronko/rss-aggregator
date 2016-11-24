@@ -66,11 +66,7 @@ public final class ChannelsActivity extends ContentActivity
 
     private void handleAddNewItem()
     {
-        SnackbarHelper.showSnackbar(this,
-                                    R.string.channel_successfully_added,
-                                    SnackbarHelper.NULL_ACTION_RES_ID,
-                                    SnackbarHelper.NULL_ON_CLICK_LISTENER,
-                                    SnackbarHelper.NULL_CALLBACK);
+        SnackbarHelper.showSnackbar(this, R.string.channel_successfully_added);
         requestContent();
     }
 

@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.dmitryvoronko.news.R;
@@ -100,13 +99,6 @@ abstract class ContentActivity extends ActivityBase
             }
         });
 
-        Logger.i(TAG, "createUpdateContentRefreshLayout: ");
-
-        if (swipeRefreshLayout != null)
-        {
-            Logger.i(TAG, "createUpdateContentRefreshLayout: swipeRefreshLayout = not null");
-        }
-
         return swipeRefreshLayout;
     }
 
@@ -123,8 +115,7 @@ abstract class ContentActivity extends ActivityBase
 
         SnackbarHelper.showSnackbar(this, R.string.item_deleted_message,
                                     R.string.cancel_button_text,
-                                    onClickListener,
-                                    null);
+                                    onClickListener);
     }
 
     protected abstract void updateContent();
@@ -137,11 +128,7 @@ abstract class ContentActivity extends ActivityBase
         contentService.getContent().add(itemPosition, item);
         adapter.notifyItemInserted(itemPosition);
         adapter.notifyDataSetChanged();
-        SnackbarHelper.showSnackbar(this,
-                                    R.string.item_restored_message,
-                                    SnackbarHelper.NULL_ACTION_RES_ID,
-                                    null,
-                                    null);
+        SnackbarHelper.showSnackbar(this, R.string.item_restored_message);
     }
 
     @Override protected void doOnPause()

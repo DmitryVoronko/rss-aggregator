@@ -38,7 +38,7 @@ public final class NewsFacade
         final boolean hasConnection = NetworkHelper.hasConnection(context);
         if (hasConnection)
         {
-            final UserInputHandler userInputHandler = new UserInputHandler(databaseManager);
+            @NonNull final UserInputHandler userInputHandler = new UserInputHandler(databaseManager);
             return userInputHandler.handleUserInput(userInput);
         } else
         {

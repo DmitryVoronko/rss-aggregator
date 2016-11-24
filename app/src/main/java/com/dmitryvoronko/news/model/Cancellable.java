@@ -9,7 +9,7 @@ abstract class Cancellable
 {
     boolean canceled = false;
 
-    public final void cancel()
+    final void cancel()
     {
         canceled = true;
     }

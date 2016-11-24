@@ -28,6 +28,18 @@ public final class EntryActivity extends ActivityBase
         shareButton = (FloatingActionButton) findViewById(R.id.share_entry_fab);
         webView =  (WebView) findViewById(R.id.entry_web_view);
         webView.setWebViewClient(new WebViewClient());
+        final Intent intent = getIntent();
+        handleIntent(intent);
+    }
+
+    @Override protected void doOnResume()
+    {
+
+    }
+
+    @Override protected void doOnPause()
+    {
+
     }
 
     private void share(final String entryLink)
@@ -37,14 +49,7 @@ public final class EntryActivity extends ActivityBase
 
     private void loadEntry(final String entryLink)
     {
-        webView.onResume();
         webView.loadUrl(entryLink);
-    }
-
-    @Override protected void doOnResume()
-    {
-        final Intent intent = getIntent();
-        handleIntent(intent);
     }
 
     private void handleIntent(final Intent intent)
@@ -83,10 +88,5 @@ public final class EntryActivity extends ActivityBase
         {
             throw new UnsupportedOperationException();
         }
-    }
-
-    @Override protected void doOnPause()
-    {
-
     }
 }

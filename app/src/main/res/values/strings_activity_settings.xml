@@ -7,11 +7,11 @@
 
     <string name="pref_title_choose_theme">Theme</string>
 
-    <string-array name="pref_theme_list_titles">
+    <string-array name="pref_theme_list_titles" translatable="false">
         <item>Green</item>
         <item>Indigo</item>
     </string-array>
-    <string-array name="pref_theme_list_values">
+    <string-array name="pref_theme_list_values" translatable="false">
         <item>1</item>
         <item>2</item>
     </string-array>
@@ -26,8 +26,11 @@
     <string name="pref_key_daily_update_switch" translatable="false">auto_update_news_switch</string>
     <string name="pref_key_daily_update_time_picker" translatable="false">daily_update_time_picker</string>
 
+    <string name="update_delay_default_value" translatable="false">5</string>
+    <string name="update_delay_key" translatable="false">update_delay</string>
+
     <!-- Notifications -->
-    <string-array name="pref_led_color_titles">
+    <string-array name="pref_led_color_titles" translatable="false">
         <item>Red</item>
         <item>Orange</item>
         <item>Yellow</item>
@@ -38,7 +41,7 @@
         <item>Purple</item>
         <item>White</item>
     </string-array>
-    <string-array name="pref_led_color_values">
+    <string-array name="pref_led_color_values" translatable="false">
         <item>1</item>
         <item>2</item>
         <item>3</item>

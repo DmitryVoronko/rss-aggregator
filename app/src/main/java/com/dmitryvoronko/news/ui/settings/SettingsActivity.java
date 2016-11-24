@@ -14,6 +14,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.preference.SwitchPreference;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
@@ -50,6 +51,9 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
                     } else if (preference instanceof TimePreference)
                     {
                         handleTimePreferenceChanged(preference, stringValue);
+                    } else if (preference instanceof SwitchPreference)
+                    {
+                        handleSwitchPreferenceChanged(preference, stringValue);
                     } else
                     {
                         preference.setSummary(stringValue);
@@ -57,17 +61,55 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
                     return true;
                 }
 
+                private void handleSwitchPreferenceChanged(final Preference preference,
+                                                           final String stringValue)
+                {
+                    final Context context = preference.getContext();
+                    final String keyDailyUpdateSwitch = context.getString(R.string.pref_key_daily_update_switch);
+                    if (preference.getKey().equalsIgnoreCase(keyDailyUpdateSwitch))
+                    {
+                        if (Boolean.valueOf(stringValue))
+                        {
+                            handleEnableUpdates(context);
+                        } else
+                        {
+                            RegularUpdateScheduler.cancelAlarm(context);
+                        }
+                    }
+                    preference.setSummary(stringValue);
+                }
+
+                private void handleEnableUpdates(final Context context)
+                {
+                    final SharedPreferences preferences =
+                            PreferenceManager.getDefaultSharedPreferences(context);
+                    final String keyDailyUpdatesTimePicker =
+                            context.getString(R.string.pref_key_daily_update_time_picker);
+                    final String defaultValue =
+                            context.getString(R.string.pref_daily_update_time_default_value);
+                    final String timePickerValue =
+                            preferences.getString(keyDailyUpdatesTimePicker, defaultValue);
+                    final int hour = TimePreference.getHour(timePickerValue);
+                    final int minute = TimePreference.getMinute(timePickerValue);
+                    RegularUpdateScheduler.scheduleAlarm(context, hour, minute);
+                }
+
                 private void handleTimePreferenceChanged(final Preference preference,
                                                          final String stringValue)
                 {
-                    final String previouslyValue = PreferenceManager
-                            .getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), "");
+                    final Context context = preference.getContext();
+                    final SharedPreferences preferences = PreferenceManager
+                            .getDefaultSharedPreferences(context);
+                    final String defaultValue =
+                            context.getString(R.string.pref_daily_update_time_default_value);
+                    final String previouslyValue = preferences.getString(preference.getKey(),
+                                                                         defaultValue);
+
                     if (!previouslyValue.equalsIgnoreCase(stringValue))
                     {
                         final int hour = TimePreference.getHour(stringValue);
                         final int minute = TimePreference.getMinute(stringValue);
-                        RegularUpdateScheduler.scheduleAlarm(preference.getContext(),
+                        RegularUpdateScheduler.scheduleAlarm(context,
                                                              hour,
                                                              minute);
                         Logger.i(TAG, "onPreferenceChange: update starts in " + stringValue);
