@@ -97,24 +97,29 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
                 private void handleTimePreferenceChanged(final Preference preference,
                                                          final String stringValue)
                 {
-                    final Context context = preference.getContext();
-                    final SharedPreferences preferences = PreferenceManager
-                            .getDefaultSharedPreferences(context);
-                    final String defaultValue =
-                            context.getString(R.string.pref_daily_update_time_default_value);
-                    final String previouslyValue = preferences.getString(preference.getKey(),
-                                                                         defaultValue);
-
-                    if (!previouslyValue.equalsIgnoreCase(stringValue))
+                    if (!stringValue.equalsIgnoreCase(""))
                     {
-                        final int hour = TimePreference.getHour(stringValue);
-                        final int minute = TimePreference.getMinute(stringValue);
-                        RegularUpdateScheduler.scheduleAlarm(context,
-                                                             hour,
-                                                             minute);
-                        Logger.i(TAG, "onPreferenceChange: update starts in " + stringValue);
+                        final Context context = preference.getContext();
+                        final SharedPreferences preferences = PreferenceManager
+                                .getDefaultSharedPreferences(context);
+                        final String defaultValue =
+                                context.getString(R.string.pref_daily_update_time_default_value);
+                        final String prefValue = preferences.getString(preference.getKey(),
+                                                                       defaultValue);
+                        final String previouslyValue = prefValue.equalsIgnoreCase("") ?
+                                                       defaultValue : prefValue;
+
+                        if (!previouslyValue.equalsIgnoreCase(stringValue))
+                        {
+                            final int hour = TimePreference.getHour(stringValue);
+                            final int minute = TimePreference.getMinute(stringValue);
+                            RegularUpdateScheduler.scheduleAlarm(context,
+                                                                 hour,
+                                                                 minute);
+                            Logger.i(TAG, "onPreferenceChange: update starts in " + stringValue);
+                        }
+                        preference.setSummary(stringValue);
                     }
-                    preference.setSummary(stringValue);
                 }
 
                 private void handleRingtonePreferenceChanged(final Preference preference,

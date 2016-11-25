@@ -13,12 +13,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Green"
+        android:theme="@style/MainAppTheme"
         tools:ignore="AllowBackup">
         <activity
             android:name=".ui.content.ChannelsActivity"
             android:label="@string/app_name"
-            android:theme="@style/Green.NoActionBar">
+            android:theme="@style/MainAppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

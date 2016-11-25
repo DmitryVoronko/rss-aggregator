@@ -14,7 +14,7 @@
         <item name="colorAccent">@color/indigoColorPrimaryAccent</item>
     </style>
 
-    <style name="Green.NoActionBar">
+    <style name="MainAppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
