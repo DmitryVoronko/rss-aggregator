@@ -12,6 +12,7 @@ import lombok.NonNull;
 @Data
 public final class FileInfo
 {
+    private static final String FILE_FORMAT = ".xml";
     private final String link;
     private final String fileName;
 
@@ -21,11 +22,10 @@ public final class FileInfo
         this.fileName = fileName;
     }
 
-    @NonNull public static FileInfo create(@NonNull final Channel channel)
+    @NonNull public static FileInfo valueOf(@NonNull final Channel channel)
     {
         final String link = channel.getLink();
-        final String fileName = channel.getId() + channel.getTitle() + ".xml";
-
+        final String fileName = channel.getId() + channel.getTitle() + FILE_FORMAT;
         return new FileInfo(link, fileName);
     }
 }

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4caf50</color>
-    <color name="colorPrimaryDark">#388e3c</color>
-    <color name="colorAccent">#8bc34a</color>
+    <color name="greenColorPrimary">#4caf50</color>
+    <color name="greenColorPrimaryDark">#388e3c</color>
+    <color name="greenColorAccent">#8bc34a</color>
 
-    <color name="darkColorPrimary">#212121</color>
-    <color name="darkColorPrimaryDark">#000000</color>
-    <color name="darkColorAccent">#424242</color>
-
-    <color name="unReadStateColor">#FF9800</color>
+    <color name="indigoColorPrimary">#3F51B5</color>
+    <color name="indigoColorPrimaryDark">#303F9F</color>
+    <color name="indigoColorPrimaryAccent">#448AFF</color>
 </resources>

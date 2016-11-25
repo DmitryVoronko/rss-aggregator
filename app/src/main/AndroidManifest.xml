@@ -5,36 +5,37 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/MainAppTheme"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".view.content.MainActivity"
+            android:name=".ui.content.ChannelsActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/MainAppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.content.EntriesActivity">
+        <activity android:name=".ui.content.EntriesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.content.MainActivity"/>
-            />
+                android:value="com.dmitryvoronko.news.ui.content.ChannelsActivity"/>
         </activity>
         <activity
-            android:name=".view.settings.SettingsActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.content.MainActivity"/>
+                android:value="com.dmitryvoronko.news.ui.content.ChannelsActivity"/>
         </activity>
 
         <service
@@ -43,11 +44,11 @@
         </service>
 
         <activity
-            android:name=".view.addnew.AddNewActivity"
+            android:name=".ui.addnew.AddNewActivity"
             android:label="@string/title_activity_add_new">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.content.MainActivity"/>
+                android:value="com.dmitryvoronko.news.ui.content.ChannelsActivity"/>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -68,23 +69,7 @@
 
                 <data
                     android:host="*"
-                    android:pathPattern=".*xml"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*rss"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*feed.*"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*podcast.*"
-                    android:scheme="http"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*Podcast.*"
+                    android:pathPattern=".*xml.*"
                     android:scheme="http"/>
                 <data
                     android:host="*"
@@ -92,27 +77,15 @@
                     android:scheme="http"/>
                 <data
                     android:host="*"
-                    android:pathPattern=".*RSS.*"
+                    android:pathPattern=".*feed.*"
                     android:scheme="http"/>
                 <data
                     android:host="*"
-                    android:pathPattern=".*xml"
-                    android:scheme="https"/>
+                    android:pathPattern=".*atom.*"
+                    android:scheme="http"/>
                 <data
                     android:host="*"
-                    android:pathPattern=".*rss"
-                    android:scheme="https"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*feed.*"
-                    android:scheme="https"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*podcast.*"
-                    android:scheme="https"/>
-                <data
-                    android:host="*"
-                    android:pathPattern=".*Podcast.*"
+                    android:pathPattern=".*xml."
                     android:scheme="https"/>
                 <data
                     android:host="*"
@@ -120,7 +93,11 @@
                     android:scheme="https"/>
                 <data
                     android:host="*"
-                    android:pathPattern=".*RSS.*"
+                    android:pathPattern=".*feed.*"
+                    android:scheme="https"/>
+                <data
+                    android:host="*"
+                    android:pathPattern=".*atom.*"
                     android:scheme="https"/>
             </intent-filter>
             <intent-filter>
@@ -142,17 +119,26 @@
         </activity>
 
         <service
-            android:name=".services.ContentService"
+            android:name=".services.ChannelsContentService"
             android:exported="false">
         </service>
+        <service
+            android:name=".services.EntriesContentService"
+            android:exported="false"/>
 
-        <activity android:name=".view.content.EntryActivity">
+        <activity android:name=".ui.content.EntryActivity">
             android:parentActivityName=".view.content.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dmitryvoronko.news.view.content.EntriesActivity"/>
-            />
+                android:value="com.dmitryvoronko.news.ui.content.EntriesActivity"/>
         </activity>
+
+        <receiver
+            android:name=".services.RegularUpdateReceiver"
+            android:enabled="true"
+            android:process=":remote"
+            android:exported="false">
+        </receiver>
     </application>
 
 </manifest>

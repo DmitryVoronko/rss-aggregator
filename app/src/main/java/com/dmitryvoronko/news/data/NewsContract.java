@@ -33,7 +33,6 @@ final class NewsContract
         String _TITLE = "_title";
         String _LINK = "_url";
         String _DESCRIPTION = "_description";
-        String _STATE = "_state";
     }
 
     final class ChannelsTable implements BaseTable
@@ -44,8 +43,7 @@ final class NewsContract
                 _TABLE_NAME + " (" + _ID + INTEGER + PRIMARY_KEY + AUTOINCREMENT + COMMA_SEP +
                 _TITLE + TEXT + NOT_NULL + COMMA_SEP +
                 _DESCRIPTION + " " + TEXT + " " + NOT_NULL + COMMA_SEP +
-                _LINK + TEXT + NOT_NULL + UNIQUE + COMMA_SEP +
-                _STATE + TEXT + NOT_NULL + ");";
+                _LINK + TEXT + NOT_NULL + UNIQUE + ");";
 
         private static final String DELETE_TABLE = DROP_TABLE_IF_EXISTS + _TABLE_NAME;
     }
@@ -63,7 +61,6 @@ final class NewsContract
                 _TITLE + TEXT + NOT_NULL + COMMA_SEP +
                 _DESCRIPTION + TEXT + NOT_NULL + COMMA_SEP +
                 _LINK + TEXT + NOT_NULL + UNIQUE + COMMA_SEP +
-                _STATE + TEXT + NOT_NULL + COMMA_SEP +
                 FOREIGN_KEY + "(" + _CHANNEL_ID + ") " + REFERENCES + " " +
                 ChannelsTable._TABLE_NAME + "(" + ChannelsTable._ID + "));";
 

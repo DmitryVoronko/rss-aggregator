@@ -12,5 +12,4 @@ import lombok.Data;
     private final String title;
     private final String link;
     private final String description;
-    private final State state;
 }

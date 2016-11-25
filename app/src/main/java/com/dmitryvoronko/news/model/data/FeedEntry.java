@@ -2,6 +2,7 @@ package com.dmitryvoronko.news.model.data;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 /**
  *
@@ -15,14 +16,12 @@ final class FeedEntry extends FeedObject implements Entry
     private final long channelId;
 
     FeedEntry(final long id,
-              final String title,
-              final String link,
-              final String description,
-              final State state,
+              @NonNull final String title,
+              @NonNull final String link,
+              @NonNull final String description,
               final long channelId)
     {
-        super(id, title, link, description,
-              state);
+        super(id, title, link, description);
         this.channelId = channelId;
     }
 }

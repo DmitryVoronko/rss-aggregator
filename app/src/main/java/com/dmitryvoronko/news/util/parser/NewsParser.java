@@ -2,8 +2,7 @@ package com.dmitryvoronko.news.util.parser;
 
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.model.data.Entry;
-import com.dmitryvoronko.news.model.data.FeedObjectFactory;
-import com.dmitryvoronko.news.model.data.State;
+import com.dmitryvoronko.news.util.log.Logger;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -22,60 +21,66 @@ public final class NewsParser
 {
     private static final String TAG = "NewsParser";
 
-    public NewsParser()
-    {
-
-    }
-
-    public Channel parse(final InputStream in, final String link)
+    public Channel parse(final InputStream in, final String link, final long channelId)
             throws IOException,
                    XmlPullParserException,
                    UnsupportedOperationException
     {
         final XmlPullParser parser = getParser(in);
+        final FormatParser formatParser = getFormatParser(parser);
+        return formatParser.parse(parser, link, channelId);
+    }
 
+    private FormatParser getAtomFormatParser(final XmlPullParser parser)
+    {
+        final String atomXMLNS = parser.getAttributeValue(null, ParserContract.XMLNS);
 
-        String title = null;
-        String description = null;
-
-        int eventType = parser.getEventType();
-        boolean done = false;
-        while (eventType != XmlPullParser.END_DOCUMENT && !done)
+        if (atomXMLNS == null)
         {
-            switch (eventType)
-            {
-                case XmlPullParser.START_DOCUMENT:
-                    break;
-                case XmlPullParser.START_TAG:
-                    final String tagName = parser.getName();
-                    if (tagName.equalsIgnoreCase(ParserContract.ITEM))
-                    {
-                        done = true;
-                    } else
-                    {
-                        if (tagName.equalsIgnoreCase(ParserContract.TITLE))
-                        {
-                            title = parser.nextText();
-                        } else if (tagName.equalsIgnoreCase(ParserContract.DESCRIPTION))
-                        {
-                            description = parser.nextText();
-                        }
-                    }
-                    break;
-                case XmlPullParser.END_TAG:
-                    break;
-                default:
-                    break;
-            }
-            eventType = parser.next();
+            Logger.e(TAG, "getAtomFormatParser(): atomXMLNS is null");
+            throw new UnsupportedOperationException();
         }
 
-        if (description == null)
+        if (!atomXMLNS.equalsIgnoreCase(ParserContract.ATOM_XMLNS))
         {
-            description = "";
+            Logger.e(TAG, "getAtomFormatParser(): Not supported atomXMLNS = " + atomXMLNS);
+            throw new UnsupportedOperationException();
         }
 
-        return FeedObjectFactory.createChannel(title, link, description);
+        return new AtomParser();
+    }
+
+    private FormatParser getRSSFormatParser(final XmlPullParser parser)
+    {
+        final String rssVersion = parser.getAttributeValue(null, ParserContract.VERSION);
+
+        if (rssVersion == null)
+        {
+            Logger.e(TAG, "getRSSFormatParser(): rssVersion is null");
+            throw new UnsupportedOperationException();
+        }
+
+        if (rssVersion.equalsIgnoreCase(ParserContract.RSS_VERSION_2_0) ||
+                rssVersion.equalsIgnoreCase(ParserContract.RSS_VERSION_0_9_1))
+        {
+
+            return new RSS20Parser();
+        } else
+        {
+            Logger.e(TAG, "getRSSFormatParser(): Not supported rssVersion = " + rssVersion);
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    public ArrayList<Entry> parse(final InputStream in, final long channelId)
+            throws XmlPullParserException,
+                   IOException,
+                   UnsupportedOperationException
+    {
+
+        final XmlPullParser parser = getParser(in);
+        final FormatParser formatParser = getFormatParser(parser);
+        return formatParser.parse(parser, channelId);
     }
 
     private XmlPullParser getParser(final InputStream in)
@@ -88,103 +93,28 @@ public final class NewsParser
         final XmlPullParser parser = factory.newPullParser();
         parser.setInput(in, null);
         parser.nextTag();
-
-        checkDocumentFormat(parser);
-
         return parser;
     }
 
-    private void checkDocumentFormat(final XmlPullParser parser)
+    private FormatParser getFormatParser(final XmlPullParser parser) throws XmlPullParserException,
+                                                                            IOException
     {
         final String tagName = parser.getName();
 
-        if (!tagName.equalsIgnoreCase(ParserContract.RSS))
+        if (tagName.equalsIgnoreCase(ParserContract.RSS))
         {
+            return getRSSFormatParser(parser);
+        } else if (tagName.equalsIgnoreCase(ParserContract.FEED))
+        {
+            return getAtomFormatParser(parser);
+        } else if (tagName.equalsIgnoreCase(ParserContract.HTML))
+        {
+            parser.nextTag();
+            return getFormatParser(parser);
+        } else
+        {
+            Logger.e(TAG, "getFormatParser(): Not supported format = " + tagName);
             throw new UnsupportedOperationException();
         }
-
-        final String rssVersion = parser.getAttributeValue(null, ParserContract.VERSION);
-
-        if (rssVersion == null)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        if (!rssVersion.equalsIgnoreCase(ParserContract.RSS_VERSION_2_0))
-        {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    public ArrayList<Entry> parse(final InputStream in, final long channelId)
-            throws XmlPullParserException,
-                   IOException,
-                   UnsupportedOperationException
-    {
-        final XmlPullParser parser = getParser(in);
-
-        final ArrayList<Entry> entries = new ArrayList<>();
-
-        String title = null;
-        String description = null;
-        String link = null;
-
-        int eventType = parser.getEventType();
-        boolean done = false;
-        while (eventType != XmlPullParser.END_DOCUMENT && !done)
-        {
-            switch (eventType)
-            {
-                case XmlPullParser.START_DOCUMENT:
-                    break;
-                case XmlPullParser.START_TAG:
-                    final String tagName = parser.getName();
-                    if (tagName.equalsIgnoreCase(ParserContract.ITEM))
-                    {
-                        title = null;
-                        description = null;
-                        link = null;
-                    } else
-                    {
-                        if (tagName.equalsIgnoreCase(ParserContract.TITLE))
-                        {
-                            title = parser.nextText();
-                        } else if (tagName.equalsIgnoreCase(ParserContract.LINK))
-                        {
-                            link = parser.nextText();
-                        } else if (tagName.equalsIgnoreCase(ParserContract.DESCRIPTION))
-                        {
-                            description = parser.nextText();
-                        }
-                    }
-                    break;
-                case XmlPullParser.END_TAG:
-                    final String name = parser.getName();
-                    if (name.equalsIgnoreCase(ParserContract.ITEM))
-                    {
-                        if (description == null)
-                        {
-                            description = "";
-                        }
-
-                        final Entry entry = FeedObjectFactory.createEntry(FeedObjectFactory.NO_ID,
-                                                                          title,
-                                                                          link,
-                                                                          description,
-                                                                          State.IS_NOT_READ,
-                                                                          channelId);
-                        entries.add(entry);
-                    } else if (name.equalsIgnoreCase(ParserContract.CHANNEL))
-                    {
-                        done = true;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            eventType = parser.next();
-        }
-
-        return entries;
     }
 }

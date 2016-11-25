@@ -14,6 +14,4 @@ public interface Channel
     String getLink();
 
     String getDescription();
-
-    State getState();
 }

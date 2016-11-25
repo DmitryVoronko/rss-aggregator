@@ -14,25 +14,30 @@ import lombok.NonNull;
 
 final class ContentValuesFactory
 {
-    static ContentValues createContentValues(@NonNull final Channel channel)
+    private ContentValuesFactory()
     {
-        return createBaseContentValue(channel);
+        throw new UnsupportedOperationException();
     }
 
-    private static ContentValues createBaseContentValue(@NonNull final Channel channel)
+    static ContentValues createContentValues(@NonNull final Channel channel)
+    {
+        return createBaseContentValueWithoutId(channel);
+    }
+
+    private static ContentValues createBaseContentValueWithoutId(@NonNull final Channel channel)
     {
         final ContentValues values = new ContentValues();
         values.put(NewsContract.BaseTable._TITLE, channel.getTitle());
         values.put(NewsContract.BaseTable._DESCRIPTION, channel.getDescription());
         values.put(NewsContract.BaseTable._LINK, channel.getLink());
-        values.put(NewsContract.BaseTable._STATE, channel.getState().name());
         return values;
     }
 
     static ContentValues createContentValues(@NonNull final Entry entry)
     {
-        final ContentValues values = createBaseContentValue(entry);
+        final ContentValues values = createBaseContentValueWithoutId(entry);
         values.put(NewsContract.EntryTable._CHANNEL_ID, entry.getChannelId());
         return values;
     }
+
 }

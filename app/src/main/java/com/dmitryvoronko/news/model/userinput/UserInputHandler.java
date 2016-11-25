@@ -1,10 +1,10 @@
 package com.dmitryvoronko.news.model.userinput;
 
-import android.util.Log;
-
 import com.dmitryvoronko.news.data.DatabaseManager;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.model.data.Entry;
+import com.dmitryvoronko.news.model.data.FeedObjectFactory;
+import com.dmitryvoronko.news.util.log.Logger;
 import com.dmitryvoronko.news.util.parser.NewsParser;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -39,8 +39,8 @@ public final class UserInputHandler
     {
         try
         {
-            final URL url = new URL(userInput);
-            final String link = url.toString();
+            @NonNull final URL url = new URL(userInput);
+            @NonNull final String link = url.toString();
             final boolean hasAlready = databaseManager.channelIsAlreadyExists(link);
 
             if (hasAlready)
@@ -53,7 +53,7 @@ public final class UserInputHandler
                 final ArrayList<Entry> entries;
                 try
                 {
-                    final NewsParser newsParser = new NewsParser();
+                    @NonNull final NewsParser newsParser = new NewsParser();
                     channel = parseChannel(url, newsParser);
                     channelId = databaseManager.insert(channel);
                     entries = parseEntries(url, channelId, newsParser);
@@ -80,23 +80,20 @@ public final class UserInputHandler
         }
     }
 
-    private Channel parseChannel(final URL url, final NewsParser newsParser)
+    private Channel parseChannel(@NonNull final URL url,
+                                 @NonNull final NewsParser newsParser)
             throws IOException, XmlPullParserException
     {
-        final Channel channel;
         @Cleanup final InputStream inputStream = url.openStream();
-        channel = newsParser.parse(inputStream, url.toString());
-        return channel;
+        return newsParser.parse(inputStream, url.toString(), FeedObjectFactory.NO_ID);
     }
 
-    private ArrayList<Entry> parseEntries(final URL url, final long channelId,
-                                          final NewsParser newsParser)
+    private ArrayList<Entry> parseEntries(@NonNull final URL url, final long channelId,
+                                          @NonNull final NewsParser newsParser)
             throws IOException, XmlPullParserException
     {
-        final ArrayList<Entry> entries;
         @Cleanup final InputStream inputStream = url.openStream();
-        entries = newsParser.parse(inputStream, channelId);
-        return entries;
+        return newsParser.parse(inputStream, channelId);
     }
 
     private Status insertToDatabase(@NonNull final ArrayList<Entry> entries)
@@ -106,7 +103,7 @@ public final class UserInputHandler
             databaseManager.insert(entry);
         }
         final Status status = Status.ADDED;
-        Log.d(TAG, "insertToDatabase: Status = " + status);
+        Logger.i(TAG, "insertToDatabase: Status = " + status);
         return status;
     }
 }

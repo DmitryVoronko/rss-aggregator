@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import lombok.NonNull;
 
 /**
+ *
  * Created by Dmitry on 01/11/2016.
  */
 
@@ -37,7 +38,7 @@ public final class NewsFacade
         final boolean hasConnection = NetworkHelper.hasConnection(context);
         if (hasConnection)
         {
-            final UserInputHandler userInputHandler = new UserInputHandler(databaseManager);
+            @NonNull final UserInputHandler userInputHandler = new UserInputHandler(databaseManager);
             return userInputHandler.handleUserInput(userInput);
         } else
         {
@@ -60,9 +61,9 @@ public final class NewsFacade
         databaseManager.deleteChannel(id);
     }
 
-    public void updateChannels()
+    public UpdateStatus updateChannels()
     {
-        updater.updateChannels();
+        return updater.updateChannels();
     }
 
     public void deleteEntry(final long id)
@@ -70,13 +71,13 @@ public final class NewsFacade
         databaseManager.deleteEntry(id);
     }
 
-    public void updateEntries(final long channelId)
+    public UpdateStatus updateEntries(final long channelId)
     {
-        updater.updateChannel(channelId);
+        return updater.updateChannel(channelId);
     }
 
     public void cancelUpdate()
     {
-        updater.cancelUpdate();
+        updater.cancel();
     }
 }

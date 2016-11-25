@@ -23,47 +23,70 @@ public final class DatabaseManager extends DatabaseManagerBase
 
     public long insert(@NonNull final Channel channel)
     {
-        return new Request<Long>().executeRequest(RequestFactory.insert(channel));
+        return executeRequest(RequestFactory.insert(channel));
     }
 
     public void insert(@NonNull final Entry entry)
     {
-        new Request<Long>().executeRequest(RequestFactory.insert(entry));
+        executeRequest(RequestFactory.insert(entry));
     }
 
     public void update(@NonNull final Channel channel)
     {
-        new Request<Boolean>().executeRequest(RequestFactory.update(channel));
+        executeRequest(RequestFactory.update(channel));
     }
 
-    public void deleteChannel(@NonNull final long id)
+    public void deleteChannel(final long id) throws IllegalArgumentException
     {
-        new Request<Boolean>().executeRequest(RequestFactory.deleteChannel(id));
+        if (id <= -1)
+        {
+            throw new IllegalArgumentException();
+        } else
+        {
+            executeRequest(RequestFactory.deleteChannel(id));
+        }
     }
 
-    public void deleteEntry(@NonNull final long id)
+    public void deleteEntry(final long id) throws IllegalArgumentException
     {
-        new Request<Boolean>().executeRequest(RequestFactory.deleteEntry(id));
+        if (id <= -1)
+        {
+            throw new IllegalArgumentException();
+        } else
+        {
+            executeRequest(RequestFactory.deleteEntry(id));
+        }
     }
 
     public boolean channelIsAlreadyExists(@NonNull final String link)
     {
-        return new Request<Boolean>().executeRequest(RequestFactory.channelIsAlreadyExists(link));
+        return executeRequest(RequestFactory.channelIsAlreadyExists(link));
     }
 
     public ArrayList<Channel> getChannels()
     {
-        return new Request<ArrayList<Channel>>().executeRequest(RequestFactory.channelsRequest());
+        return executeRequest(RequestFactory.channelsRequest());
     }
 
-    public ArrayList<Entry> getEntries(@NonNull final long channelId)
+    public ArrayList<Entry> getEntries(final long channelId) throws IllegalArgumentException
     {
-        return new Request<ArrayList<Entry>>()
-                .executeRequest(RequestFactory.entriesRequest(channelId));
+        if (channelId <= -1)
+        {
+            throw new IllegalArgumentException();
+        } else
+        {
+            return executeRequest(RequestFactory.entriesRequest(channelId));
+        }
     }
 
-    public Channel getChannel(final long channelId)
+    public Channel getChannel(final long channelId) throws IllegalArgumentException
     {
-        return new Request<Channel>().executeRequest(RequestFactory.getChannel(channelId));
+        if (channelId <= -1)
+        {
+            throw new IllegalArgumentException();
+        } else
+        {
+            return executeRequest(RequestFactory.getChannel(channelId));
+        }
     }
 }
