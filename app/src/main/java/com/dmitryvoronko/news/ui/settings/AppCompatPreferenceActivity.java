@@ -115,7 +115,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity
         getDelegate().setTitle(title);
     }
 
-    ActionBar getSupportActionBar()
+    protected ActionBar getSupportActionBar()
     {
         return getDelegate().getSupportActionBar();
     }

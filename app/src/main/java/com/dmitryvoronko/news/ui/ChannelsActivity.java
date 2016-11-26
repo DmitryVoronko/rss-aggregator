@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.ui.content;
+package com.dmitryvoronko.news.ui;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -13,16 +13,11 @@ import android.view.View;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.ChannelsContentService;
+import com.dmitryvoronko.news.ui.content.ContentActivity;
 import com.dmitryvoronko.news.ui.util.SnackbarHelper;
-import com.dmitryvoronko.news.ui.addnew.AddNewActivity;
-import com.dmitryvoronko.news.ui.settings.SettingsActivity;
-
-
-import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNEL_ID;
 
 public final class ChannelsActivity extends ContentActivity
 {
-    private final static int ACTION_SHOW_NEW_ITEM_ACTIVITY = 1;
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu)
@@ -46,8 +41,7 @@ public final class ChannelsActivity extends ContentActivity
 
     private void startSettingsActivity()
     {
-        final Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        SettingsActivity.startSettingsActivity(this);
     }
 
     @Override
@@ -57,7 +51,7 @@ public final class ChannelsActivity extends ContentActivity
 
         if (resultCode == RESULT_OK)
         {
-            if (requestCode == ACTION_SHOW_NEW_ITEM_ACTIVITY)
+            if (requestCode == AddNewActivity.ACTION_SHOW_NEW_ITEM_ACTIVITY)
             {
                 handleAddNewItem();
             }
@@ -82,10 +76,15 @@ public final class ChannelsActivity extends ContentActivity
             @Override
             public void onClick(final View v)
             {
-                startAddNewItemActivity();
+                startAddNewActivity();
             }
 
         });
+    }
+
+    private void startAddNewActivity()
+    {
+        AddNewActivity.startAddNewItemActivity(this);
     }
 
     @Override protected void setLayout()
@@ -112,12 +111,12 @@ public final class ChannelsActivity extends ContentActivity
             {
                 final ChannelsContentService.Binder binder
                         = (ChannelsContentService.Binder) service;
-                contentService = binder.getService();
+                setContentService(binder.getService());
             }
 
             @Override public void onServiceDisconnected(final ComponentName name)
             {
-                contentService = null;
+                setContentService(null);
             }
         };
     }
@@ -129,14 +128,7 @@ public final class ChannelsActivity extends ContentActivity
 
     @Override protected void goToChild(final long id, final String link)
     {
-        final Intent intent = new Intent(this, EntriesActivity.class);
-        intent.putExtra(EXTRA_CHANNEL_ID, id);
-        startActivity(intent);
+        EntriesActivity.startEntriesActivity(this, id);
     }
 
-    private void startAddNewItemActivity()
-    {
-        final Intent intent = new Intent(this, AddNewActivity.class);
-        startActivityForResult(intent, ACTION_SHOW_NEW_ITEM_ACTIVITY);
-    }
 }

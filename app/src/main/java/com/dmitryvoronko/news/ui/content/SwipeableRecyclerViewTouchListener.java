@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.EqualsAndHashCode;
+
 /**
  *
  * Created by Dmitry on 20/10/2016.
@@ -109,6 +111,8 @@ final class SwipeableRecyclerViewTouchListener
     {
         handleTouchEvent(motionEvent);
     }
+
+
 
     @Override
     public void onRequestDisallowInterceptTouchEvent(final boolean disallowIntercept)
@@ -207,16 +211,17 @@ final class SwipeableRecyclerViewTouchListener
                 final float absVelocityY = Math.abs(mVelocityTracker.getYVelocity());
                 boolean dismiss = false;
                 boolean dismissRight = false;
-                if (Math.abs(mFinalDelta) > mViewWidth / 2 && mSwiping)
+                if (Math.abs(mFinalDelta) > (float) mViewWidth / (float) 2 && mSwiping)
                 {
                     dismiss = true;
                     dismissRight = mFinalDelta > 0;
-                } else if (mMinFlingVelocity <= absVelocityX && absVelocityX <= mMaxFlingVelocity
+                } else if ((float) mMinFlingVelocity <= absVelocityX && absVelocityX <=
+                        (float) mMaxFlingVelocity
                         && absVelocityY < absVelocityX && mSwiping)
                 {
                     // dismiss only if flinging in the same direction as dragging
-                    dismiss = (velocityX < 0) == (mFinalDelta < 0);
-                    dismissRight = mVelocityTracker.getXVelocity() > 0;
+                    dismiss = (velocityX < (float) 0) == (mFinalDelta < (float) 0);
+                    dismissRight = mVelocityTracker.getXVelocity() > (float) 0;
                 }
                 if (dismiss && mDownPosition != mAnimatingPosition &&
                         mDownPosition != ListView.INVALID_POSITION)
@@ -416,9 +421,8 @@ final class SwipeableRecyclerViewTouchListener
     {
         void onDismissedBySwipeRight(final int[] reverseSortedPositions);
     }
-
-    private final class PendingDismissData
-            implements Comparable<PendingDismissData>
+    @EqualsAndHashCode
+    private static final class PendingDismissData implements Comparable<PendingDismissData>
     {
         private final int position;
         private final View view;

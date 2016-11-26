@@ -19,24 +19,19 @@ public final class RegularUpdateReceiver extends BroadcastReceiver
     public static final int STANDARD_REQUEST_CODE = 222;
     public static final int ANOTHER_TRY_REQUEST_CODE = 347;
 
-    public RegularUpdateReceiver()
-    {
-
-    }
-
     @Override
     public void onReceive(final Context context,
                           final Intent intent)
     {
         if (intent != null)
         {
-            if (intent.getAction().equalsIgnoreCase(ACTION_REGULAR_UPDATE_SUCCEED))
+            if (intent.getAction().equals(ACTION_REGULAR_UPDATE_SUCCEED))
             {
                 final SharedPreferences preferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 resetPref(context, preferences);
                 NotificationHelper.showNotification(context, preferences);
-            } else if (intent.getAction().equalsIgnoreCase(ACTION_REGULAR_UPDATE_INITIATE))
+            } else if (intent.getAction().equals(ACTION_REGULAR_UPDATE_INITIATE))
             {
                 ChannelsContentService.startActionRegularUpdate(context);
             }

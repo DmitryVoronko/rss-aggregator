@@ -8,7 +8,7 @@ import com.dmitryvoronko.news.data.DatabaseManager;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.model.data.Entry;
 import com.dmitryvoronko.news.model.userinput.Status;
-import com.dmitryvoronko.news.model.userinput.UserInputHandler;
+import com.dmitryvoronko.news.model.userinput.NewChannelHandler;
 import com.dmitryvoronko.news.util.NetworkHelper;
 
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ public final class NewsFacade
     private final Context context;
     private final DatabaseManager databaseManager;
     private final NewsUpdater updater;
+    private NewChannelHandler newChannelHandler;
 
     public NewsFacade(@NonNull final ContextWrapper context)
     {
@@ -38,8 +39,8 @@ public final class NewsFacade
         final boolean hasConnection = NetworkHelper.hasConnection(context);
         if (hasConnection)
         {
-            @NonNull final UserInputHandler userInputHandler = new UserInputHandler(databaseManager);
-            return userInputHandler.handleUserInput(userInput);
+            newChannelHandler = new NewChannelHandler(databaseManager);
+            return newChannelHandler.handleUserInput(userInput);
         } else
         {
             return Status.NO_INTERNET_CONNECTION;
@@ -79,5 +80,10 @@ public final class NewsFacade
     public void cancelUpdate()
     {
         updater.cancel();
+    }
+
+    public void cancelAddNewChannel()
+    {
+        newChannelHandler.cancel();
     }
 }

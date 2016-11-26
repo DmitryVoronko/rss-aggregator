@@ -91,7 +91,7 @@ public final class RegularUpdateScheduler
         final String defaultValue = context.getString(R.string.update_delay_default_value);
         final String updateDelayKey = context.getString(R.string.update_delay_key);
         final String updateDelayString = preferences.getString(updateDelayKey, defaultValue);
-        final int updateDelay = Integer.valueOf(updateDelayString);
+        final int updateDelay = Integer.parseInt(updateDelayString);
         if (updateDelay >= MAX_DELAY)
         {
             Logger.i(TAG, "anotherTryScheduleAlarm: updateDelay >= 40, update canceled");

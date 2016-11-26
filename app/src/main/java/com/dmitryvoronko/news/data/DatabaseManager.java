@@ -16,7 +16,7 @@ import lombok.NonNull;
 
 public final class DatabaseManager extends DatabaseManagerBase
 {
-    public DatabaseManager(@NonNull final Context context)
+    public DatabaseManager(final Context context)
     {
         super(context);
     }

@@ -12,7 +12,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.dmitryvoronko.news.R;
-import com.dmitryvoronko.news.ui.content.ChannelsActivity;
+import com.dmitryvoronko.news.ui.ChannelsActivity;
 
 /**
  *
@@ -85,7 +85,8 @@ public final class NotificationHelper
     {
         final String prefColorName = getString(context, R.string.pref_key_notifications_led_color);
         final String defaultColor = GREEN_COLOR_NUMBER;
-        final int colorNumber = Integer.valueOf(sharedPreferences.getString(prefColorName, defaultColor));
+        final int colorNumber =
+                Integer.parseInt(sharedPreferences.getString(prefColorName, defaultColor));
         final int colorResId = chooseColorResId(colorNumber);
         return getColor(context, colorResId);
     }

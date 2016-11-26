@@ -1,4 +1,4 @@
-package com.dmitryvoronko.news.ui.settings;
+package com.dmitryvoronko.news.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import android.view.MenuItem;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.RegularUpdateScheduler;
+import com.dmitryvoronko.news.ui.settings.AppCompatPreferenceActivity;
 import com.dmitryvoronko.news.util.log.Logger;
 import com.dmitryvoronko.news.ui.util.ThemeHelper;
 import com.dmitryvoronko.news.view.settings.TimePreference;
@@ -66,7 +67,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
                 {
                     final Context context = preference.getContext();
                     final String keyDailyUpdateSwitch = context.getString(R.string.pref_key_daily_update_switch);
-                    if (preference.getKey().equalsIgnoreCase(keyDailyUpdateSwitch))
+                    if (preference.getKey().equals(keyDailyUpdateSwitch))
                     {
                         if (Boolean.valueOf(stringValue))
                         {
@@ -151,6 +152,8 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
                     final ListPreference listPreference = (ListPreference) preference;
                     final int index = listPreference.findIndexOfValue(stringValue);
 
+                    final String lastValue = ((ListPreference) preference).getValue();
+
                     preference.setSummary(
                             index >= 0
                             ? listPreference.getEntries()[index]
@@ -158,22 +161,37 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
 
                     final String themeKey =
                             preference.getContext().getString(R.string.pref_key_choose_theme);
-                    if (preference.getKey().equalsIgnoreCase(themeKey))
+                    if (preference.getKey().equals(themeKey))
                     {
-                        ThemeHelper.setTheme(preference.getContext());
+                        Logger.i(TAG, "lastValue = " + lastValue + ", currentValue = " +
+                                         stringValue);
+                        if (!lastValue.equals(stringValue))
+                        {
+
+                            Logger.i(TAG, "Op");
+                            ThemeHelper.setTheme(preference.getContext());
+                            startSettingsActivity(preference.getContext());
+                        }
                     }
                 }
             };
 
-    private static void bindPreferenceSummaryToValue(final Preference preference)
+    private static void bindPreferenceSummaryToValue(final Preference preference,
+                                                     final String defaultValue)
     {
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         final Context context = preference.getContext();
         final SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
-        final String newValue = preferences.getString(preference.getKey(), "");
+        final String newValue = preferences.getString(preference.getKey(), defaultValue);
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, newValue);
+    }
+
+    public static void startSettingsActivity(final Context context)
+    {
+        final Intent intent = new Intent(context, SettingsActivity.class);
+        context.startActivity(intent);
     }
 
     @Override
@@ -233,7 +251,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName);
     }
 
-    public static class GeneralPreferenceFragment extends PreferenceFragment
+    public static final class GeneralPreferenceFragment extends PreferenceFragment
     {
         @Override
         public void onCreate(final Bundle savedInstanceState)
@@ -243,7 +261,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
             setHasOptionsMenu(true);
 
             final String themeKey = getString(R.string.pref_key_choose_theme);
-            bindPreferenceSummaryToValue(findPreference(themeKey));
+            bindPreferenceSummaryToValue(findPreference(themeKey), "");
         }
 
         @Override
@@ -257,9 +275,10 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
             }
             return super.onOptionsItemSelected(item);
         }
+
     }
 
-    public static class NotificationPreferenceFragment extends PreferenceFragment
+    public static final class NotificationPreferenceFragment extends PreferenceFragment
     {
         @Override
         public void onCreate(final Bundle savedInstanceState)
@@ -269,9 +288,9 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
             setHasOptionsMenu(true);
 
             final String ringtoneKey = getString(R.string.pref_key_ringtone);
-            bindPreferenceSummaryToValue(findPreference(ringtoneKey));
+            bindPreferenceSummaryToValue(findPreference(ringtoneKey), "");
             final String lEDColorKey = getString(R.string.pref_key_notifications_led_color);
-            bindPreferenceSummaryToValue(findPreference(lEDColorKey));
+            bindPreferenceSummaryToValue(findPreference(lEDColorKey), "");
         }
 
         @Override
@@ -287,7 +306,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
         }
     }
 
-    public static class UpdatesPreferenceFragment extends PreferenceFragment
+    public static final class UpdatesPreferenceFragment extends PreferenceFragment
     {
         @Override
         public void onCreate(final Bundle savedInstanceState)
@@ -296,9 +315,9 @@ public final class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_updates);
             setHasOptionsMenu(true);
 
-
             final String timePickerKey = getString(R.string.pref_key_daily_update_time_picker);
-            bindPreferenceSummaryToValue(findPreference(timePickerKey));
+            final String defaultValue = getString(R.string.pref_daily_update_time_default_value);
+            bindPreferenceSummaryToValue(findPreference(timePickerKey), defaultValue);
         }
 
         @Override

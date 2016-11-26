@@ -3,9 +3,13 @@ package com.dmitryvoronko.news.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 
 import com.dmitryvoronko.news.model.NewsFacade;
 import com.dmitryvoronko.news.model.userinput.Status;
+
+import lombok.NonNull;
 
 public final class AddNewService extends IntentService
 {
@@ -20,6 +24,7 @@ public final class AddNewService extends IntentService
             "com.dmitryvoronko.news.services.extra.NEW_CHANNEL_LINK";
 
     private final NewsFacade newsFacade;
+    private final IBinder binder = new Binder();
 
     public AddNewService()
     {
@@ -57,4 +62,25 @@ public final class AddNewService extends IntentService
         intent.putExtra(EXTRA_ADD_NEW_CHANNEL_STATUS, status.name());
         sendBroadcast(intent);
     }
+
+    public void cancelAddNewChannel()
+    {
+        newsFacade.cancelAddNewChannel();
+    }
+
+    public final class Binder extends android.os.Binder
+    {
+        public AddNewService getService()
+        {
+            return AddNewService.this;
+        }
+    }
+
+    @Nullable @Override public IBinder onBind(@NonNull final Intent intent)
+    {
+        return binder;
+    }
+
+
+
 }

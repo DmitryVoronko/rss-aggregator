@@ -59,7 +59,7 @@ final class NewsUpdater extends Cancellable
 
         for (final Channel channel : channels)
         {
-            if (canceled)
+            if (isCanceled())
             {
                 break;
             }
@@ -73,7 +73,7 @@ final class NewsUpdater extends Cancellable
 
         for (final Future<Feed> feedFuture : futures)
         {
-            if (canceled)
+            if (isCanceled())
             {
                 break;
             }
@@ -98,7 +98,7 @@ final class NewsUpdater extends Cancellable
         Logger.i(TAG, "Finish update");
 
         insertToDatabase(parsedItems);
-        if (!canceled)
+        if (!isCanceled())
         {
             return UpdateStatus.UPDATED;
         } else
@@ -122,7 +122,7 @@ final class NewsUpdater extends Cancellable
     {
         for (final Feed feed : parsedItems)
         {
-            if (canceled)
+            if (isCanceled())
             {
                 break;
             }
@@ -191,7 +191,7 @@ final class NewsUpdater extends Cancellable
         @NonNull final Channel channel = databaseManager.getChannel(channelId);
         @NonNull final FileInfo fileInfo = FileInfo.valueOf(channel);
         final Feed feed = getUpdatedFeed(fileInfo, channelId);
-        if (feed != null && !canceled)
+        if (feed != null && !isCanceled())
         {
             insertToDatabase(feed);
             return UpdateStatus.UPDATED;
@@ -202,7 +202,7 @@ final class NewsUpdater extends Cancellable
     }
 
     @Data
-    private final class Feed
+    private static final class Feed
     {
         private final Channel channel;
         private final ArrayList<Entry> entries;

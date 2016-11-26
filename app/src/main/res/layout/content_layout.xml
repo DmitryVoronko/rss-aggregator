@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".ui.content.ChannelsActivity"
+        tools:context=".ui.ChannelsActivity"
         tools:listitem="@layout/feed_object_view"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>

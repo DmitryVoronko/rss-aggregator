@@ -1,6 +1,7 @@
-package com.dmitryvoronko.news.ui.content;
+package com.dmitryvoronko.news.ui;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.services.EntriesContentService;
+import com.dmitryvoronko.news.ui.content.ContentActivity;
 
 import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNEL_ID;
 
@@ -18,12 +20,15 @@ import static com.dmitryvoronko.news.services.EntriesContentService.EXTRA_CHANNE
  */
 public final class EntriesActivity extends ContentActivity
 {
-    public static final String EXTRA_ENTRY_ID =
-            "com.dmitryvoronko.news.ui.content.extra.ENTRY_ID";
-    public static final String EXTRA_ENTRY_LINK =
-            "com.dmitryvoronko.news.ui.content.extra.ENTRY_LINK";
     public static final long DEFAULT_CHANNEL_ID = -10;
     private static long channelId = DEFAULT_CHANNEL_ID;
+
+    static void startEntriesActivity(final Context context, final long id)
+    {
+        final Intent intent = new Intent(context, EntriesActivity.class);
+        intent.putExtra(EXTRA_CHANNEL_ID, id);
+        context.startActivity(intent);
+    }
 
     @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
@@ -66,21 +71,19 @@ public final class EntriesActivity extends ContentActivity
             public void onServiceConnected(final ComponentName name, final IBinder service)
             {
                 final EntriesContentService.Binder binder = (EntriesContentService.Binder) service;
-                contentService = binder.getService();
+                setContentService(binder.getService());
             }
 
             @Override public void onServiceDisconnected(final ComponentName name)
             {
-                contentService = null;
+                setContentService(null);
             }
         };
     }
 
     @Override protected void goToChild(final long id, final String link)
     {
-        final Intent intent = new Intent(this, EntryActivity.class);
-        intent.putExtra(EXTRA_ENTRY_ID, id);
-        intent.putExtra(EXTRA_ENTRY_LINK, link);
-        startActivity(intent);
+        EntryActivity.startEntryActivity(this, id, link);
     }
+
 }

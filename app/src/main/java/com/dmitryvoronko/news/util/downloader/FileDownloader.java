@@ -41,14 +41,21 @@ public final class FileDownloader
         {
             final URL url = new URL(fileInfo.getLink());
             final URLConnection connection = url.openConnection();
-            final HttpURLConnection httpConnection = (HttpURLConnection) connection;
-
-            final int responseCode = httpConnection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK)
+            HttpURLConnection httpConnection = null;
+            try
             {
-                @Cleanup final InputStream inputStream = httpConnection.getInputStream();
+                httpConnection = (HttpURLConnection) connection;
 
-                downloadFile(fileInfo.getFileName(), inputStream);
+                final int responseCode = httpConnection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK)
+                {
+                    @Cleanup final InputStream inputStream = httpConnection.getInputStream();
+
+                    downloadFile(fileInfo.getFileName(), inputStream);
+                }
+            } finally
+            {
+                httpConnection.disconnect();
             }
 
         } catch (final MalformedURLException e)
@@ -58,7 +65,6 @@ public final class FileDownloader
         {
             Logger.e(TAG, "download: IO Exception", e);
         }
-
     }
 
     private void downloadFile(final String fileName,

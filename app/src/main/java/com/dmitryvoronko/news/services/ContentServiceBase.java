@@ -78,10 +78,10 @@ abstract class ContentServiceBase extends IntentService implements ContentServic
         if (intent != null)
         {
             final String action = intent.getAction();
-            if (ACTION_GET_CONTENT.equalsIgnoreCase(action))
+            if (ACTION_GET_CONTENT.equals(action))
             {
                 handleActionGetContent(intent);
-            } else if (ACTION_UPDATE_CONTENT.equalsIgnoreCase(action))
+            } else if (ACTION_UPDATE_CONTENT.equals(action))
             {
                 final boolean hasConnection = NetworkHelper.hasConnection(this);
                 if (hasConnection)
@@ -91,7 +91,7 @@ abstract class ContentServiceBase extends IntentService implements ContentServic
                 {
                     sendBroadcast(ACTION_NO_INTERNET_CONNECTION);
                 }
-            } else if (ACTION_REGULAR_UPDATE_CONTENT.equalsIgnoreCase(action))
+            } else if (ACTION_REGULAR_UPDATE_CONTENT.equals(action))
             {
                 final boolean hasConnection = NetworkHelper.hasConnection(this);
                 if (hasConnection)

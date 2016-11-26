@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Created by Dmitry on 12/11/2016.
  */
 
-abstract class ContentActivity extends ActivityBase
+public abstract class ContentActivity extends ActivityBase
 {
     private static final String TAG = "ContentActivity";
 
@@ -36,7 +36,7 @@ abstract class ContentActivity extends ActivityBase
     private RecyclerView recyclerView;
     private final BroadcastReceiver contentBroadcastReceiver = createBroadcastReceiver();
     private final ServiceConnection contentServiceConnection = createServiceConnection();
-    ContentService contentService;
+    private ContentService contentService;
 
     @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
@@ -51,6 +51,7 @@ abstract class ContentActivity extends ActivityBase
         swipeTouchListener = getSwipeableRecyclerViewTouchListener();
 
         recyclerView.addOnItemTouchListener(swipeTouchListener);
+
         updateContentRefreshLayout = createUpdateContentRefreshLayout();
         Logger.i(TAG, "doOnCreate: ");
     }
@@ -169,15 +170,17 @@ abstract class ContentActivity extends ActivityBase
         {
             @Override public void onReceive(final Context context, final Intent intent)
             {
-                if (intent.getAction().equalsIgnoreCase(ContentService.ACTION_CONTENT_READY))
+                if (intent.getAction().equals(ContentService.ACTION_CONTENT_READY))
                 {
                     contentChanged();
-                    if (updateContentRefreshLayout == null)
+                    if (updateContentRefreshLayout != null)
                     {
-                        Logger.i(TAG, "onReceive: updateContentRefreshLayout == null");
+                        updateContentRefreshLayout.setRefreshing(false);
+                    } else
+                    {
+                        Logger.e(TAG, "onReceive: updateContentRefreshLayout == null");
                     }
-                    updateContentRefreshLayout.setRefreshing(false);
-                } else if (intent.getAction().equalsIgnoreCase(
+                } else if (intent.getAction().equals(
                         ContentService.ACTION_NO_INTERNET_CONNECTION))
                 {
                     handleActionNoInternetConnection();
@@ -218,4 +221,8 @@ abstract class ContentActivity extends ActivityBase
 
     protected abstract void goToChild(final long id, final String link);
 
+    protected void setContentService(final ContentService contentService)
+    {
+        this.contentService = contentService;
+    }
 }

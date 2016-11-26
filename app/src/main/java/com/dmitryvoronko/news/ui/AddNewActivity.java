@@ -1,14 +1,19 @@
-package com.dmitryvoronko.news.ui.addnew;
+package com.dmitryvoronko.news.ui;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,7 +27,6 @@ import android.widget.EditText;
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.model.userinput.Status;
 import com.dmitryvoronko.news.services.AddNewService;
-import com.dmitryvoronko.news.ui.ActivityBase;
 import com.dmitryvoronko.news.ui.util.SnackbarHelper;
 import com.dmitryvoronko.news.util.log.Logger;
 
@@ -32,18 +36,22 @@ import lombok.Data;
 public final class AddNewActivity extends ActivityBase
 {
     private static final String TAG = "AddNewActivity";
+    public final static int ACTION_SHOW_NEW_ITEM_ACTIVITY = 41;
 
     private final LastUserInput lastUserInput = new LastUserInput("", Status.NOTHING);
 
     private EditText inputLink;
     private TextInputLayout inputLayoutLink;
+    private final ServiceConnection addNewServiceConnection = createServiceConnection();
+
+    private AddNewService addNewService;
 
     private ProgressDialog progressDialog;
     private final BroadcastReceiver statusReceiver = new BroadcastReceiver()
     {
         @Override public void onReceive(final Context context, final Intent intent)
         {
-            if (intent.getAction().equalsIgnoreCase(AddNewService.ACTION_ADD_NEW_CHANNEL_STATUS))
+            if (intent.getAction().equals(AddNewService.ACTION_ADD_NEW_CHANNEL_STATUS))
             {
                 final String stringStatus =
                         intent.getStringExtra(AddNewService.EXTRA_ADD_NEW_CHANNEL_STATUS);
@@ -54,6 +62,12 @@ public final class AddNewActivity extends ActivityBase
             }
         }
     };
+
+    public static void startAddNewItemActivity(final FragmentActivity fragmentActivity)
+    {
+        final Intent intent = new Intent(fragmentActivity, AddNewActivity.class);
+        fragmentActivity.startActivityForResult(intent, ACTION_SHOW_NEW_ITEM_ACTIVITY);
+    }
 
     @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
@@ -104,11 +118,23 @@ public final class AddNewActivity extends ActivityBase
     {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener()
+        {
+            @Override public void onCancel(final DialogInterface dialogInterface)
+            {
+                cancelAddingChannel();
+            }
+        });
         progressDialog.setTitle(R.string.adding_dialog_title);
         final String message = getResources().getString(R.string.adding_dialog_message);
         progressDialog.setMessage(message);
         return progressDialog;
+    }
+
+    private void cancelAddingChannel()
+    {
+        addNewService.cancelAddNewChannel();
     }
 
     @NonNull private View.OnClickListener getAddNewItemListener()
@@ -171,7 +197,7 @@ public final class AddNewActivity extends ActivityBase
                 say(R.string.already_exists);
                 break;
             case TOTAL_ERROR:
-                SnackbarHelper.showNoInternetConnectionSnackBar(this);
+                say(R.string.status_can_not_connect_to_address);
                 break;
             case UNSUPPORTED_FORMAT:
                 say(R.string.unsupported_channel_format);
@@ -196,13 +222,15 @@ public final class AddNewActivity extends ActivityBase
 
     @Override protected void doOnPause()
     {
+        unbindService(addNewServiceConnection);
         unregisterReceiver(statusReceiver);
     }
 
     @Override protected void doOnResume()
     {
         initStatusReceiver();
-
+        final Intent intent = new Intent(this, AddNewService.class);
+        bindService(intent, addNewServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private void validateLink()
@@ -233,15 +261,33 @@ public final class AddNewActivity extends ActivityBase
         }
     }
 
+    private ServiceConnection createServiceConnection()
+    {
+        return new ServiceConnection()
+        {
+            @Override
+            public void onServiceConnected(final ComponentName name, final IBinder service)
+            {
+                final AddNewService.Binder binder = (AddNewService.Binder) service;
+                addNewService = (binder.getService());
+            }
+
+            @Override public void onServiceDisconnected(final ComponentName name)
+            {
+                addNewService = null;
+            }
+        };
+    }
+
     @Data
     @AllArgsConstructor
-    private final class LastUserInput
+    private static final class LastUserInput
     {
         private String inputString;
         private Status status;
     }
 
-    private class LinkTextWatcher implements TextWatcher
+    private final class LinkTextWatcher implements TextWatcher
     {
         @Override
         public void beforeTextChanged(final CharSequence s, final int start, final int count,

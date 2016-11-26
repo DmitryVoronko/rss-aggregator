@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
 
+import com.dmitryvoronko.news.R;
+
 /**
  *
  * Created by Dmitry on 20/11/2016.
@@ -24,8 +26,8 @@ public final class TimePreference extends DialogPreference
     {
         super(context, attrs);
 
-        setPositiveButtonText("Set");
-        setNegativeButtonText("Cancel");
+        setPositiveButtonText(R.string.ok_button_text);
+        setNegativeButtonText(R.string.cancel_button_text);
     }
 
     @Override

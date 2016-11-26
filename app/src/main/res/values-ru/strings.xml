@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_settings" translatable="true">Настройки</string>
-    <string name="unsupported_channel_format" translatable="true">Извините. Наше приложение на поддерживает данный формат канала.</string>
     <string name="title_activity_settings" translatable="true">Настройки</string>
-    <string name="title_activity_add_new" translatable="true">Добавление нового канала</string>
+
     <string name="share_button_description" translatable="true">Поделиться</string>
     <string name="pref_title_vibrate" translatable="true">Вибрация</string>
     <string name="pref_title_ringtone" translatable="true">Мелодия</string>
     <string name="pref_title_news_updated_notifications" translatable="true">Уведомления обновления новостей</string>
-    <string name="add_new_item_button_name" translatable="true">Добавить</string>
-    <string name="adding_dialog_message" translatable="true">Добавление канала…</string>
-    <string name="adding_dialog_title" translatable="true">Пожалуйста подождите…</string>
-    <string name="already_exists" translatable="true">Канал уже существует</string>
-    <string name="cancel_button_text" translatable="true">Отмена</string>
-    <string name="channel_successfully_added" translatable="true">Канал успешно добавлен</string>
-    <string name="enter_valid_channel_link" translatable="true">Введите правильный адресс канала</string>
-    <string name="input_link_are_not_xml" translatable="true">Введенная ссылка не является ссылкой на канал</string>
-    <string name="input_string_is_not_link" translatable="true">Введенная строка не является ссылкой</string>
+
     <string name="item_deleted_message" translatable="true">Объект удален!</string>
     <string name="item_restored_message" translatable="true">Объект восстановлен!</string>
-    <string name="new_item_edit_text_hint" translatable="true">Адресс канала</string>
+
     <string name="news_update_notification_text" translatable="true">Нажмите чтобы перейти к новостям.</string>
     <string name="news_update_notification_title" translatable="true">Новости обновленны</string>
     <string name="no_internet_connection_message" translatable="true">Нет соединения с интернет</string>

@@ -10,7 +10,7 @@ import com.dmitryvoronko.news.util.log.Logger;
 
 import lombok.NonNull;
 
-import static com.dmitryvoronko.news.ui.content.EntriesActivity.DEFAULT_CHANNEL_ID;
+import static com.dmitryvoronko.news.ui.EntriesActivity.DEFAULT_CHANNEL_ID;
 
 /**
  *

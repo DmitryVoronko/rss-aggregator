@@ -35,7 +35,7 @@ final class NewsContract
         String _DESCRIPTION = "_description";
     }
 
-    final class ChannelsTable implements BaseTable
+    final static class ChannelsTable implements BaseTable
     {
         static final String _TABLE_NAME = "channels";
 
@@ -48,7 +48,7 @@ final class NewsContract
         private static final String DELETE_TABLE = DROP_TABLE_IF_EXISTS + _TABLE_NAME;
     }
 
-    final class EntryTable implements BaseTable
+    final static class EntryTable implements BaseTable
     {
         static final String _TABLE_NAME = "entries";
 

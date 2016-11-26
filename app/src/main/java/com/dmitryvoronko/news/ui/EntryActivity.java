@@ -1,6 +1,7 @@
-package com.dmitryvoronko.news.ui.content;
+package com.dmitryvoronko.news.ui;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,17 +12,25 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.dmitryvoronko.news.R;
-import com.dmitryvoronko.news.ui.ActivityBase;
 import com.dmitryvoronko.news.ui.util.ShareHelper;
-
-import static com.dmitryvoronko.news.ui.content.EntriesActivity.EXTRA_ENTRY_ID;
-import static com.dmitryvoronko.news.ui.content.EntriesActivity.EXTRA_ENTRY_LINK;
 
 public final class EntryActivity extends ActivityBase
 {
+    private static final String EXTRA_ENTRY_ID =
+            "com.dmitryvoronko.news.ui.content.extra.ENTRY_ID";
+    private static final String EXTRA_ENTRY_LINK =
+            "com.dmitryvoronko.news.ui.content.extra.ENTRY_LINK";
     private final static long NO_ENTRY_ID = -1;
     private WebView webView;
     private FloatingActionButton shareButton;
+
+    static void startEntryActivity(final Context context, final long id, final String link)
+    {
+        final Intent intent = new Intent(context, EntryActivity.class);
+        intent.putExtra(EXTRA_ENTRY_ID, id);
+        intent.putExtra(EXTRA_ENTRY_LINK, link);
+        context.startActivity(intent);
+    }
 
     @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
@@ -76,7 +85,7 @@ public final class EntryActivity extends ActivityBase
         webView.loadUrl(entryLink);
     }
 
-    private final class Browser extends WebViewClient
+    private static final class Browser extends WebViewClient
     {
         @SuppressWarnings("deprecation")
         @Override public boolean shouldOverrideUrlLoading(final WebView view,

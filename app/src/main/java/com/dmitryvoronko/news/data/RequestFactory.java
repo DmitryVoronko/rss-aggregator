@@ -26,7 +26,7 @@ final class RequestFactory extends RequestFactoryBase
 
     private RequestFactory()
     {
-        super();
+        throw new UnsupportedOperationException();
     }
 
     static Request<Boolean> update(@NonNull final Channel channel)

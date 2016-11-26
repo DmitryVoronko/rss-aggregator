@@ -26,7 +26,7 @@ public final class ThemeHelper
                 PreferenceManager.getDefaultSharedPreferences(context);
         final String themeKey = context.getString(R.string.pref_key_choose_theme);
         final int themeNumber =
-                Integer.valueOf(sharedPreferences.getString(themeKey, THEME_GREEN_KEY));
+                Integer.parseInt(sharedPreferences.getString(themeKey, THEME_GREEN_KEY));
         final int themeResId;
 
         switch (themeNumber)

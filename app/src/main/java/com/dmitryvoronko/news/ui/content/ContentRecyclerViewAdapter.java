@@ -110,7 +110,7 @@ final class ContentRecyclerViewAdapter
         void onItemClick(final long id, final String link);
     }
 
-    final class ViewHolder extends RecyclerView.ViewHolder
+    static final class ViewHolder extends RecyclerView.ViewHolder
     {
         final CardView cardView;
 

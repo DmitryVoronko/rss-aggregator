@@ -1,6 +1,7 @@
 package com.dmitryvoronko.news.model.userinput;
 
 import com.dmitryvoronko.news.data.DatabaseManager;
+import com.dmitryvoronko.news.model.Cancellable;
 import com.dmitryvoronko.news.model.data.Channel;
 import com.dmitryvoronko.news.model.data.Entry;
 import com.dmitryvoronko.news.model.data.FeedObjectFactory;
@@ -23,14 +24,14 @@ import lombok.NonNull;
  * Created by Dmitry on 01/11/2016.
  */
 
-public final class UserInputHandler
+public final class NewChannelHandler extends Cancellable
 {
-    private final static String TAG = "USER_INPUT_HANDLER";
+    private static final String TAG = "NewChannelHandler";
     private static final int NO_CHANNEL = -1;
 
     private final DatabaseManager databaseManager;
 
-    public UserInputHandler(@NonNull final DatabaseManager databaseManager)
+    public NewChannelHandler(@NonNull final DatabaseManager databaseManager)
     {
         this.databaseManager = databaseManager;
     }
@@ -59,16 +60,13 @@ public final class UserInputHandler
                     entries = parseEntries(url, channelId, newsParser);
                 } catch (final XmlPullParserException e)
                 {
-                    if (channelId != NO_CHANNEL)
-                    {
-                        databaseManager.deleteChannel(channelId);
-                    }
+                    deleteChannel(channelId);
                     return Status.NOT_XML;
                 } catch (final UnsupportedOperationException e)
                 {
                     return Status.UNSUPPORTED_FORMAT;
                 }
-                return insertToDatabase(entries);
+                return insertToDatabase(entries, channelId);
             }
 
         } catch (final MalformedURLException e)
@@ -77,6 +75,14 @@ public final class UserInputHandler
         } catch (final IOException e)
         {
             return Status.TOTAL_ERROR;
+        }
+    }
+
+    private void deleteChannel(final long channelId)
+    {
+        if (channelId != NO_CHANNEL)
+        {
+            databaseManager.deleteChannel(channelId);
         }
     }
 
@@ -96,13 +102,26 @@ public final class UserInputHandler
         return newsParser.parse(inputStream, channelId);
     }
 
-    private Status insertToDatabase(@NonNull final ArrayList<Entry> entries)
+    private Status insertToDatabase(@NonNull final ArrayList<Entry> entries,
+                                    final long channelId)
     {
         for (final Entry entry : entries)
         {
+            if (isCanceled())
+            {
+                break;
+            }
             databaseManager.insert(entry);
         }
-        final Status status = Status.ADDED;
+        final Status status;
+        if (isCanceled())
+        {
+            deleteChannel(channelId);
+            status = Status.CANCELED;
+        } else
+        {
+            status = Status.ADDED;
+        }
         Logger.i(TAG, "insertToDatabase: Status = " + status);
         return status;
     }

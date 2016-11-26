@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.dmitryvoronko.news.model.data.Channel;
-import com.dmitryvoronko.news.util.log.Logger;
 
 import lombok.NonNull;
 
@@ -17,8 +16,6 @@ import lombok.NonNull;
 
 abstract class RequestFactoryBase
 {
-    private static final String TAG = "RequestFactoryBase";
-
     static long insertBase(@NonNull final SQLiteDatabase sqLiteDatabase,
                            @NonNull final String tableName,
                            @NonNull final ContentValues values,
@@ -29,14 +26,11 @@ abstract class RequestFactoryBase
         final boolean alreadyExists = alreadyExistsBase(sqLiteDatabase, link, tableName);
         if (alreadyExists)
         {
-            Logger.i(TAG, "Updated = " + channel.getId());
             updateBase(sqLiteDatabase, tableName, values, channel);
             return channel.getId();
         } else
         {
-            final long insertedId = sqLiteDatabase.insert(tableName, null, values);
-            Logger.i(TAG, "Inserted id = " + insertedId);
-            return insertedId;
+            return sqLiteDatabase.insert(tableName, null, values);
         }
     }
 
