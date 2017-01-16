@@ -60,6 +60,7 @@
                 <data android:scheme="pcast"/>
                 <data android:scheme="feed"/>
                 <data android:scheme="rss"/>
+                <data android:scheme="atom"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
