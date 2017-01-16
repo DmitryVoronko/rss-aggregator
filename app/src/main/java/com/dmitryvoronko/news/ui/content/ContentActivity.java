@@ -22,6 +22,9 @@ import com.dmitryvoronko.news.util.log.Logger;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  *
  * Created by Dmitry on 12/11/2016.
@@ -32,8 +35,13 @@ public abstract class ContentActivity extends ActivityBase
     private static final String TAG = "ContentActivity";
 
     private final ContentRecyclerViewAdapter adapter = createContentRecyclerViewAdapter();
-    private SwipeRefreshLayout updateContentRefreshLayout;
-    private RecyclerView recyclerView;
+
+    @BindView(R.id.swipe_refresh)
+    protected SwipeRefreshLayout updateContentRefreshLayout;
+
+    @BindView(R.id.my_recycler_view)
+    protected RecyclerView recyclerView;
+
     private final BroadcastReceiver contentBroadcastReceiver = createBroadcastReceiver();
     private final ServiceConnection contentServiceConnection = createServiceConnection();
     private ContentService contentService;
@@ -41,7 +49,7 @@ public abstract class ContentActivity extends ActivityBase
     @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
         setLayout();
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        ButterKnife.bind(this);
         recyclerView.setHasFixedSize(true);
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -52,7 +60,7 @@ public abstract class ContentActivity extends ActivityBase
 
         recyclerView.addOnItemTouchListener(swipeTouchListener);
 
-        updateContentRefreshLayout = createUpdateContentRefreshLayout();
+        initRefreshLayout(updateContentRefreshLayout);
         Logger.i(TAG, "doOnCreate: ");
     }
 
@@ -83,10 +91,8 @@ public abstract class ContentActivity extends ActivityBase
         return new SwipeableRecyclerViewTouchListener(recyclerView, listener);
     }
 
-    @NonNull private SwipeRefreshLayout createUpdateContentRefreshLayout()
+    private void initRefreshLayout(final SwipeRefreshLayout swipeRefreshLayout)
     {
-        final SwipeRefreshLayout swipeRefreshLayout =
-                (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.greenColorAccent,
                                                    R.color.greenColorPrimary,
                                                    R.color.greenColorPrimaryDark);
@@ -99,8 +105,6 @@ public abstract class ContentActivity extends ActivityBase
                 updateContent();
             }
         });
-
-        return swipeRefreshLayout;
     }
 
     private void showUndoRemoveItemSnackbar()

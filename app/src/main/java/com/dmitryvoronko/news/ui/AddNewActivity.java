@@ -30,6 +30,8 @@ import com.dmitryvoronko.news.services.AddNewService;
 import com.dmitryvoronko.news.ui.util.SnackbarHelper;
 import com.dmitryvoronko.news.util.log.Logger;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -40,8 +42,11 @@ public final class AddNewActivity extends ActivityBase
 
     private final LastUserInput lastUserInput = new LastUserInput("", Status.NOTHING);
 
-    private EditText inputLink;
-    private TextInputLayout inputLayoutLink;
+    @BindView(R.id.input_link)
+    protected EditText inputLink;
+    @BindView(R.id.input_layout_link)
+    protected TextInputLayout inputLayoutLink;
+
     private final ServiceConnection addNewServiceConnection = createServiceConnection();
 
     private AddNewService addNewService;
@@ -75,6 +80,8 @@ public final class AddNewActivity extends ActivityBase
         {
             setContentView(R.layout.activity_add_new);
 
+            ButterKnife.bind(this);
+
             initViewComponents();
 
             initStatusReceiver();
@@ -88,8 +95,6 @@ public final class AddNewActivity extends ActivityBase
 
     private void initViewComponents()
     {
-        inputLink = (EditText) findViewById(R.id.input_link);
-        inputLayoutLink = (TextInputLayout) findViewById(R.id.input_layout_link);
         inputLink.addTextChangedListener(new LinkTextWatcher());
         final Button addButton = (Button) findViewById(R.id.add_new_item_button);
         progressDialog = getProgressDialogWithTitle();

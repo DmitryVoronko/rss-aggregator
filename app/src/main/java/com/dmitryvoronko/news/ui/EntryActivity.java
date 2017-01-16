@@ -14,6 +14,9 @@ import android.webkit.WebViewClient;
 import com.dmitryvoronko.news.R;
 import com.dmitryvoronko.news.ui.util.ShareHelper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public final class EntryActivity extends ActivityBase
 {
     private static final String EXTRA_ENTRY_ID =
@@ -21,8 +24,12 @@ public final class EntryActivity extends ActivityBase
     private static final String EXTRA_ENTRY_LINK =
             "com.dmitryvoronko.news.ui.content.extra.ENTRY_LINK";
     private final static long NO_ENTRY_ID = -1;
-    private WebView webView;
-    private FloatingActionButton shareButton;
+
+    @BindView(R.id.entry_web_view)
+    protected WebView webView;
+
+    @BindView(R.id.share_entry_fab)
+    protected FloatingActionButton shareButton;
 
     static void startEntryActivity(final Context context, final long id, final String link)
     {
@@ -35,9 +42,8 @@ public final class EntryActivity extends ActivityBase
     @Override protected void doOnCreate(final Bundle savedInstanceState)
     {
         setContentView(R.layout.activity_entry);
-        shareButton = (FloatingActionButton) findViewById(R.id.share_entry_fab);
+        ButterKnife.bind(this);
 
-        webView = (WebView) findViewById(R.id.entry_web_view);
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.setWebViewClient(new Browser());
