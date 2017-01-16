@@ -19,6 +19,11 @@ public final class FeedObjectFactory
     private static final int INDEX_DESCRIPTION_COLUMN = 3;
     private static final int INDEX_CHANNEL_ID_COLUMN = 4;
 
+    private FeedObjectFactory()
+    {
+        throw new UnsupportedOperationException();
+    }
+
     public static Entry createEntry(@NonNull final Cursor cursor, final int[] columnsIndexes)
     {
         @NonNull final Channel channel = createChannel(cursor, columnsIndexes);

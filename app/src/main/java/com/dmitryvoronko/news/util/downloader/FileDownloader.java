@@ -67,8 +67,7 @@ public final class FileDownloader
         }
     }
 
-    private void downloadFile(final String fileName,
-                              final InputStream inputStream)
+    private void downloadFile(final String fileName, final InputStream inputStream)
     {
         try
         {

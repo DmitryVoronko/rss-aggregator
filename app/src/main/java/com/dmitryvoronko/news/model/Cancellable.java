@@ -9,12 +9,12 @@ public abstract class Cancellable
 {
     private boolean canceled = false;
 
-    protected final void cancel()
+    public final void cancel()
     {
         canceled = true;
     }
 
-    protected boolean isCanceled()
+    protected final boolean isCanceled()
     {
         return canceled;
     }

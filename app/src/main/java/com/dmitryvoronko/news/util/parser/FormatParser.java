@@ -21,7 +21,7 @@ import java.util.ArrayList;
 abstract class FormatParser
 {
     private static final String TAG = "FormatParser";
-    Channel parse(final XmlPullParser parser, final String link, final long channelId)
+    final Channel parse(final XmlPullParser parser, final String link, final long channelId)
             throws IOException,
                    XmlPullParserException,
                    UnsupportedOperationException
@@ -89,7 +89,7 @@ abstract class FormatParser
     @NonNull protected abstract String getEntryTagName();
 
 
-    ArrayList<Entry> parse(final XmlPullParser parser, final long channelId)
+    final ArrayList<Entry> parse(final XmlPullParser parser, final long channelId)
             throws XmlPullParserException,
                    IOException,
                    UnsupportedOperationException

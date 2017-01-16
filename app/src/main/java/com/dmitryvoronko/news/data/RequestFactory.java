@@ -134,9 +134,10 @@ final class RequestFactory extends RequestFactoryBase
                 @NonNull final String where = NewsContract.ChannelsTable._ID + LIKE;
                 @NonNull final String id = String.valueOf(channelId);
                 @NonNull final String[] whereArgs = {id};
-                @NonNull @Cleanup final Cursor cursor = sqLiteDatabase.query(tableName, columns, where,
-                                                                    whereArgs,
-                                                                    null, null, null);
+                @NonNull @Cleanup final Cursor cursor = sqLiteDatabase.query(tableName, columns,
+                                                                             where,
+                                                                             whereArgs,
+                                                                             null, null, null);
                 cursor.moveToFirst();
                 final int[] columnIndexes = getColumnIndexes(cursor, columns);
                 return FeedObjectFactory.createChannel(cursor, columnIndexes);
@@ -176,7 +177,8 @@ final class RequestFactory extends RequestFactoryBase
 
                 while (cursor.moveToNext())
                 {
-                    @NonNull final Channel channel = FeedObjectFactory.createChannel(cursor, columnsIndexes);
+                    @NonNull final Channel channel =
+                            FeedObjectFactory.createChannel(cursor, columnsIndexes);
                     channelsRequest.add(channel);
                 }
 
@@ -216,7 +218,8 @@ final class RequestFactory extends RequestFactoryBase
 
                 while (cursor.moveToNext())
                 {
-                    @NonNull final Entry entry = FeedObjectFactory.createEntry(cursor, columnsIndexes);
+                    @NonNull final Entry entry = FeedObjectFactory.createEntry(cursor,
+                                                                               columnsIndexes);
                     entries.add(entry);
                 }
 

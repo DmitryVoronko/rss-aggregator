@@ -33,8 +33,8 @@ final class DatabaseOpenHelper extends SQLiteOpenHelper
 
     @Override
     public void onUpgrade(@NonNull final SQLiteDatabase db,
-                          @NonNull final int oldVersion,
-                          @NonNull final int newVersion)
+                          final int oldVersion,
+                          final int newVersion)
     {
         db.execSQL(NewsContract.DATABASE_DELETE);
         onCreate(db);

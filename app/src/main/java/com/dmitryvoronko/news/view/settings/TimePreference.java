@@ -21,8 +21,7 @@ public final class TimePreference extends DialogPreference
     private int lastMinute = 0;
     private TimePicker picker = null;
 
-    public TimePreference(final Context context,
-                          final AttributeSet attrs)
+    public TimePreference(final Context context, final AttributeSet attrs)
     {
         super(context, attrs);
 
@@ -77,8 +76,7 @@ public final class TimePreference extends DialogPreference
     }
 
     @Override
-    protected void onSetInitialValue(final boolean restoreValue,
-                                     final Object defaultValue)
+    protected void onSetInitialValue(final boolean restoreValue, final Object defaultValue)
     {
         final String time;
         if (restoreValue)

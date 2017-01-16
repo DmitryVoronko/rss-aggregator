@@ -33,7 +33,8 @@ public final class NotificationHelper
         throw new UnsupportedOperationException();
     }
 
-    public static void showNotification(final Context context, final SharedPreferences sharedPreferences)
+    public static void showNotification(final Context context,
+                                        final SharedPreferences sharedPreferences)
     {
         if (notificationsEnabled(context, sharedPreferences))
         {
@@ -41,7 +42,8 @@ public final class NotificationHelper
         }
     }
 
-    private static void createAndShowNotification(final Context context, final SharedPreferences sharedPreferences)
+    private static void createAndShowNotification(final Context context,
+                                                  final SharedPreferences sharedPreferences)
     {
         final PendingIntent pendingIntent = createNotificationActionIntent(context);
 

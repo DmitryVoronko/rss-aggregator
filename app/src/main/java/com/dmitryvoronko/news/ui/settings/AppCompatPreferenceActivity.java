@@ -28,14 +28,14 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity
     }
 
     @Override
-    protected void onStop()
+    protected final void onStop()
     {
         super.onStop();
         getDelegate().onStop();
     }
 
     @Override
-    protected void onDestroy()
+    protected final void onDestroy()
     {
         super.onDestroy();
         getDelegate().onDestroy();
@@ -51,28 +51,28 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity
     }
 
     @Override
-    protected void onPostCreate(final Bundle savedInstanceState)
+    protected final void onPostCreate(final Bundle savedInstanceState)
     {
         super.onPostCreate(savedInstanceState);
         getDelegate().onPostCreate(savedInstanceState);
     }
 
     @Override
-    protected void onPostResume()
+    protected final void onPostResume()
     {
         super.onPostResume();
         getDelegate().onPostResume();
     }
 
     @Override
-    public void onConfigurationChanged(final Configuration newConfig)
+    public final void onConfigurationChanged(final Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
         getDelegate().onConfigurationChanged(newConfig);
     }
 
     @Override
-    public void setContentView(
+    public final void setContentView(
             @LayoutRes
             final int layoutResID)
     {
@@ -80,42 +80,42 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity
     }
 
     @Override
-    public void setContentView(final View view)
+    public final void setContentView(final View view)
     {
         getDelegate().setContentView(view);
     }
 
     @Override
-    public void setContentView(final View view, final ViewGroup.LayoutParams params)
+    public final void setContentView(final View view, final ViewGroup.LayoutParams params)
     {
         getDelegate().setContentView(view, params);
     }
 
     @Override
-    public void addContentView(final View view, final ViewGroup.LayoutParams params)
+    public final void addContentView(final View view, final ViewGroup.LayoutParams params)
     {
         getDelegate().addContentView(view, params);
     }
 
-    public void invalidateOptionsMenu()
+    public final void invalidateOptionsMenu()
     {
         getDelegate().invalidateOptionsMenu();
     }
 
     @Override
-    @android.support.annotation.NonNull public MenuInflater getMenuInflater()
+    @android.support.annotation.NonNull public final MenuInflater getMenuInflater()
     {
         return getDelegate().getMenuInflater();
     }
 
     @Override
-    protected void onTitleChanged(final CharSequence title, final int color)
+    protected final void onTitleChanged(final CharSequence title, final int color)
     {
         super.onTitleChanged(title, color);
         getDelegate().setTitle(title);
     }
 
-    protected ActionBar getSupportActionBar()
+    protected final ActionBar getSupportActionBar()
     {
         return getDelegate().getSupportActionBar();
     }

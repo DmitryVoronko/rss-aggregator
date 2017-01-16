@@ -57,13 +57,7 @@ final class ContentRecyclerViewAdapter
         imageButton = (ImageButton) holder.cardView.findViewById(R.id.feed_object_share_button);
         final Channel channel = data.get(position);
 
-        imageButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override public void onClick(final View view)
-            {
-                ShareHelper.share(holder.cardView.getContext(), channel.getLink());
-            }
-        });
+        imageButton.setOnClickListener(new MyOnClickListener(holder, channel));
 
 
         holder.cardView.setOnClickListener(new View.OnClickListener()
@@ -75,8 +69,7 @@ final class ContentRecyclerViewAdapter
         });
 
         //noinspection deprecation
-        final String title = TextUtils.htmlEncode(
-                Html.fromHtml(channel.getTitle()).toString());
+        final String title = Html.fromHtml(channel.getTitle()).toString();
         articleTitle.setText(title);
 
         if (channel.getTitle().equals(""))
@@ -118,6 +111,23 @@ final class ContentRecyclerViewAdapter
         {
             super(cardView);
             this.cardView = (CardView) cardView;
+        }
+    }
+
+    private static final class MyOnClickListener implements View.OnClickListener
+    {
+        private final ViewHolder holder;
+        private final Channel channel;
+
+        public MyOnClickListener(final ViewHolder holder, final Channel channel)
+        {
+            this.holder = holder;
+            this.channel = channel;
+        }
+
+        @Override public final void onClick(final View view)
+        {
+            ShareHelper.share(holder.cardView.getContext(), channel.getLink());
         }
     }
 }

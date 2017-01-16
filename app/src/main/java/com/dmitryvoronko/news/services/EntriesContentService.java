@@ -24,7 +24,7 @@ public final class EntriesContentService extends ContentServiceBase
     private static final String TAG = "EntriesContentService";
 
     public static void startActionGetContent(@NonNull final Context context,
-                                             @NonNull final long channelId)
+                                             final long channelId)
     {
         startContentAction(context, channelId, ACTION_GET_CONTENT);
     }

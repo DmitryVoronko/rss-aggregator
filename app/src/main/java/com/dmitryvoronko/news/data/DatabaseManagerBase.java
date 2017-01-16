@@ -25,7 +25,7 @@ abstract class DatabaseManagerBase
     }
 
 
-    <T> T executeRequest(@NonNull final com.dmitryvoronko.news.data.Request<T> request)
+    final <T> T executeRequest(@NonNull final com.dmitryvoronko.news.data.Request<T> request)
     {
         T result = null;
         try

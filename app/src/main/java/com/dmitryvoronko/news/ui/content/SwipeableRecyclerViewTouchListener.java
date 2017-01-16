@@ -402,15 +402,7 @@ final class SwipeableRecyclerViewTouchListener
             }
         });
 
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-        {
-            @Override
-            public void onAnimationUpdate(final ValueAnimator valueAnimator)
-            {
-                lp.height = (Integer) valueAnimator.getAnimatedValue();
-                dismissView.setLayoutParams(lp);
-            }
-        });
+        animator.addUpdateListener(new MyAnimatorUpdateListener(lp, dismissView));
 
         mPendingDismisses.add(new PendingDismissData(dismissPosition,
                                                      dismissView));
@@ -438,6 +430,25 @@ final class SwipeableRecyclerViewTouchListener
         public int compareTo(final @NonNull PendingDismissData other)
         {
             return other.position - position;
+        }
+    }
+
+    private static final class MyAnimatorUpdateListener implements ValueAnimator.AnimatorUpdateListener
+    {
+        private final ViewGroup.LayoutParams lp;
+        private final View dismissView;
+
+        public MyAnimatorUpdateListener(final ViewGroup.LayoutParams lp, final View dismissView)
+        {
+            this.lp = lp;
+            this.dismissView = dismissView;
+        }
+
+        @Override
+        public final void onAnimationUpdate(final ValueAnimator valueAnimator)
+        {
+            lp.height = (Integer) valueAnimator.getAnimatedValue();
+            dismissView.setLayoutParams(lp);
         }
     }
 }

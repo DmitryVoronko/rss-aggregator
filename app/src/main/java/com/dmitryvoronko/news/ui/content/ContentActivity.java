@@ -221,7 +221,7 @@ public abstract class ContentActivity extends ActivityBase
 
     protected abstract void goToChild(final long id, final String link);
 
-    protected void setContentService(final ContentService contentService)
+    protected final void setContentService(final ContentService contentService)
     {
         this.contentService = contentService;
     }
